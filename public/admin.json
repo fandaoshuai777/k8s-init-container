@@ -1,0 +1,98 @@
+{
+	"code": 0,
+	"data": [
+		{
+			"path": "/home",
+			"name": "home",
+			"component": "home",
+			"meta": {
+				"title": "message.router.home",
+				"isLink": "",
+				"isHide": false,
+				"isKeepAlive": true,
+				"isAffix": true,
+				"isIframe": false,
+				"roles": [
+					"admin",
+					"common"
+				],
+				"icon": "iconfont icon-shouye"
+			}
+		},
+		{
+			"path": "/indentmanagement/index.vue",
+			"name": "indentmanagement",
+			"component": "indentmanagement",
+			"meta": {
+				"title": "订单管理",
+				"isLink": "",
+				"isHide": false,
+				"isKeepAlive": true,
+				"isAffix": false,
+				"isIframe": false,
+				"roles": [
+					"admin",
+					"common"
+				],
+				"icon": "iconfont icon-gongju"
+			}
+		},
+		{
+			"path": "/billmanagement",
+			"name": "billmanagemenDetail",
+			"component": "layout/routerView/parent",
+			"redirect": "/billmanagement/detail",
+			"meta": {
+				"title": "账单管理",
+				"isLink": "",
+				"isHide": false,
+				"isKeepAlive": true,
+				"isAffix": false,
+				"isIframe": false,
+				"roles": [
+					"admin",
+					"common"
+				],
+				"icon": "iconfont icon-crew_feature"
+			},
+			"children": [
+				{
+					"path": "/billmanagement/detail",
+					"name": "billmanagemenDetail",
+					"component": "billmanagement/detail/index",
+					"meta": {
+						"title": "结算账单明细",
+						"isLink": "",
+						"isHide": false,
+						"isKeepAlive": true,
+						"isAffix": false,
+						"isIframe": false,
+						"roles": [
+							"admin",
+							"common"
+						],
+						"icon": "el-icon-thumb"
+					}
+				},
+				{
+					"path": "/billmanagement/daybill",
+					"name": "billmanagementDaybill",
+					"component": "billmanagement/daybill/index",
+					"meta": {
+						"title": "结算日账单",
+						"isLink": "",
+						"isHide": false,
+						"isKeepAlive": true,
+						"isAffix": false,
+						"isIframe": false,
+						"roles": [
+							"admin",
+							"common"
+						],
+						"icon": "el-icon-edit"
+					}
+				}
+			]
+		}
+	]
+}
