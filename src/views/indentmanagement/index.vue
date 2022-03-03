@@ -46,17 +46,17 @@
 				</el-form>
 			</div>
 			<div class="center">交易总金额：{} 订单数量：{}总升数：{}</div>
-			<el-table style="width: 100%">
-				<el-table-column label="订单号" />
+			<el-table style="width: 100%" :dara="tableData">
+				<el-table-column prop="orderNo"  label="订单号" />
 				<el-table-column prop="roleName" label="订单状态" show-overflow-tooltip align="center"></el-table-column>
 				<el-table-column prop="roleSign" label="下单时间" show-overflow-tooltip align="center"></el-table-column>
-				<el-table-column prop="sort" label="支付时间" show-overflow-tooltip align="center"></el-table-column>
-				<el-table-column prop="status" label="所属油站" show-overflow-tooltip align="center" />
-				<el-table-column prop="describe" label="订单油机金额(元)" show-overflow-tooltip align="center"></el-table-column>
-				<el-table-column prop="createTime" label="油号" show-overflow-tooltip align="center"></el-table-column>
+				<el-table-column prop="text" label="支付时间" show-overflow-tooltip align="center"></el-table-column>
+				<el-table-column prop="stationId" label="所属油站" show-overflow-tooltip align="center" />
+				<el-table-column prop="thumbnail" label="订单油机金额(元)" show-overflow-tooltip align="center"></el-table-column>
+				<el-table-column prop="top_comments_content" label="油号" show-overflow-tooltip align="center"></el-table-column>
 				<el-table-column prop="createTime" label="枪号" show-overflow-tooltip align="center"></el-table-column>
 				<el-table-column prop="createTime" label="升数(L)" show-overflow-tooltip align="center"></el-table-column>
-				<el-table-column prop="createTime" label="用户手机号" show-overflow-tooltip align="center"></el-table-column>
+				<el-table-column prop="driverTel" label="用户手机号" show-overflow-tooltip align="center"></el-table-column>
 				<el-table-column label="操作" width="200" align="center">
 					<template #default="scope">
 						<el-button size="small" type="text" @click="onOpenEditRole(scope.row)">查看</el-button>
@@ -77,7 +77,10 @@
 		</el-card>
 	</div>
 </template>
+
 <script>
+import { orderPage } from '@/api/indentmanagement/index.js';
+
 export default {
 	data() {
 		return {
@@ -88,6 +91,12 @@ export default {
 				orderStatus: '',
 				timePayment: '',
 				oilStation: '',
+			},
+			tableData: [],
+			total: 0,
+			pagination: {
+				pageSize: 10,
+				pageNo: 1,
 			},
 			options: [
 				{
@@ -113,10 +122,24 @@ export default {
 			],
 		};
 	},
+	computed: {
+		paginationOption: function () {
+			return { ...this.pagination, total: this.total };
+		},
+	},
 	methods: {
 		onSubmit() {
-			console.log(this.formInline);
+			getJoke().then((res) => {
+				console.log((this.tableData = res.reqult));
+			});
+			// console.log(this.formInline);
 		},
+	},
+	mounted() {
+		let date = { ...this.pagination };
+		orderPage(date).then((res) => {
+			console.log(res);
+		});
 	},
 };
 </script>

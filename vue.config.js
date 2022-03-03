@@ -10,12 +10,12 @@ module.exports = {
 		hotOnly: false, // 热更新
 		proxy: {
 			// 设置代理
-			'/gitee': {
-				target: 'https://gitee.com',
+			'/api': {
+				target: 'http://201.201.0.88:8888',
 				ws: true,
 				changeOrigin: true,
 				pathRewrite: {
-					'^/gitee': '',
+					'^/api': '',
 				},
 			},
 		},

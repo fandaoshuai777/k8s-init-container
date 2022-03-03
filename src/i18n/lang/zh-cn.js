@@ -50,11 +50,7 @@ export default {
 		foundMsg: '您可以先检查网址，然后重新输入或给我们反馈问题。',
 		foundBtn: '返回首页',
 	},
-	noAccess: {
-		accessTitle: '您未被授权，没有操作权限~',
-		accessMsg: '联系方式：加QQ群探讨 665452019',
-		accessBtn: '重新授权',
-	},
+
 	layout: {
 		configTitle: '布局配置',
 		oneTitle: '全局主题',
@@ -87,7 +83,7 @@ export default {
 		fourIsGrayscale: '灰色模式',
 		fourIsInvert: '色弱模式',
 		fourIsWartermark: '开启水印',
-		fourWartermarkText: '小鹰商户后台',
+		fourWartermarkText: '水印文案',
 		fiveTitle: '其它设置',
 		fiveTagsStyle: 'Tagsview 风格',
 		fiveAnimation: '主页面切换动画',

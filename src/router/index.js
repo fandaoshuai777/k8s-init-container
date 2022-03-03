@@ -32,6 +32,7 @@ const dynamicRoutes = [
 
 // 定义静态路由
 const staticRoutes = [
+
 	{
 		path: '/login',
 		name: 'login',
@@ -59,7 +60,7 @@ const staticRoutes = [
 	{
 		path: '/commercial',
 		name: 'commercial',
-		component: () => import('../views/agreement/commercial.vue'),
+		component: () => import('@/views/agreement/commercial.vue'),
 		meta: {
 			title: '平台服务协议',
 		},
@@ -67,11 +68,12 @@ const staticRoutes = [
 	{
 		path: '/platform',
 		name: 'platform',
-		component: () => import('../views/agreement/platform.vue'),
+		component: () => import('@/views/agreement/platform.vue'),
 		meta: {
 			title: '商户隐私协议',
 		},
 	},
+
 ];
 
 // 加载静态路由
@@ -196,7 +198,7 @@ export function adminUser(router, to, next) {
 			setCacheTagsViewRoutes(JSON.parse(JSON.stringify(res.data)));
 			next({ ...to, replace: true });
 		})
-		.catch(() => {});
+		.catch(() => { });
 }
 
 // 添加路由，模拟数据与方法，可自行进行修改 test
@@ -216,7 +218,7 @@ export function testUser(router, to, next) {
 			setCacheTagsViewRoutes(JSON.parse(JSON.stringify(res.data)));
 			next({ ...to, replace: true });
 		})
-		.catch(() => {});
+		.catch(() => { });
 }
 
 // 重置路由
@@ -238,34 +240,47 @@ export function getRouterList(router, to, next) {
 	else if (Session.get('userInfo').userName === 'test') testUser(router, to, next);
 }
 
-// 路由加载前
+// 路由加载前111111111111111111
 router.beforeEach((to, from, next) => {
 	keepAliveSplice(to);
-	NProgress.configure({ showSpinner: false });
-	if (to.meta.title && to.path !== '/login') NProgress.start();
-	let token = Session.get('token');
-	if (to.path === '/login' && !token) {
+	if (to.path == '/platform') {
+		NProgress.start();
+		next();1
+		delayNProgressDone();
+	} else if (to.path == '/commercial') {
 		NProgress.start();
 		next();
 		delayNProgressDone();
 	} else {
-		if (!token) {
+		NProgress.configure({ showSpinner: false });
+		if (to.meta.title && to.path !== '/login') NProgress.start();
+		let token = Session.get('token');
+		if (to.path === '/login' && !token) {
 			NProgress.start();
-			next('/login');
-			Session.clear();
-			delayNProgressDone();
-		} else if (token && to.path === '/login') {
-			next('/indentmanagement/index.vue');
+			next();
 			delayNProgressDone();
 		} else {
-			if (Object.keys(store.state.routesList.routesList).length <= 0) {
-				getRouterList(router, to, next);
+			if (!token) {
+				NProgress.start();
+				next('/login');
+				Session.clear();
+				delayNProgressDone();
+			} else if (token && to.path === '/login') {
+
+				next('/indentmanagement/index.vue');
+				delayNProgressDone();
 			} else {
-				next();
-				delayNProgressDone(0);
+				if (Object.keys(store.state.routesList.routesList).length <= 0) {
+					getRouterList(router, to, next);
+				} else {
+					next();
+					delayNProgressDone(0);
+				}
 			}
 		}
 	}
+
+
 });
 
 // 路由加载后

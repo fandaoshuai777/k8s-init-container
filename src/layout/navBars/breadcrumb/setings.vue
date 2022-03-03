@@ -9,6 +9,69 @@
 			@close="onDrawerClose"
 		>
 			<el-scrollbar class="layout-breadcrumb-seting-bar">
+				<el-divider content-position="left">菜单 / 顶栏</el-divider>
+				<div class="layout-breadcrumb-seting-bar-flex">
+					<div class="layout-breadcrumb-seting-bar-flex-label">顶栏背景</div>
+					<div class="layout-breadcrumb-seting-bar-flex-value">
+						<el-color-picker v-model="getThemeConfig.topBar" size="small" @change="onBgColorPickerChange('topBar')"> </el-color-picker>
+					</div>
+				</div>
+				<div class="layout-breadcrumb-seting-bar-flex">
+					<div class="layout-breadcrumb-seting-bar-flex-label">菜单背景</div>
+					<div class="layout-breadcrumb-seting-bar-flex-value">
+						<el-color-picker v-model="getThemeConfig.menuBar" size="small" @change="onBgColorPickerChange('menuBar')"> </el-color-picker>
+					</div>
+				</div>
+				<div class="layout-breadcrumb-seting-bar-flex">
+					<div class="layout-breadcrumb-seting-bar-flex-label">分栏菜单背景</div>
+					<div class="layout-breadcrumb-seting-bar-flex-value">
+						<el-color-picker v-model="getThemeConfig.columnsMenuBar" size="small" @change="onBgColorPickerChange('columnsMenuBar')">
+						</el-color-picker>
+					</div>
+				</div>
+				<div class="layout-breadcrumb-seting-bar-flex">
+					<div class="layout-breadcrumb-seting-bar-flex-label">顶栏默认字体颜色</div>
+					<div class="layout-breadcrumb-seting-bar-flex-value">
+						<el-color-picker v-model="getThemeConfig.topBarColor" size="small" @change="onBgColorPickerChange('topBarColor')"> </el-color-picker>
+					</div>
+				</div>
+				<div class="layout-breadcrumb-seting-bar-flex">
+					<div class="layout-breadcrumb-seting-bar-flex-label">菜单默认字体颜色</div>
+					<div class="layout-breadcrumb-seting-bar-flex-value">
+						<el-color-picker v-model="getThemeConfig.menuBarColor" size="small" @change="onBgColorPickerChange('menuBarColor')"> </el-color-picker>
+					</div>
+				</div>
+				<div class="layout-breadcrumb-seting-bar-flex">
+					<div class="layout-breadcrumb-seting-bar-flex-label">分栏菜单默认字体颜色</div>
+					<div class="layout-breadcrumb-seting-bar-flex-value">
+						<el-color-picker v-model="getThemeConfig.columnsMenuBarColor" size="small" @change="onBgColorPickerChange('columnsMenuBarColor')">
+						</el-color-picker>
+					</div>
+				</div>
+				<div class="layout-breadcrumb-seting-bar-flex mt10">
+					<div class="layout-breadcrumb-seting-bar-flex-label">顶栏背景渐变</div>
+					<div class="layout-breadcrumb-seting-bar-flex-value">
+						<el-switch v-model="getThemeConfig.isTopBarColorGradual" @change="onTopBarGradualChange"></el-switch>
+					</div>
+				</div>
+				<div class="layout-breadcrumb-seting-bar-flex mt14">
+					<div class="layout-breadcrumb-seting-bar-flex-label">菜单背景渐变</div>
+					<div class="layout-breadcrumb-seting-bar-flex-value">
+						<el-switch v-model="getThemeConfig.isMenuBarColorGradual" @change="onMenuBarGradualChange"></el-switch>
+					</div>
+				</div>
+				<div class="layout-breadcrumb-seting-bar-flex mt14">
+					<div class="layout-breadcrumb-seting-bar-flex-label">分栏菜单背景渐变</div>
+					<div class="layout-breadcrumb-seting-bar-flex-value">
+						<el-switch v-model="getThemeConfig.isColumnsMenuBarColorGradual" @change="onColumnsMenuBarGradualChange"></el-switch>
+					</div>
+				</div>
+				<div class="layout-breadcrumb-seting-bar-flex mt14">
+					<div class="layout-breadcrumb-seting-bar-flex-label">菜单字体背景高亮</div>
+					<div class="layout-breadcrumb-seting-bar-flex-value">
+						<el-switch v-model="getThemeConfig.isMenuBarColorHighlight" @change="onMenuBarHighlightChange"></el-switch>
+					</div>
+				</div>
 				<!-- 界面设置 -->
 				<el-divider content-position="left">{{ $t('message.layout.threeTitle') }}</el-divider>
 				<div class="layout-breadcrumb-seting-bar-flex">
@@ -108,14 +171,6 @@
 				<!-- 其它设置 -->
 				<el-divider content-position="left">{{ $t('message.layout.fiveTitle') }}</el-divider>
 				<div class="layout-breadcrumb-seting-bar-flex mt15">
-					<div class="layout-breadcrumb-seting-bar-flex-label">{{ $t('message.layout.fiveTagsStyle') }}</div>
-					<div class="layout-breadcrumb-seting-bar-flex-value">
-						<el-select v-model="getThemeConfig.tagsStyle" placeholder="请选择" size="mini" style="width: 90px" @change="setLocalThemeConfig">
-							<el-option label="风格1" value="tags-style-one"></el-option>
-						</el-select>
-					</div>
-				</div>
-				<div class="layout-breadcrumb-seting-bar-flex mt15">
 					<div class="layout-breadcrumb-seting-bar-flex-label">{{ $t('message.layout.fiveAnimation') }}</div>
 					<div class="layout-breadcrumb-seting-bar-flex-value">
 						<el-select v-model="getThemeConfig.animation" placeholder="请选择" size="mini" style="width: 90px" @change="setLocalThemeConfig">
@@ -214,15 +269,26 @@
 				</div>
 				<div class="copy-config">
 					<el-alert :title="$t('message.layout.tipText')" type="warning" :closable="false"> </el-alert>
-					<el-button
-						size="small"
-						class="copy-config-btn"
-						icon="el-icon-document-copy"
-						type="primary"
-						ref="copyConfigBtnRef"
-						@click="onCopyConfigClick"
-						>{{ $t('message.layout.copyText') }}
-					</el-button>
+					<div class="Btn">
+						<el-button
+							size="small"
+							class="copy-config-btn"
+							icon="el-icon-document-copy"
+							type="primary"
+							ref="copyConfigBtnRef"
+							@click="onCopyConfigClick"
+							>{{ $t('message.layout.copyText') }}
+						</el-button>
+						<el-button
+							size="small"
+							class="copy-config-btn"
+							icon="el-icon-document-copy"
+							type="primary"
+							ref="copyConfigBtnRef"
+							@click="onResetConfigClick"
+							>一键恢复默认
+						</el-button>
+					</div>
 				</div>
 			</el-scrollbar>
 		</el-drawer>
@@ -234,6 +300,7 @@ import ClipboardJS from 'clipboard';
 import { Local } from '@/utils/storage.js';
 import { verifyAndSpace } from '@/utils/toolsValidate';
 import Watermark from '@/utils/wartermark';
+import { getLightColor } from '@/utils/theme';
 
 export default {
 	name: 'layoutBreadcrumbSeting',
@@ -298,7 +365,7 @@ export default {
 		},
 		// 4、界面显示 --> 开启水印
 		onWartermarkChange() {
-			console.log(this.getThemeConfig)
+			console.log(this.getThemeConfig);
 			this.getThemeConfig.isWartermark ? Watermark.set(this.getThemeConfig.wartermarkText) : Watermark.del();
 			this.setLocalThemeConfig();
 		},
@@ -357,9 +424,82 @@ export default {
 		},
 		// 菜单 / 顶栏背景等
 		onBgColorPickerChange(bg, rgb) {
-			document.documentElement.style.setProperty(`--bg-${bg}`, rgb);
+			document.documentElement.style.setProperty(`--bg-${bg}`, this.$store.state.themeConfig.themeConfig[bg]);
 			this.setLocalThemeConfigStyle();
+			this.onTopBarGradualChange();
+			this.onTopBarGradualChange();
+			this.onMenuBarGradualChange();
+			this.onColumnsMenuBarGradualChange();
 		},
+		// 2、菜单 / 顶栏 --> 顶栏背景渐变
+		onTopBarGradualChange() {
+			this.setGraduaFun(
+				'.layout-navbars-breadcrumb-index',
+				this.$store.state.themeConfig.themeConfig.isTopBarColorGradual,
+				this.$store.state.themeConfig.themeConfig.topBar
+			);
+		},
+		// 2、菜单 / 顶栏 --> 菜单背景渐变
+		onMenuBarGradualChange() {
+			this.setGraduaFun(
+				'.layout-container .el-aside',
+				this.$store.state.themeConfig.themeConfig.isMenuBarColorGradual,
+				this.$store.state.themeConfig.themeConfig.menuBar
+			);
+		},
+		// 2、菜单 / 顶栏 --> 分栏菜单背景渐变
+		onColumnsMenuBarGradualChange() {
+			this.setGraduaFun(
+				'.layout-container .layout-columns-aside',
+				this.$store.state.themeConfig.themeConfig.isColumnsMenuBarColorGradual,
+				this.$store.state.themeConfig.themeConfig.columnsMenuBar
+			);
+		},
+		initSetStyle() {
+			setTimeout(() => {
+				// 2、菜单 / 顶栏 --> 顶栏背景渐变
+				this.onTopBarGradualChange();
+				// 2、菜单 / 顶栏 --> 菜单背景渐变
+				this.onMenuBarGradualChange();
+				// 2、菜单 / 顶栏 --> 分栏菜单背景渐变
+				this.onColumnsMenuBarGradualChange();
+				// 2、菜单 / 顶栏 --> 菜单字体背景高亮
+				this.onMenuBarHighlightChange();
+			}, 1300);
+		},
+		// 2、菜单 / 顶栏 --> 菜单字体背景高亮
+		onMenuBarHighlightChange() {
+			this.$nextTick(() => {
+				setTimeout(() => {
+					let elsItems = document.querySelectorAll('.el-menu-item');
+					let elActive = document.querySelector('.el-menu-item.is-active');
+					if (!elActive) return false;
+					if (this.$store.state.themeConfig.themeConfig.isMenuBarColorHighlight) {
+						elsItems.forEach((el) => el.setAttribute('id', ``));
+						elActive.setAttribute('id', `add-is-active`);
+						Local.set('menuBarHighlightId', elActive.getAttribute('id'));
+					} else {
+						elActive.setAttribute('id', ``);
+					}
+					this.setLocalThemeConfig();
+				}, 0);
+			});
+		},
+		setGraduaFun(el, bool, color) {
+			this.$nextTick(() => {
+				let els = document.querySelector(el);
+				console.log(color);
+				if (!els) return false;
+				if (bool) els.setAttribute('style', `background-image:linear-gradient(to bottom left , ${color}, ${getLightColor(color, 0.6)})`);
+				else els.setAttribute('style', `background-image:${color}`);
+				this.setLocalThemeConfigStyle();
+			});
+		},
+		// 一键恢复默认
+onResetConfigClick  () {
+	Local.clear();
+	window.location.reload();
+},
 		// 一键复制配置
 		onCopyConfigClick() {
 			this.$store.state.themeConfig.themeConfig.isDrawer = false;
@@ -509,10 +649,15 @@ export default {
 		.copy-config-btn {
 			width: 100%;
 			margin-top: 15px;
+			margin: 10px 0 0 0;
 		}
 		.copy-config-last-btn {
 			margin: 10px 0 0;
 		}
 	}
+}
+.Btn {
+	display: flex;
+	flex-flow: column;
 }
 </style>

@@ -14,9 +14,11 @@ const service = axios.create({
 // 添加请求拦截器
 service.interceptors.request.use(
 	(config) => {
+		console.log()
 		// 在发送请求之前做些什么 token
 		if (Session.get('token')) {
 			config.headers.common['Authorization'] = `${Session.get('token')}`;
+
 		}
 		return config;
 	},
@@ -29,24 +31,25 @@ service.interceptors.request.use(
 // 添加响应拦截器
 service.interceptors.response.use(
 	(response) => {
+         console.log(response)
 		// 对响应数据做点什么
 		const res = response.data;
-		if (res.code && res.code !== 0) {
-			// `token` 过期或者账号已在别处登录
-			if (res.code === 401 || res.code === 4001) {
-				// 清除浏览器全部临时缓存
-				Session.clear();
-				router.push('/login');
-				store.commit('setMenuData', {});
-				resetRouter(); // 重置路由
-				MessageBox.alert('你已被登出，请重新登录', '提示', {})
-					.then(() => {})
-					.catch(() => {});
-			}
-			return Promise.reject(service.interceptors.response.error);
-		} else {
-			return response.data;
-		}
+		// if (res.code && res.code !== 0) {
+		// 	// `token` 过期或者账号已在别处登录
+		// 	if (res.code === 401 || res.code === 4001) {
+		// 		// 清除浏览器全部临时缓存
+		// 		Session.clear();
+		// 		router.push('/login');
+		// 		store.commit('setMenuData', {});
+		// 		resetRouter(); // 重置路由
+		// 		MessageBox.alert('你已被登出，请重新登录', '提示', {})
+		// 			.then(() => {})
+		// 			.catch(() => {});
+		// 	}
+		// 	return Promise.reject(service.interceptors.response.error);
+		// } else {
+		return response.data;
+		// }
 	},
 	(error) => {
 		// 对响应错误做点什么

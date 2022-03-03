@@ -1,7 +1,7 @@
 <template>
-	<el-form size="large" class="login-content-form">
+	<el-form size="large" class="login-content-form" :model="form">
 		<el-form-item class="login-animation1">
-			<el-input type="text" clearable autocomplete="off" placeholder="请输入手机号">
+			<el-input type="text" clearable autocomplete="off" placeholder="请输入手机号" v-model="form.userPhone">
 				<template #prefix>
 					<i class="el-icon-mobile-phone left"></i>
 				</template>
@@ -9,7 +9,7 @@
 		</el-form-item>
 		<el-form-item class="login-animation2">
 			<el-col :span="15">
-				<el-input type="text" maxlength="4" clearable autocomplete="off" placeholder="请输入验证码">
+				<el-input type="text" maxlength="4" clearable autocomplete="off" placeholder="请输入验证码" v-model="form.code">
 					<template #prefix>
 						<i class="el-icon-position left"></i>
 					</template>
@@ -17,7 +17,7 @@
 			</el-col>
 			<el-col :span="1"></el-col>
 			<el-col :span="8">
-				<el-button class="login-content-code">点击获取验证码</el-button>
+				<el-button class="login-content-code" @click="gain">点击获取验证码</el-button>
 			</el-col>
 		</el-form-item>
 		<el-form-item class="login-animation3"> <el-radio v-model="radio" label="自动登录"></el-radio></el-form-item>
@@ -27,11 +27,11 @@
 				<span>我已阅读并同意</span>
 				<span class="color">《平台服务协议》</span>
 
-				和<span  class="color">《商户隐私协议》</span>
+				和<span class="color">《商户隐私协议》</span>
 			</div>
 		</el-form-item>
 		<el-form-item class="login-animation5">
-			<el-button round type="primary" class="login-content-submit">
+			<el-button round type="primary" class="login-content-submit" @click="register">
 				<span>登录</span>
 			</el-button>
 		</el-form-item>
@@ -40,13 +40,31 @@
 </template>
 
 <script>
+import { sendCode, verificationCodeLogin } from '@/api/login/index.js';
+
 export default {
-	data(){
-		return{
-			 radio: '1'
-		}
-	}
-}
+	data() {
+		return {
+			radio: '1',
+			form: {
+				userPhone: '',
+				code: '',
+			},
+		};
+	},
+	methods: {
+		gain() {
+			sendCode(this.form.userPhone).then((res) => {
+				console.log(res);
+			});
+		},
+		register() {
+			verificationCodeLogin(this.form.userPhone,this.form.code).then((res) => {
+				console.log(res);
+			});
+		},
+	},
+};
 </script>
 <style scoped lang="scss">
 .login-content-form {
@@ -68,7 +86,6 @@ export default {
 		width: 100%;
 		letter-spacing: 2px;
 		font-weight: 300;
-		
 	}
 	.login-msg {
 		color: var(--el-text-color-placeholder);
@@ -101,8 +118,8 @@ export default {
 ::v-deep .el-radio__inner {
 	border-radius: 0% !important;
 }
-.color{
-	color:#87CEFA;
-	cursor:pointer
+.color {
+	color: #87cefa;
+	cursor: pointer;
 }
 </style>
