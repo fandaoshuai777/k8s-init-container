@@ -7,18 +7,16 @@ import { Session } from '@/utils/storage';
 // 创建 axios 实例
 const service = axios.create({
 	baseURL: process.env.VUE_APP_BASE_API,
-	timeout: 50000,
+	timeout: 10000,
 	headers: { 'Content-Type': 'application/json' },
 });
 
 // 添加请求拦截器
 service.interceptors.request.use(
 	(config) => {
-		console.log()
 		// 在发送请求之前做些什么 token
 		if (Session.get('token')) {
-			config.headers.common['Authorization'] = `${Session.get('token')}`;
-
+			config.headers.common['merchant-server-token'] = `${Session.get('token')}`;
 		}
 		return config;
 	},
@@ -31,7 +29,6 @@ service.interceptors.request.use(
 // 添加响应拦截器
 service.interceptors.response.use(
 	(response) => {
-         console.log(response)
 		// 对响应数据做点什么
 		const res = response.data;
 		// if (res.code && res.code !== 0) {

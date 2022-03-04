@@ -18,11 +18,8 @@ export function sendCode(userPhone) {
 //验证码登录
 export function verificationCodeLogin(userPhone,code) {
 	return request({
-		url: `api/verificationCodeLogin/${userPhone}/${code}`,
-		method: 'post',
-	    headers:{
-			token:'merchant-server-token'
-		}
+		url: `api/oilUser/verificationCodeLogin/${userPhone}/${code}`,
+		method: 'post'
 	});
 }
 
