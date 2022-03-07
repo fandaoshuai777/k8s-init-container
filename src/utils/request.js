@@ -2,21 +2,21 @@ import store from '@/store';
 import router, { resetRouter } from '@/router/index';
 import axios from 'axios';
 import { Message, MessageBox } from 'element-ui';
-import { Session } from '@/utils/storage';
+import { Local } from '@/utils/storage';
 
 // 创建 axios 实例
 const service = axios.create({
 	baseURL: process.env.VUE_APP_BASE_API,
 	timeout: 10000,
-	headers: { 'Content-Type': 'application/json' },
+	headers: { 'Content-Type': 'application/json;charset=UTF-8' },
 });
 
 // 添加请求拦截器
 service.interceptors.request.use(
 	(config) => {
 		// 在发送请求之前做些什么 token
-		if (Session.get('token')) {
-			config.headers.common['merchant-server-token'] = `${Session.get('token')}`;
+		if (Local.get('token')) {
+			config.headers.common['merchant-server-token'] = `${Local.get('token')}`;
 		}
 		return config;
 	},

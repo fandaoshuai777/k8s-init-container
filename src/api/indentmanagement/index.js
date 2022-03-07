@@ -25,7 +25,29 @@ export function stamp(params) {
 //申请退款
 export function refundReview(params) {
   return request({
-    url: `api/order/orderInfo/refundReview/${params}`,
+    url: `api/order/orderInfo/refundReview`,
+    method: 'post',
+    data: params,
+  })
+}
+//油品下拉
+export function oilTypeDict() {
+  return request({
+    url: `api/order/oilTypeDict`,
+    method: 'post',
+  })
+}
+//油站下拉
+export function oilStationDict() {
+  return request({
+    url: `api/order/oilStationDict`,
+    method: 'post',
+  })
+}
+//状态下拉
+export function oilStatusDict() {
+  return request({
+    url: `api/order/oilStatusDict`,
     method: 'post',
   })
 }

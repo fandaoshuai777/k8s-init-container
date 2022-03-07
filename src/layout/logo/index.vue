@@ -1,7 +1,7 @@
 <template>
 	<div class="layout-logo" v-if="setShowLogo" @click="onThemeConfigChange">
 		<img src="https://gitee.com/lyt-top/vue-next-admin-images/raw/master/vue2/logo-mini.svg" class="layout-logo-medium-img" />
-		<span>{{ getThemeConfig.globalTitle }}</span>
+		<span>小鹰加油商家端</span>
 	</div>
 	<div class="layout-logo-size" v-else @click="onThemeConfigChange">
 		<img src="https://gitee.com/lyt-top/vue-next-admin-images/raw/master/vue2/logo-mini.svg" class="layout-logo-size-img" />

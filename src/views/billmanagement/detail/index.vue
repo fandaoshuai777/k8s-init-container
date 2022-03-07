@@ -8,27 +8,24 @@
 					</el-form-item>
 					<el-form-item label=" 支付时间">
 						<el-date-picker
-							v-model="formInline.user"
+							v-model="Time"
 							type="datetimerange"
 							start-placeholder="开始日期"
 							end-placeholder="结束日期"
-							:default-time="['12:00:00']"
+							:default-time="['00:00:00', '23:59:59']"
+							value-format="yyyy-MM-dd HH:mm:ss"
+							:picker-options="pickerOptions"
 						>
 						</el-date-picker>
 					</el-form-item>
 					<el-form-item label="交易类型">
-						<el-select v-model="formInline.paymentType">
-							<el-option label="全部" value=""></el-option>
-							<el-option label="油卡支付" value="1"></el-option>
-							<el-option label="余额支付" value="3"></el-option>
-							<el-option label="微信支付" value="2"></el-option>
+						<el-select v-model="formInline.paymentType" clearable>
+							<el-option v-for="(item, index) in billSta" :key="index" :label="item.label" :value="item.code"></el-option>
 						</el-select>
 					</el-form-item>
 					<el-form-item label="油号">
-						<el-select v-model="formInline.oilType">
-							<el-option label="全部" value=""></el-option>
-							<el-option label="95#" value="95#"></el-option>
-							<el-option label="92#" value="92#"></el-option>
+						<el-select v-model="formInline.oilType" clearable>
+							<el-option v-for="(item, index) in billStas" :key="index" :label="item" :value="item"></el-option>
 						</el-select>
 					</el-form-item>
 				</div>
@@ -43,21 +40,19 @@
 			<el-table style="width: 100%" :data="tableList">
 				<el-table-column prop="orderNo" label="订单编号" align="center" />
 				<el-table-column prop="driverTel" label="司机手机号" show-overflow-tooltip align="center"></el-table-column>
-				<el-table-column prop="a" label="交易类型" show-overflow-tooltip align="center"></el-table-column>
+				<el-table-column prop="state" label="交易类型" show-overflow-tooltip align="center"></el-table-column>
 				<el-table-column prop="fuelVolume" label="订单油机金额" show-overflow-tooltip align="center"></el-table-column>
 				<el-table-column prop="solidKnotAmount" label="应结算金额" show-overflow-tooltip align="center" />
-				<el-table-column prop="a" label="让利金额" show-overflow-tooltip align="center"></el-table-column>
+				<el-table-column prop="platformMoney" label="让利金额" show-overflow-tooltip align="center"></el-table-column>
 				<el-table-column prop="slottingAllowanceMoney" label="通道费" show-overflow-tooltip align="center"></el-table-column>
-				<el-table-column prop="a" label="商家承担直降金额" show-overflow-tooltip align="center"></el-table-column>
-				<el-table-column prop="a" label="商家承担平台优惠券金额" show-overflow-tooltip align="center"></el-table-column>
-				<el-table-column prop="platformSettleAmount" label="结算单价" show-overflow-tooltip align="center"></el-table-column>
+				<el-table-column prop="channelPrice" label="结算单价" show-overflow-tooltip align="center"></el-table-column>
 				<el-table-column prop="gunno" label="枪号" show-overflow-tooltip align="center"></el-table-column>
 				<el-table-column prop="oilType" label="油品类型" show-overflow-tooltip align="center"></el-table-column>
-				<el-table-column prop="a" label="加油量" show-overflow-tooltip align="center"></el-table-column>
+				<el-table-column prop="fuelVolume" label="加油量" show-overflow-tooltip align="center"></el-table-column>
 				<el-table-column prop="paymentStatus" label="订单状态" show-overflow-tooltip align="center"></el-table-column>
-				<el-table-column prop="massState" label="订单来源" show-overflow-tooltip align="center"></el-table-column>
-				<el-table-column prop="orderTime" label="创建时间" show-overflow-tooltip align="center"></el-table-column>
-				<el-table-column prop="paymentTime" label="支付时间" show-overflow-tooltip align="center"></el-table-column>
+				<el-table-column prop="orderSource" label="订单来源" show-overflow-tooltip align="center"></el-table-column>
+				<el-table-column prop="paymentTime" label="创建时间" show-overflow-tooltip align="center"></el-table-column>
+				<el-table-column prop="orderTime" label="支付时间" show-overflow-tooltip align="center"></el-table-column>
 			</el-table>
 			<div class="right">
 				<el-pagination
@@ -76,7 +71,8 @@
 	</div>
 </template>
 <script>
-import { billDetailList } from '@/api/bill/index.js';
+import { billDetailList, payTypeDict } from '@/api/bill/index.js';
+import { oilTypeDict } from '@/api/indentmanagement/index.js';
 
 export default {
 	data() {
@@ -85,12 +81,48 @@ export default {
 				orderNo: null,
 				paymentType: null,
 				oilType: null,
+				startTime: null,
+				endTime: null,
 			},
 			tableList: [],
 			total: 0,
 			pagination: {
 				pageSize: 10,
 				pageNum: 1,
+			},
+			Time: null,
+			billSta: [],
+			billStas: [],
+			pickerOptions: {
+				shortcuts: [
+					{
+						text: '最近一周',
+						onClick(picker) {
+							const end = new Date();
+							const start = new Date();
+							start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+							picker.$emit('pick', [start, end]);
+						},
+					},
+					{
+						text: '最近一个月',
+						onClick(picker) {
+							const end = new Date();
+							const start = new Date();
+							start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+							picker.$emit('pick', [start, end]);
+						},
+					},
+					{
+						text: '最近三个月',
+						onClick(picker) {
+							const end = new Date();
+							const start = new Date();
+							start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+							picker.$emit('pick', [start, end]);
+						},
+					},
+				],
 			},
 		};
 	},
@@ -102,24 +134,58 @@ export default {
 	created() {
 		this.indentList();
 	},
+	mounted() {
+		payTypeDict().then((res) => {
+			this.billSta = res.result.map((n) => {
+				return {
+					...n,
+					label: n.value,
+				};
+			});
+		});
+		oilTypeDict().then((res) => {
+			this.billStas = res.result;
+		});
+	},
 	methods: {
+
 		inquire() {
 			this.pagination.pageNum = 1;
+			if (this.Time == null) {
+				this.formInline.endTime = '';
+				this.formInline.startTime = '';
+			} else {
+				this.formInline.endTime = this.Time[0];
+				this.formInline.startTime = this.Time[1];
+			}
+
 			this.indentList();
 		},
 		indentList() {
-			let date = { ...this.pagination, ...this.formInline };
-			billDetailList(date, this.$route.query.stationId).then((res) => {
+			let date = { ...this.pagination, ...this.formInline, stationId: this.$route.query.stationId };
+			billDetailList(date).then((res) => {
 				this.tableList = res.result.data.map((n) => {
 					return {
 						...n,
 						paymentType: n.paymentType == 1 ? '油卡支付' : n.paymentType == 2 ? '微信支付' : n.paymentType == 3 ? '余额支付' : n.paymentType,
+						paymentStatus:
+							n.paymentStatus == 1
+								? '已付款'
+								: n.paymentStatus == 2
+								? '退款成功'
+								: n.paymentStatus == 3
+								? '付款中'
+								: n.paymentStatus == 4
+								? '待退款'
+								: n.paymentStatus == 5
+								? '退款失败'
+								: n.paymentStatus,
+						state: n.state == 1 ? '消费 ' : n.state == 2 ? '退款' : n.state,
 					};
 				});
 				this.total = res.result.totalNum;
 			});
 		},
-
 		// 页码变化
 		paginationChange(value) {
 			this.pagination.pageNum = value;

@@ -1,4 +1,4 @@
-import { Session } from '@/utils/storage.js';
+import { Local } from '@/utils/storage.js';
 
 const userInfosModule = {
 	namespaced: true,
@@ -17,7 +17,7 @@ const userInfosModule = {
 			if (data) {
 				commit('getUserInfos', data);
 			} else {
-				if (Session.get('userInfo')) commit('getUserInfos', Session.get('userInfo'));
+				if (Local.get('userInfo')) commit('getUserInfos', Local.get('userInfo'));
 			}
 		},
 	},

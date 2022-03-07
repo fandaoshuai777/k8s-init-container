@@ -5,38 +5,38 @@
 				<el-form :model="formInline" class="demo-form-inline">
 					<div class="header">
 						<el-form-item label="订单号">
-							<el-input v-model="formInline.orderNo" placeholder="请输入订单号"></el-input>
+							<el-input v-model="formInline.orderNo" placeholder="请输入订单号" clearable></el-input>
 						</el-form-item>
 						<el-form-item label="手机号">
-							<el-input v-model="formInline.driverTel" placeholder="请输入手机号"></el-input>
+							<el-input v-model="formInline.driverTel" placeholder="请输入手机号" clearable></el-input>
 						</el-form-item>
 						<el-form-item label="油号">
 							<el-select v-model="formInline.oilType">
 								<el-option label="全部" value=""></el-option>
-								<el-option label="95#" value="95#"></el-option>
-								<el-option label="92#" value="92#"></el-option>
+								<el-option v-for="(item, index) in batchNum" :key="index" :label="item.index" :value="item"></el-option>
 							</el-select>
 						</el-form-item>
 						<el-form-item label="订单状态">
-							<el-select v-model="formInline.orderStatus">
-								<el-option v-for="(item, index) in options" :key="index" :label="item.label" :value="item.label"></el-option>
+							<el-select v-model="formInline.paymentStatus">
+								<el-option v-for="(item, index) in oilStatusDict" :key="index" :label="item.label" :value="item.code"></el-option>
 							</el-select>
 						</el-form-item>
 					</div>
 					<div class="header-buttom">
 						<el-form-item label="支付时间">
 							<el-date-picker
-								v-model="formInline.timePayment"
+								v-model="Time"
 								type="datetimerange"
 								start-placeholder="开始日期"
 								end-placeholder="结束日期"
-								:default-time="['12:00:00']"
+								:default-time="['00:00:00', '23:59:59']"
+								value-format="yyyy-MM-dd HH:mm:ss"
 							>
 							</el-date-picker>
 						</el-form-item>
 						<el-form-item label="油站">
-							<el-select v-model="formInline.stationName">
-								<el-option v-for="(item, index) in options" :key="index" :label="item.label" :value="item.label"></el-option>
+							<el-select v-model="formInline.stationName" clearable>
+								<el-option v-for="(item, index) in oilStations" :key="index" :label="item.label" :value="item.code"></el-option>
 							</el-select>
 						</el-form-item>
 						<el-form-item>
@@ -47,7 +47,7 @@
 					</div>
 				</el-form>
 			</div>
-			<div class="center">交易总金额：{} 订单数量：{}总升数：{}</div>
+			<div class="center">交易总金额：{{ dieselEngineNumCount }} 订单数量：{{ orderNum }}总升数：{{ fuelVolumeTotal }}</div>
 			<el-table style="width: 100%" :data="tableData" border>
 				<el-table-column prop="orderNo" label="订单号" align="center" />
 				<el-table-column prop="paymentStatus" label="订单状态" show-overflow-tooltip align="center"></el-table-column>
@@ -62,7 +62,15 @@
 				<el-table-column label="操作" width="200" align="center">
 					<template #default="scope">
 						<el-button size="small" type="text" @click="onOpenEditRole(scope.row)">查看</el-button>
-						<el-button size="small" type="text" @click="onRowDel(scope.row)">发起退款</el-button>
+						<el-button
+							size="small"
+							type="text"
+							:disabled="
+								scope.row.paymentStatus === '已付款' ? false : scope.row.paymentStatus === '退款失败' ? false : true
+							"
+							@click="onRowDel(scope.row)"
+							>发起退款</el-button
+						>
 						<el-button size="small" type="text" @click="receipt(scope.row)">补打小票</el-button>
 					</template>
 				</el-table-column>
@@ -93,81 +101,64 @@
 				>
 				<el-col :span="6" style="text-algin: center"><div class="grid-content bg-purple">下单时间</div></el-col>
 				<el-col :span="6"
-					><div class="grid-content bg-purple">{{ orderData.orderNo }}</div></el-col
+					><div class="grid-content bg-purple">{{ orderData.orderTime }}</div></el-col
 				>
 				<el-col :span="6"><div class="grid-content bg-purple">支付时间</div></el-col>
 				<el-col :span="6"
-					><div class="grid-content bg-purple">{{ orderData.stationName }}</div></el-col
+					><div class="grid-content bg-purple">{{ orderData.paymentTime }}</div></el-col
 				>
 				<el-col :span="6" style="text-algin: center"><div class="grid-content bg-purple">订单状态</div></el-col>
 				<el-col :span="6"
-					><div class="grid-content bg-purple">{{ orderData.orderNo }}</div></el-col
+					><div class="grid-content bg-purple">{{ orderData.paymentStatus }}</div></el-col
 				>
-				<el-col :span="6"><div class="grid-content bg-purple">123</div></el-col>
-				<el-col :span="6"
-					><div class="grid-content bg-purple">{{ orderData.stationName }}</div></el-col
-				>
+				<el-col :span="6"><div class="grid-content bg-purple"></div></el-col>
+				<el-col :span="6"><div class="grid-content bg-purple"></div></el-col>
 				<el-col :span="6" style="text-algin: center"><div class="grid-content bg-purple">所属油站</div></el-col>
 				<el-col :span="6"
-					><div class="grid-content bg-purple">{{ orderData.orderNo }}</div></el-col
-				>
-				<el-col :span="6"><div class="grid-content bg-purple">123</div></el-col>
-				<el-col :span="6"
 					><div class="grid-content bg-purple">{{ orderData.stationName }}</div></el-col
 				>
+				<el-col :span="6"><div class="grid-content bg-purple"></div></el-col>
+				<el-col :span="6"><div class="grid-content bg-purple"></div></el-col>
 				<el-col :span="6" style="text-algin: center"><div class="grid-content bg-purple">退款时间</div></el-col>
 				<el-col :span="6"
 					><div class="grid-content bg-purple">{{ orderData.orderNo }}</div></el-col
 				>
 				<el-col :span="6"><div class="grid-content bg-purple">退款原因</div></el-col>
-				<el-col :span="6"
-					><div class="grid-content bg-purple">{{ orderData.stationName }}</div></el-col
-				>
+				<el-col :span="6"><div class="grid-content bg-purple"></div></el-col>
 				<el-col :span="6"><div class="grid-content bg-purple">拒绝退款原因</div></el-col>
-				<el-col :span="6"
-					><div class="grid-content bg-purple">{{ orderData.stationName }}</div></el-col
-				>
-				<el-col :span="6"><div class="grid-content bg-purple">123</div></el-col>
-				<el-col :span="6"
-					><div class="grid-content bg-purple">{{ orderData.stationName }}</div></el-col
-				>
+				<el-col :span="6"><div class="grid-content bg-purple"></div></el-col>
+				<el-col :span="6"><div class="grid-content bg-purple"></div></el-col>
+				<el-col :span="6"><div class="grid-content bg-purple"></div></el-col>
 				<el-col :span="6"><div class="grid-content bg-purple">油品</div></el-col>
 				<el-col :span="6"
-					><div class="grid-content bg-purple">{{ orderData.stationName }}</div></el-col
+					><div class="grid-content bg-purple">{{ orderData.oilType }}</div></el-col
 				>
 				<el-col :span="6"><div class="grid-content bg-purple">油枪</div></el-col>
 				<el-col :span="6"
-					><div class="grid-content bg-purple">{{ orderData.stationName }}</div></el-col
+					><div class="grid-content bg-purple">{{ orderData.oilGunNo }}</div></el-col
 				>
 				<el-col :span="6"><div class="grid-content bg-purple">加油量</div></el-col>
 				<el-col :span="6"
-					><div class="grid-content bg-purple">{{ orderData.stationName }}</div></el-col
+					><div class="grid-content bg-purple">{{ orderData.fuelVolume }}</div></el-col
 				>
 				<el-col :span="6"><div class="grid-content bg-purple">订单油机金额</div></el-col>
-				<el-col :span="6"
-					><div class="grid-content bg-purple">{{ orderData.stationName }}</div></el-col
-				>
+				<el-col :span="6"><div class="grid-content bg-purple"></div></el-col>
 				<el-col :span="6"><div class="grid-content bg-purple">序列号(撬装)</div></el-col>
-				<el-col :span="6"
-					><div class="grid-content bg-purple">{{ orderData.stationName }}</div></el-col
-				>
-				<el-col :span="6"><div class="grid-content bg-purple">123</div></el-col>
-				<el-col :span="6"
-					><div class="grid-content bg-purple">{{ orderData.stationName }}</div></el-col
-				>
+				<el-col :span="6"><div class="grid-content bg-purple"></div></el-col>
+				<el-col :span="6"><div class="grid-content bg-purple"></div></el-col>
+				<el-col :span="6"><div class="grid-content bg-purple"></div></el-col>
 			</el-row>
 		</el-dialog>
 		<el-dialog title="退款" :visible.sync="refund" :close-on-click-modal="false" @close="close">
 			<el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
 				<el-form-item label="退款原因" prop="region">
 					<el-select v-model="ruleForm.region" style="width: 100%">
-						<el-option label="错付油站" value="3"></el-option>
-						<el-option label="错付金额" value="2"></el-option>
-						<el-option label="付款未加油" value="1"></el-option>
-						<el-option label="其他" value="0"></el-option>
+						<el-option label="错付油站" value="错付油站"></el-option>
+						<el-option label="错付金额" value="错付金额"></el-option>
+						<el-option label="付款未加油" value="付款未加油"></el-option>
+						<el-option label="其他" value="其他"></el-option>
 					</el-select>
 				</el-form-item>
-
 				<el-form-item prop="name" :required="isHaveTo">
 					<el-input type="textarea" placeholder="请输入内容" v-model="ruleForm.name" maxlength="20" show-word-limit resize="none" :rows="6">
 					</el-input>
@@ -183,7 +174,7 @@
 	</div>
 </template>
 <script>
-import { orderPage, orderInfo, stamp, refundReview } from '@/api/indentmanagement/index.js';
+import { orderPage, orderInfo, stamp, refundReview, oilTypeDict, oilStationDict, oilStatusDict } from '@/api/indentmanagement/index.js';
 
 export default {
 	data() {
@@ -199,17 +190,25 @@ export default {
 		return {
 			compile: false,
 			refund: false,
+			 disabled: true,
 			formInline: {
 				orderNo: '',
 				cellPhone: '',
 				oilMark: null,
-				orderStatus: null,
-				timePayment: null,
+				paymentStatus: null,
 				oilStation: null,
+				startTime: null,
+				endTime: null,
 			},
+			Time: null,
+			dieselEngineNumCount: 0,
+			fuelVolumeTotal: 0,
+			orderNum: 0,
 			tableData: [],
-			orderData: {},
+			orderData: [],
+
 			total: 0,
+			rfndReason: '',
 			pagination: {
 				pageSize: 10,
 				pageNum: 1,
@@ -234,10 +233,14 @@ export default {
 					label: '其他',
 				},
 			],
+			batchNum: [],
+			oilStations: [],
+			oilStatusDict: [],
 			ruleForm: {
 				name: '',
-				region: '0',
+				region: '其他',
 			},
+			flag: '',
 			rules: {
 				name: [{ validator: validateName }],
 				region: [{ required: true, message: '请选择类型', trigger: 'blur' }],
@@ -252,13 +255,24 @@ export default {
 	methods: {
 		inquire() {
 			this.pagination.pageNum = 1;
+			if (this.Time == null) {
+				this.formInline.endTime = '';
+				this.formInline.startTime = '';
+			} else {
+				this.formInline.endTime = this.Time[0];
+				this.formInline.startTime = this.Time[1];
+			}
+
 			this.indentList();
 		},
 		//列表
 		indentList() {
 			let date = { ...this.pagination, ...this.formInline };
 			orderPage(date).then((res) => {
-				this.tableData = res.result.data.map((n) => {
+				this.dieselEngineNumCount = res.result.orderPageTotal.dieselEngineNumCount.toFixed(2);
+				this.fuelVolumeTotal = res.result.orderPageTotal.fuelVolumeTotal.toFixed(2);
+				this.orderNum = res.result.orderPageTotal.orderNum.toFixed(2);
+				this.tableData = res.result.orderVOPage.data.map((n) => {
 					return {
 						...n,
 						paymentStatus:
@@ -279,7 +293,8 @@ export default {
 								: n.paymentStatus,
 					};
 				});
-				this.total = res.result.totalNum;
+				this.flag = this.tableData.paymentStatus;
+				this.total = res.result.orderVOPage.totalNum;
 			});
 		},
 		//查看详情
@@ -292,14 +307,28 @@ export default {
 		//发起退款
 		onRowDel(row) {
 			this.refund = true;
+			console.log(row.orderNo);
 			this.serial = row.orderNo;
 		},
 		//申请退款
 		apply(formName) {
 			this.$refs[formName].validate((valid) => {
 				if (valid) {
-					refundReview(this.serial).then((res) => {
-						console.log(res);
+					if (this.ruleForm.name !== '') {
+						this.rfndReason = this.ruleForm.name;
+					} else {
+						this.rfndReason = this.ruleForm.region;
+					}
+					let date = { rfndReason: this.rfndReason, orderNo: this.serial };
+					refundReview(date).then((res) => {
+						if (res.code == 200) {
+							this.refund = false;
+							this.$message.success('发起退款成功');
+							this.$refs.ruleForm.resetFields();
+						} else {
+							// this.$refs.ruleForm.resetFields();
+							this.$message.error(res.msg);
+						}
 					});
 				} else {
 					return false;
@@ -311,6 +340,8 @@ export default {
 			stamp(row.orderNo).then((res) => {
 				if (res.code == 200) {
 					this.$message.success('打印成功');
+				}else{
+					this.$message.error(res.msg);
 				}
 			});
 		},
@@ -333,10 +364,31 @@ export default {
 	},
 	mounted() {
 		this.indentList();
+		oilTypeDict().then((res) => {
+			this.batchNum = res.result;
+		});
+		oilStationDict().then((res) => {
+			this.oilStations = res.result.map((n) => {
+				return {
+					...n,
+					label: n.value,
+				};
+			});
+			// this.oilStations = res.result;
+		});
+		oilStatusDict().then((res) => {
+			this.oilStatusDict = res.result.map((n) => {
+				return {
+					...n,
+					label: n.value,
+				};
+			});
+			// this.oilStatusDict = res.result;
+		});
 	},
 	computed: {
 		isHaveTo: function () {
-			return this.ruleForm.region !== `1` && this.ruleForm.region !== `2` && this.ruleForm.region !== `3`;
+			return this.ruleForm.region !== `错付油站` && this.ruleForm.region !== `错付金额` && this.ruleForm.region !== `付款未加油`;
 		},
 	},
 };
@@ -355,8 +407,10 @@ export default {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
+
 	.el-form-item {
 		display: flex;
+		margin-right: 80px;
 	}
 }
 .right {

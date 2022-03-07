@@ -6,6 +6,7 @@
 </template>
 
 <script>
+
 import setIntroduction from '@/utils/setIconfont.js';
 import { Local } from '@/utils/storage.js';
 import Setings from '@/layout/navBars/breadcrumb/setings.vue';
@@ -46,7 +47,6 @@ export default {
 		$route: {
 			handler(to) {
 				this.$nextTick(() => {
-					
 					let webTitle = '';
 					let { globalTitle } = this.$store.state.themeConfig.themeConfig;
 					to.path === '/login' ? (webTitle = to.meta.title) : (webTitle = this.$t(to.meta.title));
@@ -62,3 +62,4 @@ export default {
 	},
 };
 </script>
+

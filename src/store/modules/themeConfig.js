@@ -67,7 +67,7 @@ const themeConfigModule = {
 			 * 全局网站标题 / 副标题
 			 */
 			// 网站主标题（菜单导航、浏览器当前网页标题）
-			globalTitle: 'vue-prev-admin',
+			globalTitle: '小鹰加油商家端',
 			// 网站副标题（登录页顶部文字）
 			globalViceTitle: 'SMALL@小柒',
 			// 网站描述（登录页顶部文字）

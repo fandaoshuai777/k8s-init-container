@@ -1,48 +1,55 @@
 <template>
-	<el-form size="large" class="login-content-form" :model="form" ref="Userform" :rules="rules">
-		<el-form-item class="login-animation1" prop="userPhone">
-			<el-input type="text" clearable autocomplete="off" placeholder="请输入账号" v-model.number="form.userPhone">
-				<template #prefix>
-					<i class="el-icon-user left"></i>
-				</template>
-			</el-input>
-		</el-form-item>
-		<el-form-item class="login-animation2" prop="userPassword">
-			<el-input autocomplete="off" placeholder="请输入密码" v-model.number="form.userPassword" :show-password="true">
-				<template #prefix>
-					<i class="el-icon-lock left"></i>
-				</template>
-				<template #suffix>
-					<i> </i>
-				</template>
-			</el-input>
-		</el-form-item>
-		<el-form-item class="login-animation3 item"> <el-checkbox label="">自动登录</el-checkbox></el-form-item>
-		<el-form-item class="login-animation4 center" prop="type">
-			<el-checkbox-group v-model="form.type" style="margin-right: 5px; height: 30px">
-				<el-checkbox name="type"></el-checkbox>
-			</el-checkbox-group>
-			<div style="margin-right: 5px; height: 30px">
-				<span>我已阅读并同意</span>
-				<span class="color" @click="platform()">《平台服务协议》</span>
-
-				和<span class="color" @click="commercial()">《商户隐私协议》</span>
-			</div>
-		</el-form-item>
-		<el-form-item class="login-animation4">
-			<el-button type="primary" class="login-content-submit" @click="register('form')" round>
-				<span>登录</span>
-			</el-button>
-		</el-form-item>
-	</el-form>
+	<div >
+		<el-form size="large" class="login-content-form" :model="form" ref="Userform" :rules="rules">
+			<el-form-item class="login-animation1" prop="userPhone">
+				<el-input type="text" clearable autocomplete="off" placeholder="请输入账号" v-model.number="form.userPhone">
+					<template #prefix>
+						<i class="el-icon-user left"></i>
+					</template>
+				</el-input>
+			</el-form-item>
+			<el-form-item class="login-animation2" prop="userPassword">
+				<el-input autocomplete="off" placeholder="请输入密码" v-model.number="form.userPassword" :show-password="true">
+					<template #prefix>
+						<i class="el-icon-lock left"></i>
+					</template>
+					<template #suffix>
+						<i> </i>
+					</template>
+				</el-input>
+			</el-form-item>
+			<el-form-item class="login-animation3 item"> <el-checkbox v-model="volunt">自动登录</el-checkbox></el-form-item>
+			<el-form-item class="login-animation4 center" prop="type">
+				<el-checkbox-group v-model="form.type" style="margin-right: 5px; height: 30px">
+					<el-checkbox name="type"></el-checkbox>
+				</el-checkbox-group>
+				<div style="margin-right: 5px; height: 30px">
+					<span>我已阅读并同意</span>
+					<span class="color" @click="platform()">《平台服务协议》</span>
+					和<span class="color" @click="commercial()">《商户隐私协议》</span>
+				</div>
+			</el-form-item>
+			<el-form-item class="login-animation4">
+				<el-button type="primary" class="login-content-submit" @click="register('form')" round>
+					<span>登录</span>
+				</el-button>
+			</el-form-item>
+		</el-form>
+		<Platform ref="child" />
+	</div>
 </template>
 <script>
 import { PrevLoading } from '@/utils/loading.js';
 import { account } from '@/api/login/index.js';
-import { Session } from '@/utils/storage.js';
+import { Local, Session } from '@/utils/storage.js';
+import  Platform  from '../../agreement/platform.vue';
 export default {
+	components: {
+		Platform,
+	},
 	data() {
 		return {
+			addOrUpdateVisible: false,
 			form: {
 				userPhone: '',
 				userPassword: '',
@@ -51,6 +58,7 @@ export default {
 			submit: {
 				loading: false,
 			},
+			volunt: true,
 			rules: {
 				userPassword: [
 					{ required: true, message: '密码不能为空' },
@@ -66,7 +74,6 @@ export default {
 	},
 	methods: {
 		register() {
-			
 			this.$refs.Userform.validate((valid) => {
 				if (valid) {
 					account(this.form).then((res) => {
@@ -102,17 +109,31 @@ export default {
 									authBtnList: defaultAuthBtnList,
 									token: res.result,
 								};
-								// 存储 token 到浏览器缓存
-								Session.set('token', res.result);
-								// 存储用户信息到浏览器缓存
-								Session.set('userInfo', userInfos);
-								// 存储用户信息到vuex
-								this.$store.dispatch('userInfos/setUserInfos', userInfos);
-								PrevLoading.start();
-								window.location.href = `${window.location.origin}${window.location.pathname}`;
-								setTimeout(() => {
-									this.$message.success(`${this.currentTime}，${this.$t('message.login.signInText')}`);
-								}, 300);
+								if (this.volunt == true) {
+									// 存储 token 到浏览器缓存
+									Local.set('token', res.result);
+									// 存储用户信息到浏览器缓存
+									Local.set('userInfo', userInfos);
+									// 存储用户信息到vuex
+									this.$store.dispatch('userInfos/setUserInfos', userInfos);
+									PrevLoading.start();
+									window.location.href = `${window.location.origin}${window.location.pathname}`;
+									setTimeout(() => {
+										this.$message.success(`${this.currentTime}，${this.$t('message.login.signInText')}`);
+									}, 300);
+								} else {
+									// 存储 token 到浏览器缓存
+									Session.set('token', res.result);
+									// 存储用户信息到浏览器缓存
+									Session.set('userInfo', userInfos);
+									// 存储用户信息到vuex
+									this.$store.dispatch('userInfos/setUserInfos', userInfos);
+									PrevLoading.start();
+									window.location.href = `${window.location.origin}${window.location.pathname}`;
+									setTimeout(() => {
+										this.$message.success(`${this.currentTime}，${this.$t('message.login.signInText')}`);
+									}, 300);
+								}
 							}, 300);
 						} else {
 							this.$nextTick(() => {
@@ -127,9 +148,10 @@ export default {
 				}
 			});
 		},
+
 		consent() {},
 		platform() {
-			this.$router.push('/platform');
+			this.$refs.child.sing();
 		},
 		commercial() {
 			this.$router.push('/commercial');
@@ -203,5 +225,9 @@ export default {
 .color {
 	color: #87cefa;
 	cursor: pointer;
+}
+::v-deep .el-checkbox__label {
+	color: black;
+	padding-left: 4px;
 }
 </style>

@@ -6,30 +6,35 @@
 			</div>
 			<img src="./login-icon-two.svg" class="login-icon-group-icon" />
 		</div>
-		<div class="login-content">
-			<div class="login-content-main">
-				<h4 class="login-content-title ml15">管理后台</h4>
-				<div v-if="!isScan">
-					<el-tabs  v-model="tabsActiveName">
-						<el-tab-pane :label="'用户名登录'" name="account">
-							<Account />
-						</el-tab-pane>
-						<el-tab-pane :label="'手机号登录'" name="mobile">
-							<Mobile />
-						</el-tab-pane>
-					</el-tabs>
-				</div>
-				<div class="login-content-main-sacn" @click="isScan = !isScan">
-					<i class="iconfont" :class="isScan ? 'icon-diannao1' : 'icon-barcode-qr'"></i>
-					<div class="login-content-main-sacn-delta"></div>
-				</div>
+		
+			<div class="login-content">
+			
+					<div class="login-content-main">
+						<h4 class="login-content-title ml15">管理后台</h4>
+						<div v-if="!isScan">
+							<el-tabs v-model="tabsActiveName">
+								<el-tab-pane :label="'用户名登录'" name="account">
+									<Account />
+								</el-tab-pane>
+								<el-tab-pane :label="'手机号登录'" name="mobile">
+									<Mobile />
+								</el-tab-pane>
+							</el-tabs>
+						</div>
+						<div class="login-content-main-sacn" @click="isScan = !isScan">
+							<i class="iconfont" :class="isScan ? 'icon-diannao1' : 'icon-barcode-qr'"></i>
+							<div class="login-content-main-sacn-delta">123</div>
+						</div>
+					</div>
+			
 			</div>
-		</div>
+	
 	</div>
 </template>
 <script>
 import Account from './component/account.vue';
 import Mobile from './component/mobile.vue';
+
 export default {
 	components: {
 		Account,
@@ -41,6 +46,7 @@ export default {
 			tabsActiveName: 'account',
 		};
 	},
+	methods: {},
 };
 </script>
 <style scoped lang="scss">
@@ -77,7 +83,7 @@ export default {
 			overflow: hidden;
 			height: 80%;
 			-webkit-mask-box-image: url("data:image/svg+xml,%3Csvg width='1200' height='770' xmlns='http://www.w3.org/2000/svg' fill='none'%3E%3Cg%3E%3Cpath id='svg_1' d='M58.4 47.77C104.6 59.51 135.26 67.37 162.11 78.04C188.97 88.72 226.33 102.69 265.92 123.55C305.51 144.4 366.96 167.09 441.43 121.52C515.9 75.95 546.48 61.01 577.69 46.27C608.9 31.53 625.86 23.69 680.26 12.28C734.65 0.87 837.29 10.7 867.29 21.8C897.29 32.9 935.51 51.9 962.21 95.45C988.9 139.01 972.91 177.36 951.37 221.39C929.83 265.43 883.49 306 890.44 337.33C897.4 368.66 974.73 412.18 974.73 411.47C974.73 412.18 1066.36 457.62 1106.36 491.06C1146.36 524.5 1178.8 563.36 1184.03 579.63C1189.26 595.9 1200.4 622.49 1181.55 676.88C1162.71 731.26 1127.16 764.32 1115.31 778.64C1103.45 792.96 5.34 783.61 4.32 784.63C3.3 785.65 -172.34 2.38 1.13 35.04L58.4 47.77L58.4 47.77Z' fill='%23409eff'%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
-			background:#409EFF;
+			background: #409eff;
 			transition: all 0.3s ease;
 		}
 		&::after {
@@ -88,7 +94,7 @@ export default {
 			right: 0;
 			top: 0;
 			-webkit-mask-box-image: url("data:image/svg+xml,%3Csvg width='150' height='300' xmlns='http://www.w3.org/2000/svg' fill='none'%3E%3Cg%3E%3Cpath id='svg_1' d='M-0.56 -0.28C41.94 36.17 67.73 18.94 93.33 33.96C118.93 48.98 107.58 73.56 101.94 89.76C96.29 105.96 50.09 217.83 47.87 231.18C45.64 244.52 46.02 255.2 64.4 270.05C82.79 284.91 121.99 292.31 111.98 289.81C101.97 287.32 153.96 301.48 151.83 299.9C149.69 298.32 149.98 -1.36 149.71 -1.18C149.98 -1.36 -43.06 -36.74 -0.56 -0.28L-0.56 -0.28Z' fill='%23409eff'%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
-			background: #409EFF;
+			background: #409eff;
 			transition: all 0.3s ease;
 		}
 		&-icon {
@@ -165,4 +171,5 @@ export default {
 		}
 	}
 }
+
 </style>

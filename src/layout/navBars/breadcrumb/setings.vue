@@ -496,10 +496,10 @@ export default {
 			});
 		},
 		// 一键恢复默认
-onResetConfigClick  () {
-	Local.clear();
-	window.location.reload();
-},
+		onResetConfigClick() {
+			Local.clear();
+			window.location.reload();
+		},
 		// 一键复制配置
 		onCopyConfigClick() {
 			this.$store.state.themeConfig.themeConfig.isDrawer = false;

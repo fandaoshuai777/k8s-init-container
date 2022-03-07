@@ -4,28 +4,26 @@
 			<el-form :model="formInline" class="demo-form-inline">
 				<div class="header">
 					<el-form-item label="油站">
-						<el-select v-model="formInline.stationName">
-							<el-option label="全部" value="0"></el-option>
-							<el-option label="昌平加油站" value="昌平加油站"></el-option>
-							<el-option label="蓉电加油站" value="蓉电加油站"></el-option>
+						<el-select v-model="formInline.stationName" clearable>
+							<el-option v-for="(item, index) in oilStations" :key="index" :label="item.label" :value="item.code"></el-option>
 						</el-select>
 					</el-form-item>
-
 					<el-form-item label="账单状态">
-						<el-select v-model="formInline.billStatus">
-							<el-option label="全部" value="0"></el-option>
-							<el-option label="已生成" value="1"></el-option>
-							<el-option label="已结算" value="3"></el-option>
-							<el-option label="结算失败" value="2"></el-option>
+						<el-select v-model="formInline.billStatus" clearable>
+							<el-option v-for="(item, index) in billSta" :key="index" :label="item.label" :value="item.code"></el-option>
 						</el-select>
 					</el-form-item>
 					<el-form-item label="账单日期">
 						<el-date-picker
-							v-model="formInline.user"
-							type="datetimerange"
+							v-model="Time"
+							type="daterange"
+							align="right"
+							unlink-panels
+							range-separator="至"
 							start-placeholder="开始日期"
 							end-placeholder="结束日期"
-							:default-time="['12:00:00']"
+							value-format="yyyy-MM-dd"
+							style="width: 400px"
 						>
 						</el-date-picker>
 					</el-form-item>
@@ -36,7 +34,12 @@
 					</el-form-item>
 				</div>
 			</el-form>
-			<div style="margin-top: 20px">交易总金额（元）： 让利总金额（元）： 应结算总金额（元）： 实际结算总金额（元）： 商家承担直降总金额（元）：</div>
+			<div style="margin-top: 20px">
+				交易总金额（元）：{{ dieselEngineNumTotal }} 让利总金额（元）：{{ platformMoneyTotal }} 应结算总金额（元）：{{
+					settleAmountTotal
+				}}
+				实际结算总金额（元）：{{ solidKnotAmountTotal }} 商家承担直降总金额（元）：{{ plummetTotal }}
+			</div>
 			<el-table style="width: 100%" :data="tableData">
 				<el-table-column prop="billNo" label="账单编号" align="center" />
 				<el-table-column prop="billTime" label="账单日期" show-overflow-tooltip align="center"></el-table-column>
@@ -47,8 +50,8 @@
 				<el-table-column prop="plummet" label="商家承担直降金额(元）" show-overflow-tooltip align="center"></el-table-column>
 				<el-table-column prop="discount" label="商家承担平台优惠券金额(元)" show-overflow-tooltip align="center"></el-table-column>
 				<el-table-column prop="oldSolidKnotAmount" label="实结金额(元)" show-overflow-tooltip align="center"></el-table-column>
-				<el-table-column prop="a" label="升数" show-overflow-tooltip align="center"></el-table-column>
-				<el-table-column prop="a" label="交易笔数" show-overflow-tooltip align="center"></el-table-column>
+				<el-table-column prop="fuelVolume" label="升数" show-overflow-tooltip align="center"></el-table-column>
+				<el-table-column prop="orderNum" label="交易笔数" show-overflow-tooltip align="center"></el-table-column>
 				<el-table-column prop="serviceCharge" label="手续费(元)" show-overflow-tooltip align="center"></el-table-column>
 				<el-table-column prop="billStatus" label="账单状态" show-overflow-tooltip align="center"></el-table-column>
 				<el-table-column label="操作" align="center">
@@ -74,7 +77,8 @@
 	</div>
 </template>
 <script>
-import { billList } from '@/api/bill/index.js';
+import { billList, billStatusDict } from '@/api/bill/index.js';
+import { oilStationDict } from '@/api/indentmanagement/index.js';
 
 export default {
 	data() {
@@ -82,13 +86,23 @@ export default {
 			formInline: {
 				stationName: null,
 				billStatus: null,
+				startTime: null,
+				endTime: null,
 			},
+			dieselEngineNumTotal: 0,
+			platformMoneyTotal: 0,
+			plummetTotal: 0,
+			settleAmountTotal: 0,
+			solidKnotAmountTotal: 0,
 			tableData: [],
 			pagination: {
 				pageSize: 10,
 				pageNum: 1,
 			},
 			total: 0,
+			Time: null,
+			billSta: [],
+			oilStations: [],
 		};
 	},
 	computed: {
@@ -99,16 +113,54 @@ export default {
 	created() {
 		this.getbillList();
 	},
+	mounted() {
+		billStatusDict().then((res) => {
+			this.billSta = res.result.map((n) => {
+				return {
+					...n,
+					label: n.value,
+				};
+			});
+		});
+		oilStationDict().then((res) => {
+			console.log(res.result);
+			this.oilStations = res.result.map((n) => {
+				return {
+					...n,
+					label: n.value,
+				};
+			});
+			// this.oilStations = res.result;
+		});
+	},
 	methods: {
 		inquire() {
-			this.pagination.pageNum=1
+			console.log(this.Time);
+			this.pagination.pageNum = 1;
+			if (this.Time == null) {
+				this.formInline.endTime = '';
+				this.formInline.startTime = '';
+			} else {
+				this.formInline.endTime = this.Time[0];
+				this.formInline.startTime = this.Time[1];
+			}
 			this.getbillList();
 		},
 		getbillList() {
 			let date = { ...this.pagination, ...this.formInline };
 			billList(date).then((res) => {
-				this.tableData = res.result.data;
-				this.total = res.result.totalNum;
+				this.dieselEngineNumTotal = res.result.stationTotalVO.dieselEngineNumTotal;
+				this.platformMoneyTotal = res.result.stationTotalVO.platformMoneyTotal;
+				this.plummetTotal = res.result.stationTotalVO.plummetTotal;
+				this.settleAmountTotal = res.result.stationTotalVO.settleAmountTotal;
+				this.solidKnotAmountTotal = res.result.stationTotalVO.solidKnotAmountTotal;
+				this.tableData = res.result.oilStationDailyBillPage.data.map((n) => {
+					return {
+						...n,
+						billStatus: n.billStatus == 1 ? '未确认' : n.billStatus == 2 ? '已确认' : n.billStatus == 3 ? '已结算' : n.billStatus,
+					};
+				});
+				this.total = res.result.oilStationDailyBillPage.totalNum;
 			});
 		},
 		onOpenBill(row) {

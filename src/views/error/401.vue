@@ -19,14 +19,14 @@
 </template>
 
 <script>
-import { Session } from '@/utils/storage';
+import { Local } from '@/utils/storage';
 import { resetRouter } from '@/router';
 export default {
 	name: 'noAuth',
 	methods: {
 		// 重新授权
 		onSetAuth() {
-			Session.clear();
+			Local.clear();
 			this.$store.commit('setMenuData', {});
 			resetRouter(); // 重置路由
 			this.$router.push('/login');
