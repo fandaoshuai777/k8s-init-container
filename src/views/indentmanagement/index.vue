@@ -330,6 +330,7 @@ export default {
 							this.refund = false;
 							this.$message.success('发起退款成功');
 							this.$refs.ruleForm.resetFields();
+							this.inquire()
 						} else {
 							// this.$refs.ruleForm.resetFields();
 							this.$message.error(res.msg);
