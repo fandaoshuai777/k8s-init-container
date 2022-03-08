@@ -423,6 +423,7 @@ export default {
 		},
 		// 菜单 / 顶栏背景等
 		onBgColorPickerChange(bg, rgb) {
+			console.log(this.$store.state.themeConfig.themeConfig)
 			document.documentElement.style.setProperty(`--bg-${bg}`, this.$store.state.themeConfig.themeConfig[bg]);
 			this.setLocalThemeConfigStyle();
 			this.onTopBarGradualChange();
@@ -487,7 +488,6 @@ export default {
 		setGraduaFun(el, bool, color) {
 			this.$nextTick(() => {
 				let els = document.querySelector(el);
-				console.log(color);
 				if (!els) return false;
 				if (bool) els.setAttribute('style', `background-image:linear-gradient(to bottom left , ${color}, ${getLightColor(color, 0.6)})`);
 				else els.setAttribute('style', `background-image:${color}`);

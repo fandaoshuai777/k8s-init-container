@@ -3,7 +3,7 @@ import request from '@/utils/request';
 // 账号密码登录
 export function account(params) {
 	return request({
-		url: 'api/oilUser/login',
+		url: '/oilUser/login',
 		method: 'post',
 		data: params,
 	});
@@ -11,14 +11,14 @@ export function account(params) {
 // 发送验证码
 export function sendCode(userPhone) {
 	return request({
-		url: `api/oilUser/sendCode/${userPhone}`,
+		url: `/oilUser/sendCode/${userPhone}`,
 		method: 'post',
 	});
 }
 //验证码登录
 export function verificationCodeLogin(userPhone,code) {
 	return request({
-		url: `api/oilUser/verificationCodeLogin/${userPhone}/${code}`,
+		url: `/oilUser/verificationCodeLogin/${userPhone}/${code}`,
 		method: 'post'
 	});
 }

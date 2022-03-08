@@ -1,3 +1,5 @@
+const port = process.env.port || process.env.npm_config_port || 9527 // dev port
+
 module.exports = {
 	productionSourceMap: false,
 	publicPath: process.env.NODE_ENV === 'production' ? './' : '/',
@@ -5,20 +7,29 @@ module.exports = {
 	devServer: {
 		open: process.env.VUE_APP_OPEN === 'false' ? false : true, // 自动打开浏览器
 		host: '0.0.0.0', // 真机模拟，使用
-		port: process.env.VUE_APP_PORT, // 前台代理端口号
+		port: port, // 前台代理端口号
 		https: false, // https： {type: Booleam}
 		hotOnly: false, // 热更新
 		proxy: {
-			// 设置代理
-			'/api': {
+			[process.env.VUE_APP_BASE_API]: {
 				target: 'http://201.201.0.88:8888',
-				ws: true,
 				changeOrigin: true,
 				pathRewrite: {
-					'^/api': '',
-				},
-			},
-		},
+					['^' + process.env.VUE_APP_BASE_API]: ''
+				}
+			}
+		}
+		// proxy: {
+		// 	// 设置代理
+		// 	'/api': {
+		// 		target: 'http://201.201.0.88:8888',
+		// 		ws: true,
+		// 		changeOrigin: true,
+		// 		pathRewrite: {
+		// 			'^/api': '',
+		// 		},
+		// 	},
+		// },
 	},
 	chainWebpack(config) {
 		// 移除打包后 index.html 所有打包好的文件都预加载行为

@@ -19,7 +19,9 @@ const themeConfigModule = {
 			// 默认菜单导航字体颜色，请注意：需要同时修改 `/@/theme/common/var.scss` 对应的值
 			menuBarColor: '#eaeaea',
 			// 默认分栏菜单字体颜色，请注意：需要同时修改 `/@/theme/common/var.scss` 对应的值
+			columnsMenuBarColor: '#e6e6e6',
 			/**
+			 * 
 			 * 界面设置
 			 */
 			// 是否开启菜单水平折叠效果
