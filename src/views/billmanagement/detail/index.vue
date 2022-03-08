@@ -101,11 +101,15 @@ export default {
 		},
 	},
 	created() {
-		this.formInline.startTime = this.$route.query.billTime;
-		this.formInline.endTime = this.$route.query.billTime.split(' ', 1) + ' 23:59:59';
-		this.Time[0] = this.formInline.startTime;
-		this.Time[1] = this.formInline.endTime;
-		this.indentList();
+		if (this.$route.query.billTime == undefined) {
+			this.indentList();
+		} else {
+			this.formInline.startTime = this.$route.query.billTime;
+			this.formInline.endTime = this.$route.query.billTime.split(' ', 1) + ' 23:59:59';
+			this.Time[0] = this.formInline.startTime;
+			this.Time[1] = this.formInline.endTime;
+			this.indentList();
+		}
 	},
 	mounted() {
 		payTypeDict().then((res) => {
@@ -155,9 +159,6 @@ export default {
 		},
 		indentList() {
 			let date = { ...this.pagination, ...this.formInline };
-			this.warpList(date);
-		},
-		warpList(date) {
 			billDetailList(date).then((res) => {
 				this.tableList = res.result.data.map((n) => {
 					return {

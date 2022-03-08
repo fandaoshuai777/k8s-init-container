@@ -8,7 +8,17 @@ const themeConfigModule = {
 		themeConfig: {
 			// 是否开启布局配置抽屉
 			isDrawer: false,
-
+			// 默认顶栏导航背景颜色，请注意：需要同时修改 `/@/theme/common/var.scss` 对应的值
+			topBar: '#ffffff',
+			// 默认菜单导航背景颜色，请注意：需要同时修改 `/@/theme/common/var.scss` 对应的值
+			menuBar: '#545c64',
+			// 默认分栏菜单背景颜色，请注意：需要同时修改 `/@/theme/common/var.scss` 对应的值
+			columnsMenuBar: '#545c64',
+			// 默认顶栏导航字体颜色，请注意：需要同时修改 `/@/theme/common/var.scss` 对应的值
+			topBarColor: '#606266',
+			// 默认菜单导航字体颜色，请注意：需要同时修改 `/@/theme/common/var.scss` 对应的值
+			menuBarColor: '#eaeaea',
+			// 默认分栏菜单字体颜色，请注意：需要同时修改 `/@/theme/common/var.scss` 对应的值
 			/**
 			 * 界面设置
 			 */
@@ -69,7 +79,7 @@ const themeConfigModule = {
 			// 网站主标题（菜单导航、浏览器当前网页标题）
 			globalTitle: '小鹰加油商家端',
 			// 网站副标题（登录页顶部文字）
-			globalViceTitle: 'SMALL@小柒',
+			globalViceTitle: '小鹰加油商家端',
 			// 网站描述（登录页顶部文字）
 			globalViceDes: 'vue2.x后台管理系统免费开源模板',
 			// 默认初始语言，可选值"<zh-cn|en|zh-tw>"，默认 zh-cn

@@ -49,7 +49,7 @@
 		<el-dropdown :show-timeout="70" :hide-timeout="50" @command="onDropdownCommand">
 			<span class="layout-navbars-breadcrumb-user-link">
 				<img :src="getUserInfos.photo" class="layout-navbars-breadcrumb-user-link-photo mr5" />
-				{{ getUserInfos.userName === '' ? 'test' : getUserInfos.userName }}
+				user
 				<i class="el-icon-arrow-down el-icon--right"></i>
 			</span>
 			<el-dropdown-menu slot="dropdown">

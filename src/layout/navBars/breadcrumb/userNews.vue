@@ -32,14 +32,9 @@ export default {
 		return {
 			newsList: [
 				{
-					label: '关于版本发布的通知',
-					value: '基于 vue2.x + element ui，正式发布时间：2020年11月15日！',
-					time: '2020-11-15',
-				},
-				{
-					label: '关于学习交流的通知',
-					value: 'QQ群号码 665452019，欢迎小伙伴入群学习交流探讨！',
-					time: '2020-11-15',
+					label: '小鹰商户油站',
+					value: '小鹰商户油站 1.0.0v',
+					time: '2022/3/3',
 				},
 			],
 		};
@@ -51,7 +46,7 @@ export default {
 		},
 		// 前往通知中心点击
 		onGoToGiteeClick() {
-			window.open('https://gitee.com/lyt-top/vue-next-admin');
+			window.open('https://baike.baidu.com/item/中国国际能源控股有限公司/22110852?fr=aladdin');
 		},
 	},
 };

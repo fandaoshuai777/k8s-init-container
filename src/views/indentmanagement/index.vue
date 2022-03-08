@@ -10,14 +10,14 @@
 						<el-form-item label="手机号">
 							<el-input v-model="formInline.driverTel" placeholder="请输入手机号" clearable></el-input>
 						</el-form-item>
-						<el-form-item label="油号">
-							<el-select v-model="formInline.oilType">
+						<el-form-item label="油号" >
+							<el-select v-model="formInline.oilType" clearable>
 								<el-option label="全部" value=""></el-option>
 								<el-option v-for="(item, index) in batchNum" :key="index" :label="item.index" :value="item"></el-option>
 							</el-select>
 						</el-form-item>
 						<el-form-item label="订单状态">
-							<el-select v-model="formInline.paymentStatus">
+							<el-select v-model="formInline.paymentStatus" clearable>
 								<el-option v-for="(item, index) in oilStatusDict" :key="index" :label="item.label" :value="item.code"></el-option>
 							</el-select>
 						</el-form-item>
@@ -47,7 +47,7 @@
 					</div>
 				</el-form>
 			</div>
-			<div class="center">交易总金额：{{ dieselEngineNumCount }} 订单数量：{{ orderNum }}总升数：{{ fuelVolumeTotal }}</div>
+			<div class="center"><div> 交易总金额：{{ dieselEngineNumCount }} </div><div>订单数量：{{ orderNum }}</div> <div>总升数：{{ fuelVolumeTotal }}</div> </div>
 			<el-table style="width: 100%" :data="tableData" border>
 				<el-table-column prop="orderNo" label="订单号" align="center" />
 				<el-table-column prop="paymentStatus" label="订单状态" show-overflow-tooltip align="center"></el-table-column>
@@ -107,7 +107,9 @@
 				>
 				<el-col :span="6" style="text-algin: center"><div class="grid-content bg-purple">订单状态</div></el-col>
 				<el-col :span="6"
-					><div class="grid-content bg-purple">{{ orderData.paymentStatus }}</div></el-col
+					><div class="grid-content bg-purple">
+						{{ orderData.paymentStatus==1?'已付款':orderData.paymentStatus==1?'已付款':orderData.paymentStatus==2?'退款成功':orderData.paymentStatus==3?'付款中':orderData.paymentStatus==4?'待退款':orderData.paymentStatus==5?'退款失败':orderData.paymentStatus==6?'已结算':orderData.paymentStatus}}
+					</div></el-col
 				>
 				<el-col :span="6"><div class="grid-content bg-purple"></div></el-col>
 				<el-col :span="6"><div class="grid-content bg-purple"></div></el-col>
@@ -292,6 +294,7 @@ export default {
 								: n.paymentStatus == 6
 								? '已结算'
 								: n.paymentStatus,
+								fuelVolume:n.fuelVolume.toFixed(2)
 					};
 				});
 				this.flag = this.tableData.paymentStatus;
@@ -302,6 +305,7 @@ export default {
 		onOpenEditRole(row) {
 			orderInfo(row.orderNo).then((res) => {
 				this.orderData = res.result;
+
 				this.compile = true;
 			});
 		},
@@ -368,7 +372,7 @@ export default {
 		getTimeFn() {
 			const end = new Date();
 			const start = new Date();
-		    start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+			start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
 			console.log(this.Time);
 			this.Time[0] = this.formatDate(start) + ' 00:00:00';
 			this.Time[1] = this.formatDate(end) + ' 23:59:59';
@@ -444,8 +448,11 @@ export default {
 	margin-right: 125px;
 }
 .center {
-	margin-top: 20px;
-	margin-bottom: 20px;
+	margin: 20px 0;
+	display: flex;
+	>div{
+		margin-right: 20px;
+	}
 }
 .righ {
 	text-align: right;
@@ -483,15 +490,7 @@ export default {
 	margin-left: -1px;
 	margin-top: -1px;
 }
-.bg-purple-dark {
-	// background: #99a9bf;
-}
-.bg-purple {
-	// background: #d3dce6;
-}
-.bg-purple-light {
-	// background: #e5e9f2;
-}
+
 .grid-content {
 	border-radius: 4px;
 	min-height: 36px;

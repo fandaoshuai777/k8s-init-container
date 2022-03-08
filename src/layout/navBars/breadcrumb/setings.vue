@@ -365,16 +365,15 @@ export default {
 		},
 		// 4、界面显示 --> 开启水印
 		onWartermarkChange() {
-			console.log(this.getThemeConfig);
-			this.getThemeConfig.isWartermark ? Watermark.set(this.getThemeConfig.wartermarkText) : Watermark.del();
+			this.$store.state.themeConfig.themeConfig.isWartermark ? Watermark.set(this.$store.state.themeConfig.themeConfig.wartermarkText) : Watermark.del();
 			this.setLocalThemeConfig();
 		},
 		// 4、界面显示 --> 水印文案
 		onWartermarkTextInput(val) {
-			this.getThemeConfig.wartermarkText = verifyAndSpace(val);
-			if (this.getThemeConfig.wartermarkText === '') return false;
-			if (this.getThemeConfig.isWartermark) Watermark.set(this.getThemeConfig.wartermarkText);
-			setLocalThemeConfig();
+			this.$store.state.themeConfig.themeConfig.wartermarkText = verifyAndSpace(val);
+			if (this.$store.state.themeConfig.themeConfig.wartermarkText === '') return false;
+			if (this.$store.state.themeConfig.themeConfig.isWartermark) Watermark.set(this.$store.state.themeConfig.themeConfig.wartermarkText);
+			this.setLocalThemeConfig();
 		},
 		// 灰色模式/色弱模式
 		onAddFilterChange(attr) {
@@ -488,6 +487,7 @@ export default {
 		setGraduaFun(el, bool, color) {
 			this.$nextTick(() => {
 				let els = document.querySelector(el);
+				console.log(color);
 				if (!els) return false;
 				if (bool) els.setAttribute('style', `background-image:linear-gradient(to bottom left , ${color}, ${getLightColor(color, 0.6)})`);
 				else els.setAttribute('style', `background-image:${color}`);
@@ -496,7 +496,8 @@ export default {
 		},
 		// 一键恢复默认
 		onResetConfigClick() {
-			Local.clear();
+			Local.remove('themeConfigPrev');
+			Local.remove('themeConfigStyle');
 			window.location.reload();
 		},
 		// 一键复制配置
