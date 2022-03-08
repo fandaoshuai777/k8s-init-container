@@ -14,7 +14,7 @@
 							end-placeholder="结束日期"
 							:default-time="['00:00:00', '23:59:59']"
 							value-format="yyyy-MM-dd HH:mm:ss"
-							:picker-options="pickerOptions"
+							@change="arr"
 						>
 						</el-date-picker>
 					</el-form-item>
@@ -90,40 +90,9 @@ export default {
 				pageSize: 10,
 				pageNum: 1,
 			},
-			Time: null,
+			Time: [],
 			billSta: [],
 			billStas: [],
-			pickerOptions: {
-				shortcuts: [
-					{
-						text: '最近一周',
-						onClick(picker) {
-							const end = new Date();
-							const start = new Date();
-							start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-							picker.$emit('pick', [start, end]);
-						},
-					},
-					{
-						text: '最近一个月',
-						onClick(picker) {
-							const end = new Date();
-							const start = new Date();
-							start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-							picker.$emit('pick', [start, end]);
-						},
-					},
-					{
-						text: '最近三个月',
-						onClick(picker) {
-							const end = new Date();
-							const start = new Date();
-							start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-							picker.$emit('pick', [start, end]);
-						},
-					},
-				],
-			},
 		};
 	},
 	computed: {
@@ -132,6 +101,10 @@ export default {
 		},
 	},
 	created() {
+		this.formInline.startTime = this.$route.query.billTime;
+		this.formInline.endTime = this.$route.query.billTime.split(' ', 1) + ' 23:59:59';
+		this.Time[0] = this.formInline.startTime;
+		this.Time[1] = this.formInline.endTime;
 		this.indentList();
 	},
 	mounted() {
@@ -148,21 +121,43 @@ export default {
 		});
 	},
 	methods: {
-
-		inquire() {
-			this.pagination.pageNum = 1;
+		arr() {
 			if (this.Time == null) {
 				this.formInline.endTime = '';
 				this.formInline.startTime = '';
 			} else {
-				this.formInline.endTime = this.Time[0];
-				this.formInline.startTime = this.Time[1];
+				let startDate = this.Time[0].replace(new RegExp('-', 'gm'), '/');
+				let Sdata = new Date(startDate).getTime();
+				let startDates = this.Time[1].replace(new RegExp('-', 'gm'), '/');
+				let Sdatas = new Date(startDates).getTime();
+				console.log(Sdata > Sdatas);
+				if (Sdata + 86400000 > Sdatas) {
+				} else {
+					this.$message('只能选择某天24小时之内的');
+					this.Time = '';
+				}
+			}
+		},
+		inquire() {
+			this.pagination.pageNum = 1;
+			console.log(this.Time);
+			if (this.Time == null) {
+				this.formInline.endTime = '';
+				this.formInline.startTime = '';
+				this.Time = [];
+			} else {
+				console.log(this.Time[0]);
+				this.formInline.endTime = this.Time[1];
+				this.formInline.startTime = this.Time[0];
 			}
 
 			this.indentList();
 		},
 		indentList() {
-			let date = { ...this.pagination, ...this.formInline, stationId: this.$route.query.stationId };
+			let date = { ...this.pagination, ...this.formInline };
+			this.warpList(date);
+		},
+		warpList(date) {
 			billDetailList(date).then((res) => {
 				this.tableList = res.result.data.map((n) => {
 					return {
@@ -181,6 +176,7 @@ export default {
 								? '退款失败'
 								: n.paymentStatus,
 						state: n.state == 1 ? '消费 ' : n.state == 2 ? '退款' : n.state,
+						driverTel: n.driverTel.replace(/(\d{3})\d*(\d{4})/, '$1****$2'),
 					};
 				});
 				this.total = res.result.totalNum;

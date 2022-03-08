@@ -35,18 +35,13 @@
 				</el-button>
 			</el-form-item>
 		</el-form>
-		<Platform ref="child" />
 	</div>
 </template>
 <script>
 import { PrevLoading } from '@/utils/loading.js';
 import { account } from '@/api/login/index.js';
 import { Local, Session } from '@/utils/storage.js';
-import  Platform  from '../../agreement/platform.vue';
 export default {
-	components: {
-		Platform,
-	},
 	data() {
 		return {
 			addOrUpdateVisible: false,
@@ -119,7 +114,7 @@ export default {
 									PrevLoading.start();
 									window.location.href = `${window.location.origin}${window.location.pathname}`;
 									setTimeout(() => {
-										this.$message.success(`${this.currentTime}，${this.$t('message.login.signInText')}`);
+										this.$message.success(`${this.$t('message.login.signInText')}`);
 									}, 300);
 								} else {
 									// 存储 token 到浏览器缓存
@@ -131,7 +126,7 @@ export default {
 									PrevLoading.start();
 									window.location.href = `${window.location.origin}${window.location.pathname}`;
 									setTimeout(() => {
-										this.$message.success(`${this.currentTime}，${this.$t('message.login.signInText')}`);
+										this.$message.success(`${this.$t('message.login.signInText')}`);
 									}, 300);
 								}
 							}, 300);
@@ -151,7 +146,7 @@ export default {
 
 		consent() {},
 		platform() {
-			this.$refs.child.sing();
+			this.$router.push('/platform');
 		},
 		commercial() {
 			this.$router.push('/commercial');

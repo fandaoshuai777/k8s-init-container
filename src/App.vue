@@ -34,6 +34,7 @@ export default {
 		},
 		// 获取缓存中的布局配置
 		getLayoutThemeConfig() {
+			
 			if (Local.get('themeConfigPrev')) {
 				this.$store.dispatch('themeConfig/setThemeConfig', Local.get('themeConfigPrev'));
 				document.documentElement.style.cssText = Local.get('themeConfigStyle');

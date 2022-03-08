@@ -65,9 +65,7 @@
 						<el-button
 							size="small"
 							type="text"
-							:disabled="
-								scope.row.paymentStatus === '已付款' ? false : scope.row.paymentStatus === '退款失败' ? false : true
-							"
+							:disabled="scope.row.paymentStatus === '已付款' ? false : scope.row.paymentStatus === '退款失败' ? false : true"
 							@click="onRowDel(scope.row)"
 							>发起退款</el-button
 						>
@@ -190,7 +188,7 @@ export default {
 		return {
 			compile: false,
 			refund: false,
-			 disabled: true,
+			disabled: true,
 			formInline: {
 				orderNo: '',
 				cellPhone: '',
@@ -200,7 +198,7 @@ export default {
 				startTime: null,
 				endTime: null,
 			},
-			Time: null,
+			Time: [],
 			dieselEngineNumCount: 0,
 			fuelVolumeTotal: 0,
 			orderNum: 0,
@@ -247,6 +245,9 @@ export default {
 			},
 		};
 	},
+	created() {
+		this.getTimeFn();
+	},
 	computed: {
 		paginationOption: function () {
 			return { ...this.pagination, total: this.total };
@@ -255,18 +256,18 @@ export default {
 	methods: {
 		inquire() {
 			this.pagination.pageNum = 1;
-			if (this.Time == null) {
-				this.formInline.endTime = '';
-				this.formInline.startTime = '';
-			} else {
-				this.formInline.endTime = this.Time[0];
-				this.formInline.startTime = this.Time[1];
-			}
 
 			this.indentList();
 		},
 		//列表
 		indentList() {
+			if (this.Time == null) {
+				this.formInline.endTime = '';
+				this.formInline.startTime = '';
+			} else {
+				this.formInline.startTime = this.Time[0];
+				this.formInline.endTime = this.Time[1];
+			}
 			let date = { ...this.pagination, ...this.formInline };
 			orderPage(date).then((res) => {
 				this.dieselEngineNumCount = res.result.orderPageTotal.dieselEngineNumCount.toFixed(2);
@@ -340,7 +341,7 @@ export default {
 			stamp(row.orderNo).then((res) => {
 				if (res.code == 200) {
 					this.$message.success('打印成功');
-				}else{
+				} else {
 					this.$message.error(res.msg);
 				}
 			});
@@ -360,6 +361,33 @@ export default {
 		pageSizeChange(value) {
 			this.pagination.pageSize = value;
 			this.indentList();
+		},
+		/**
+		 * 设置默认时间
+		 */
+		getTimeFn() {
+			const end = new Date();
+			const start = new Date();
+		    start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+			console.log(this.Time);
+			this.Time[0] = this.formatDate(start) + ' 00:00:00';
+			this.Time[1] = this.formatDate(end) + ' 23:59:59';
+		},
+		/**
+		 * 格式化时间
+		 */
+		formatDate(date) {
+			var myyear = date.getFullYear();
+			var mymonth = date.getMonth() + 1;
+			var myweekday = date.getDate();
+
+			if (mymonth < 10) {
+				mymonth = '0' + mymonth;
+			}
+			if (myweekday < 10) {
+				myweekday = '0' + myweekday;
+			}
+			return myyear + '-' + mymonth + '-' + myweekday;
 		},
 	},
 	mounted() {
@@ -383,7 +411,6 @@ export default {
 					label: n.value,
 				};
 			});
-			// this.oilStatusDict = res.result;
 		});
 	},
 	computed: {
@@ -418,6 +445,7 @@ export default {
 }
 .center {
 	margin-top: 20px;
+	margin-bottom: 20px;
 }
 .righ {
 	text-align: right;
@@ -483,4 +511,4 @@ export default {
 	}
 }
 </style>
-
+ 

@@ -34,13 +34,13 @@
 					</el-form-item>
 				</div>
 			</el-form>
-			<div style="margin-top: 20px">
+			<div style="margin-top: 20px;margin-bottom:20px">
 				交易总金额（元）：{{ dieselEngineNumTotal }} 让利总金额（元）：{{ platformMoneyTotal }} 应结算总金额（元）：{{
 					settleAmountTotal
 				}}
 				实际结算总金额（元）：{{ solidKnotAmountTotal }} 商家承担直降总金额（元）：{{ plummetTotal }}
 			</div>
-			<el-table style="width: 100%" :data="tableData">
+			<el-table style="width: 100%" :data="tableData" border>
 				<el-table-column prop="billNo" label="账单编号" align="center" />
 				<el-table-column prop="billTime" label="账单日期" show-overflow-tooltip align="center"></el-table-column>
 				<el-table-column prop="stationName" label="油站名称" show-overflow-tooltip align="center"></el-table-column>

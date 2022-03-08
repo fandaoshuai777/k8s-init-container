@@ -197,6 +197,7 @@ export default {
 					})
 						.then(() => {
 							Local.clear(); // 清除缓存/token等
+							Session.clear(); // 清除缓存/token等
 							this.$store.dispatch('routesList/setRoutesList', []); // 清空 vuex 路由列表缓存
 							resetRouter(); // 删除/重置路由
 							this.$router.push('/login');

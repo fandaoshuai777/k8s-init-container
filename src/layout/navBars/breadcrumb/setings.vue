@@ -488,7 +488,6 @@ export default {
 		setGraduaFun(el, bool, color) {
 			this.$nextTick(() => {
 				let els = document.querySelector(el);
-				console.log(color);
 				if (!els) return false;
 				if (bool) els.setAttribute('style', `background-image:linear-gradient(to bottom left , ${color}, ${getLightColor(color, 0.6)})`);
 				else els.setAttribute('style', `background-image:${color}`);

@@ -2,7 +2,7 @@ import store from '@/store';
 import router, { resetRouter } from '@/router/index';
 import axios from 'axios';
 import { Message, MessageBox } from 'element-ui';
-import { Local } from '@/utils/storage';
+import { Local,Session } from '@/utils/storage';
 
 // 创建 axios 实例
 const service = axios.create({
@@ -14,10 +14,18 @@ const service = axios.create({
 // 添加请求拦截器
 service.interceptors.request.use(
 	(config) => {
-		// 在发送请求之前做些什么 token
-		if (Local.get('token')) {
-			config.headers.common['merchant-server-token'] = `${Local.get('token')}`;
+		if (Local) {
+			// 在发送请求之前做些什么 token
+			if (Local.get('token')) {
+				config.headers.common['merchant-server-token'] = `${Local.get('token')}`;
+			} else {
+				// 在发送请求之前做些什么 token
+				if (Session.get('token')) {
+					config.headers.common['merchant-server-token'] = `${Session.get('token')}`;
+				}
+			}
 		}
+
 		return config;
 	},
 	(error) => {

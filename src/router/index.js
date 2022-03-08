@@ -237,13 +237,16 @@ export function delayNProgressDone(time = 300) {
 
 // 动态加载后端返回路由路由(模拟数据)
 export function getRouterList(router, to, next) {
+	if (Local.get('userInfo') == null) {
+  
+		if (Session.get('userInfo').userName === 'admin') adminUser(router, to, next);
+		else if (Session.get('userInfo').userName === 'test') testUser(router, to, next);
+	} else {
+		if (Local.get('userInfo').userName === 'admin') adminUser(router, to, next);
+		else if (Local.get('userInfo').userName === 'test') testUser(router, to, next);
+	}
 
-	// if (!Session.get('userInfo')) return false;
-	// if (Session.get('userInfo').userName === 'admin') adminUser(router, to, next);
-	// else if (Session.get('userInfo').userName === 'test') testUser(router, to, next);
-	if (!Local.get('userInfo')) return false;
-	if (Local.get('userInfo').userName === 'admin') adminUser(router, to, next);
-	else if (Local.get('userInfo').userName === 'test') testUser(router, to, next);
+
 }
 
 // 路由加载前
@@ -260,18 +263,10 @@ router.beforeEach((to, from, next) => {
 		next();
 		delayNProgressDone();
 	} else {
-		// if (times > Local.get('userInfo').time) {
-		// 	// this.$message('登录超过7天,请重新登录');
-		// 	NProgress.start();
-		// 	next('/login');
-		// 	// Local.clear();
-		// 	delayNProgressDone();
-		// } else {
 		if (Local.get('userInfo') == null) {
-			// console.log(13)
 			NProgress.configure({ showSpinner: false });
 			if (to.meta.title && to.path !== '/login') NProgress.start();
-			let token = Local.get('token');
+			let token = Session.get('token');
 			if (to.path === '/login' && !token) {
 				NProgress.start();
 				next();
@@ -280,33 +275,33 @@ router.beforeEach((to, from, next) => {
 				if (!token) {
 					NProgress.start();
 					next('/login');
-					Local.clear();
+					Session.clear();
 					delayNProgressDone();
 				} else if (token && to.path === '/login') {
+					console.log(333333)
 					next('/indentmanagement/index.vue');
 					delayNProgressDone();
 				} else {
 					if (Object.keys(store.state.routesList.routesList).length <= 0) {
 						getRouterList(router, to, next);
+						console.log(111)
 					} else {
 						next();
 						delayNProgressDone(0);
 					}
 				}
 			}
+
+
 		} else {
 			if (times > (Local.get('userInfo').time + time)) {
 				Local.clear(); // 清除缓存/token等
-				// this.$store.dispatch('routesList/setRoutesList', []); // 清空 vuex 路由列表缓存
 				resetRouter(); // 删除/重置路由
 				setTimeout(() => {
 					ElementUi.Message.error('登录已超过7天，请重新登录！！！！');
 
 				}, 300);
-				// this.$router.push('/login');
-				// this.$message.success('您的登录已经失效,请重新登录');
 			} else {
-				// ElementUi.Message.error('欢迎回来');
 				NProgress.configure({ showSpinner: false });
 				if (to.meta.title && to.path !== '/login') NProgress.start();
 				let token = Local.get('token');
