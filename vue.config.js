@@ -5,31 +5,20 @@ module.exports = {
 	publicPath: process.env.NODE_ENV === 'production' ? './' : '/',
 	lintOnSave: false,
 	devServer: {
-		open: process.env.VUE_APP_OPEN === 'false' ? false : true, // 自动打开浏览器
+		open: true, // 自动打开浏览器
 		host: '0.0.0.0', // 真机模拟，使用
 		port: port, // 前台代理端口号
 		https: false, // https： {type: Booleam}
 		hotOnly: false, // 热更新
-		// proxy: {
-		// 	[process.env.VUE_APP_BASE_API]: {
-		// 		target: 'http://201.201.0.88:8888',
-		// 		changeOrigin: true,
-		// 		pathRewrite: {
-		// 			['^' + process.env.VUE_APP_BASE_API]: ''
-		// 		}
-		// 	}
-		// }
-		// proxy: {
-		// 	// 设置代理
-		// 	'/api': {
-		// 		target: 'http://201.201.0.88:8888',
-		// 		ws: true,
-		// 		changeOrigin: true,
-		// 		pathRewrite: {
-		// 			'^/api': '',
-		// 		},
-		// 	},
-		// },
+		proxy: {
+			[process.env.VUE_APP_BASE_API]: {
+				target: 'http://merchant-server-test.c29dd69ffd4404f389adfa283b540267b.cn-hangzhou.alicontainer.com',
+				changeOrigin: true,
+				pathRewrite: {
+					['^' + process.env.VUE_APP_BASE_API]: ''
+				}
+			}
+		}
 	},
 	chainWebpack(config) {
 		// 移除打包后 index.html 所有打包好的文件都预加载行为

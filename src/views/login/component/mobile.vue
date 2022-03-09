@@ -23,7 +23,7 @@
 				</el-button>
 			</el-col>
 		</el-form-item>
-		<el-form-item class="login-animation3 item"> <el-checkbox label="">自动登录</el-checkbox></el-form-item>
+		<el-form-item class="login-animation3 item"> <el-checkbox label="" v-model="volunt">自动登录</el-checkbox></el-form-item>
 		<el-form-item class="login-animation4 center" prop="type">
 			<el-checkbox-group v-model="form.type" style="margin-right: 5px; height: 30px">
 				<el-checkbox name="type"></el-checkbox>
@@ -46,7 +46,8 @@
 
 <script>
 import { sendCode, verificationCodeLogin } from '@/api/login/index.js';
-import { Session } from '@/utils/storage.js';
+import { Local, Session } from '@/utils/storage.js';
+
 import { PrevLoading } from '@/utils/loading.js';
 
 export default {
@@ -66,7 +67,7 @@ export default {
 			count: '', // 初始化次数
 			radio: '1',
 			timer: null,
-
+			volunt: true,
 			form: {
 				userPhone: '',
 				code: '',
@@ -139,7 +140,6 @@ export default {
 									defaultRoles = testAuthPageList;
 									defaultAuthBtnList = testAuthBtnList;
 								}
-								console.log(123);
 								const userInfos = {
 									userName: userName === 'admin' ? 'admin' : 'test',
 									photo:
@@ -151,17 +151,31 @@ export default {
 									authBtnList: defaultAuthBtnList,
 									token: res.result,
 								};
-								// 存储 token 到浏览器缓存
-								Session.set('token', res.result);
-								// 存储用户信息到浏览器缓存
-								Session.set('userInfo', userInfos);
-								// 存储用户信息到vuex
-								this.$store.dispatch('userInfos/setUserInfos', userInfos);
-								PrevLoading.start();
-								window.location.href = `${window.location.origin}${window.location.pathname}`;
-								setTimeout(() => {
-									this.$message.success(`${this.currentTime}`);
-								}, 300);
+								if (this.volunt == true) {
+									// 存储 token 到浏览器缓存
+									Local.set('token', res.result);
+									// 存储用户信息到浏览器缓存
+									Local.set('userInfo', userInfos);
+									// 存储用户信息到vuex
+									this.$store.dispatch('userInfos/setUserInfos', userInfos);
+									PrevLoading.start();
+									window.location.href = `${window.location.origin}${window.location.pathname}`;
+									setTimeout(() => {
+										this.$message.success(`${this.$t('message.login.signInText')}`);
+									}, 300);
+								} else {
+									// 存储 token 到浏览器缓存
+									Session.set('token', res.result);
+									// 存储用户信息到浏览器缓存
+									Session.set('userInfo', userInfos);
+									// 存储用户信息到vuex
+									this.$store.dispatch('userInfos/setUserInfos', userInfos);
+									PrevLoading.start();
+									window.location.href = `${window.location.origin}${window.location.pathname}`;
+									setTimeout(() => {
+										this.$message.success(`${this.currentTime}`);
+									}, 300);
+								}
 							}, 300);
 						}
 					});

@@ -6,7 +6,7 @@ import { Local,Session } from '@/utils/storage';
 
 // 创建 axios 实例
 const service = axios.create({
-	baseURL: 'http://merchant-server-test.c29dd69ffd4404f389adfa283b540267b.cn-hangzhou.alicontainer.com',
+	baseURL: process.env.VUE_APP_BASE_API,
 	timeout: 10000,
 	headers: { 'Content-Type': 'application/json;charset=UTF-8' },
 });
