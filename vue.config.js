@@ -10,15 +10,15 @@ module.exports = {
 		port: port, // 前台代理端口号
 		https: false, // https： {type: Booleam}
 		hotOnly: false, // 热更新
-		proxy: {
-			[process.env.VUE_APP_BASE_API]: {
-				target: 'http://201.201.0.88:8888',
-				changeOrigin: true,
-				pathRewrite: {
-					['^' + process.env.VUE_APP_BASE_API]: ''
-				}
-			}
-		}
+		// proxy: {
+		// 	[process.env.VUE_APP_BASE_API]: {
+		// 		target: 'http://201.201.0.88:8888',
+		// 		changeOrigin: true,
+		// 		pathRewrite: {
+		// 			['^' + process.env.VUE_APP_BASE_API]: ''
+		// 		}
+		// 	}
+		// }
 		// proxy: {
 		// 	// 设置代理
 		// 	'/api': {

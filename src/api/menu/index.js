@@ -10,18 +10,18 @@ import request from '@/utils/request';
  * 本地菜单地址：public/xxx.json
  */
 // 获取后端动态路由菜单(超级管理)
-export function getMenuAdmin() {
-	// 本地数据，路径：`/public/xxx.json`
-	return request({
-		url: './admin.json',
-		method: 'get',
-	});
-	// 模拟跨域
-	// return request({
-	// 	url: '/gitee/lyt-top/vue-next-admin-images/raw/master/vue2/admin.json',
-	// 	method: 'get',
-	// });
-}
+// export function getMenuAdmin() {
+// 	// 本地数据，路径：`/public/xxx.json`
+// 	return request({
+// 		url: './admin.json',
+// 		method: 'get',
+// 	});
+// 	// 模拟跨域
+// 	// return request({
+// 	// 	url: '/gitee/lyt-top/vue-next-admin-images/raw/master/vue2/admin.json',
+// 	// 	method: 'get',
+// 	// });
+// }
 
 // 获取后端动态路由菜单(普通用户)
 export function getMenuTest() {

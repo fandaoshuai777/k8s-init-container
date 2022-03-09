@@ -6,6 +6,7 @@ import 'nprogress/nprogress.css';
 import { Session, Local } from '@/utils/storage';
 import { PrevLoading } from '@/utils/loading.js';
 import { getMenuAdmin, getMenuTest } from '@/api/menu';
+import menuList from './admin.json';
 import ElementUi from 'element-ui'
 // 解决 `element ui` 导航栏重复点菜单报错问题
 const originalPush = VueRouter.prototype.push;
@@ -185,22 +186,33 @@ export function dynamicRouter(routes) {
 // 文档地址：https://router.vuejs.org/zh/api/#router-addroutes
 export function adminUser(router, to, next) {
 	resetRouter();
-	getMenuAdmin()
-		.then(async (res) => {
-			console.log(res)
-
-			// 读取用户信息，获取对应权限进行判断
+	
+				// 读取用户信息，获取对应权限进行判断
 			store.dispatch('userInfos/setUserInfos');
-			store.dispatch('routesList/setRoutesList', setFilterMenuFun(res.data, store.state.userInfos.userInfos.roles));
-			dynamicRoutes[0].children = res.data;
-			const awaitRoute = await dynamicRouter(dynamicRoutes);
+			store.dispatch('routesList/setRoutesList', setFilterMenuFun(menuList.data, store.state.userInfos.userInfos.roles));
+			dynamicRoutes[0].children =menuList.data;
+			const awaitRoute =  dynamicRouter(dynamicRoutes);
 			[...awaitRoute, { path: '*', redirect: '/404' }].forEach((route) => {
 				router.addRoute({ ...route });
 			});
-			setCacheTagsViewRoutes(JSON.parse(JSON.stringify(res.data)));
+			setCacheTagsViewRoutes(JSON.parse(JSON.stringify(menuList.data)));
 			next({ ...to, replace: true });
-		})
-		.catch(() => { });
+	// getMenuAdmin()
+	// 	.then(async (res) => {
+	// 		console.log(res)
+
+	// 		// 读取用户信息，获取对应权限进行判断
+	// 		store.dispatch('userInfos/setUserInfos');
+	// 		store.dispatch('routesList/setRoutesList', setFilterMenuFun(res.data, store.state.userInfos.userInfos.roles));
+	// 		dynamicRoutes[0].children = res.data;
+	// 		const awaitRoute = await dynamicRouter(dynamicRoutes);
+	// 		[...awaitRoute, { path: '*', redirect: '/404' }].forEach((route) => {
+	// 			router.addRoute({ ...route });
+	// 		});
+	// 		setCacheTagsViewRoutes(JSON.parse(JSON.stringify(res.data)));
+	// 		next({ ...to, replace: true });
+	// 	})
+	// 	.catch(() => { });
 }
 
 // 添加路由，模拟数据与方法，可自行进行修改 test
