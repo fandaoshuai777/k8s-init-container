@@ -203,5 +203,10 @@ export default {
 		margin-right: 20px;
 	}
 }
+::v-deep{
+	.el-table{
+		z-index: 0;
+	}
+}
 </style>
 

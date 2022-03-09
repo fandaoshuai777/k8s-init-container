@@ -126,20 +126,27 @@ export default {
 	},
 	methods: {
 		arr() {
-			if (this.Time == null) {
-				this.formInline.endTime = '';
-				this.formInline.startTime = '';
-			} else {
-				let startDate = this.Time[0].replace(new RegExp('-', 'gm'), '/');
-				let Sdata = new Date(startDate).getTime();
-				let startDates = this.Time[1].replace(new RegExp('-', 'gm'), '/');
-				let Sdatas = new Date(startDates).getTime();
-				console.log(Sdata > Sdatas);
-				if (Sdata + 86400000 > Sdatas) {
+			console.log(this.$route.query.billTime);
+			if (this.$route.query.billTime) {
+				console.log(123);
+				if (this.Time == null) {
+					this.formInline.endTime = '';
+					this.formInline.startTime = '';
+					return;
 				} else {
-					this.$message('只能选择某天24小时之内的');
-					this.Time = '';
+					let startDate = this.Time[0].replace(new RegExp('-', 'gm'), '/');
+					let Sdata = new Date(startDate).getTime();
+					let startDates = this.Time[1].replace(new RegExp('-', 'gm'), '/');
+					let Sdatas = new Date(startDates).getTime();
+					console.log(Sdata > Sdatas);
+					if (Sdata + 86400000 > Sdatas) {
+					} else {
+						this.$message('只能选择某天24小时之内的');
+						this.Time = '';
+					}
+					return;
 				}
+			} else {
 			}
 		},
 		inquire() {
@@ -207,5 +214,11 @@ export default {
 }
 .right {
 	text-align: right;
+	z-index: 0;
+}
+::v-deep {
+	.el-table {
+		z-index: 0;
+	}
 }
 </style>
