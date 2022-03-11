@@ -104,6 +104,13 @@ export default {
 	},
 	created() {
 		if (this.$route.query.billTime == undefined) {
+			var day = new Date();
+			day.setTime(day.getTime() - 24 * 60 * 60 * 1000);
+			var yesterday = day.getFullYear() + '-' + (day.getMonth() + 1) + '-' + day.getDate();
+			this.formInline.startTime = yesterday + ' 00:00:00';
+			this.formInline.endTime = yesterday + ' 23:59:59';
+			this.Time[0] = this.formInline.startTime;
+			this.Time[1] = this.formInline.endTime;
 			this.indentList();
 		} else {
 			this.formInline.startTime = this.$route.query.billTime;
@@ -128,28 +135,23 @@ export default {
 	},
 	methods: {
 		arr() {
-			// console.log(this.$route.query.billTime);
-			// if (this.$route.query.billTime) {
-			// 	console.log(123);
-				if (this.Time == null) {
-					this.formInline.endTime = '';
-					this.formInline.startTime = '';
-					return;
+			if (this.Time == null) {
+				this.formInline.endTime = '';
+				this.formInline.startTime = '';
+				return;
+			} else {
+				let startDate = this.Time[0].replace(new RegExp('-', 'gm'), '/');
+				let Sdata = new Date(startDate).getTime();
+				let startDates = this.Time[1].replace(new RegExp('-', 'gm'), '/');
+				let Sdatas = new Date(startDates).getTime();
+				console.log(Sdata > Sdatas);
+				if (Sdata + 86400000 > Sdatas) {
 				} else {
-					let startDate = this.Time[0].replace(new RegExp('-', 'gm'), '/');
-					let Sdata = new Date(startDate).getTime();
-					let startDates = this.Time[1].replace(new RegExp('-', 'gm'), '/');
-					let Sdatas = new Date(startDates).getTime();
-					console.log(Sdata > Sdatas);
-					if (Sdata + 86400000 > Sdatas) {
-					} else {
-						this.$message('只能选择某天24小时之内的');
-						this.Time = '';
-					}
-					return;
+					this.$message('只能选择某天24小时之内的');
+					this.Time = '';
 				}
-			// } else {
-			// }
+				return;
+			}
 		},
 		inquire() {
 			this.pagination.pageNum = 1;
