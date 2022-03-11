@@ -158,7 +158,9 @@
 					><div class="grid-content bg-purple">{{ orderData.fuelVolume }}L</div></el-col
 				>
 				<el-col :span="6"><div class="grid-content bg-purple">订单油机金额</div></el-col>
-				<el-col :span="6"><div class="grid-content bg-purple">￥--</div></el-col>
+				<el-col :span="6"
+					><div class="grid-content bg-purple">￥{{ orderData.dieselEngineNum }}</div></el-col
+				>
 				<el-col :span="6"><div class="grid-content bg-purple">序列号(撬装)</div></el-col>
 				<el-col :span="6"><div class="grid-content bg-purple"></div></el-col>
 				<el-col :span="6"><div class="grid-content bg-purple"></div></el-col>
