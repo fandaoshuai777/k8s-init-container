@@ -155,7 +155,6 @@ export default {
 		},
 		inquire() {
 			this.pagination.pageNum = 1;
-			console.log(this.Time);
 			if (this.Time == null) {
 				this.formInline.endTime = '';
 				this.formInline.startTime = '';
@@ -176,13 +175,19 @@ export default {
 						paymentType: n.paymentType == 1 ? '油卡支付' : n.paymentType == 2 ? '微信支付' : n.paymentType == 3 ? '余额支付' : n.paymentType,
 						orderSource:
 							n.orderSource == 1
-								? '团油'
+								? '小鹰加油'
 								: n.orderSource == 2
-								? '联动云'
+								? '小鹰加油'
 								: n.orderSource == 3
-								? '敬运'
+								? '小鹰加油'
 								: n.orderSource == 4
-								? '自己平台'
+								? '团油'
+								: n.orderSource == 5
+								? '宝能'
+								: n.orderSource == 6
+								? '小鹰加油'
+								: n.orderSource == 8
+								? '敬运'
 								: n.orderSource,
 						paymentStatus:
 							n.paymentStatus == 1

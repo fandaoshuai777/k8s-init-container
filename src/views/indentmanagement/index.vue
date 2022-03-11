@@ -52,7 +52,7 @@
 				<div>订单数量：{{ orderNum }}</div>
 				<div>总升数：{{ fuelVolumeTotal }}</div>
 			</div>
-			<el-table style="width: 100%;z-index: 0;" :data="tableData" border>
+			<el-table style="width: 100%; z-index: 0" :data="tableData" border>
 				<el-table-column prop="orderNo" label="订单号" align="center" />
 				<el-table-column prop="paymentStatus" label="订单状态" show-overflow-tooltip align="center"></el-table-column>
 				<el-table-column prop="orderTime" label="下单时间" show-overflow-tooltip align="center"></el-table-column>
@@ -66,7 +66,13 @@
 				<el-table-column label="操作" width="200" align="center">
 					<template #default="scope">
 						<el-button size="small" type="text" @click="onOpenEditRole(scope.row)">查看</el-button>
-						<el-button size="small" type="text" v-if="scope.row.paymentStatus == '已付款' || scope.row.paymentStatus == '退款失败'" @click="onRowDel(scope.row)">发起退款</el-button>
+						<el-button
+							size="small"
+							type="text"
+							v-if="scope.row.paymentStatus == '已付款' || scope.row.paymentStatus == '退款失败'"
+							@click="onRowDel(scope.row)"
+							>发起退款</el-button
+						>
 						<el-button size="small" type="text" v-if="scope.row.paymentStatus == '已付款'" @click="receipt(scope.row)">补打小票</el-button>
 					</template>
 				</el-table-column>
@@ -92,7 +98,27 @@
 					><div class="grid-content bg-purple">{{ orderData.orderNo }}</div></el-col
 				>
 				<el-col :span="6"><div class="grid-content bg-purple">订单来源</div></el-col>
-				<el-col :span="6"><div class="grid-content bg-purple"></div></el-col>
+				<el-col :span="6"
+					><div class="grid-content bg-purple">
+						{{
+								orderData.paymentType == 1
+								? '小鹰加油'
+								: orderData.paymentType == 2
+								? '小鹰加油'
+								:orderData.paymentType == 3
+								? '小鹰加油'
+								: orderData.paymentType == 4
+								? '团油'
+								: orderData.paymentType == 5
+								? '宝能'
+								: orderData.paymentType == 6
+								? '小鹰加油'
+								: orderData.paymentType == 8
+								? '敬运'
+								: orderData.paymentType,
+						}}
+					</div></el-col
+				>
 				<el-col :span="6" style="text-algin: center"><div class="grid-content bg-purple">下单时间</div></el-col>
 				<el-col :span="6"
 					><div class="grid-content bg-purple">{{ orderData.orderTime }}</div></el-col
@@ -106,8 +132,6 @@
 					><div class="grid-content bg-purple">
 						{{
 							orderData.paymentStatus == 1
-								? '已付款'
-								: orderData.paymentStatus == 1
 								? '已付款'
 								: orderData.paymentStatus == 2
 								? '退款成功'
@@ -132,9 +156,13 @@
 				<el-col :span="6"><div class="grid-content bg-purple"></div></el-col>
 				<el-col :span="6"><div class="grid-content bg-purple"></div></el-col>
 				<el-col :span="6" style="text-algin: center"><div class="grid-content bg-purple">退款时间</div></el-col>
-				<el-col :span="6"><div class="grid-content bg-purple"></div></el-col>
+				<el-col :span="6"
+					><div class="grid-content bg-purple">{{ orderData.rfndTime }}</div></el-col
+				>
 				<el-col :span="6"><div class="grid-content bg-purple">退款原因</div></el-col>
-				<el-col :span="6"><div class="grid-content bg-purple"></div></el-col>
+				<el-col :span="6"
+					><div class="grid-content bg-purple">{{ orderData.rfndReason }}</div></el-col
+				>
 				<el-col :span="6"><div class="grid-content bg-purple">拒绝退款原因</div></el-col>
 				<el-col :span="6"><div class="grid-content bg-purple"></div></el-col>
 				<el-col :span="6"><div class="grid-content bg-purple"></div></el-col>
@@ -156,7 +184,9 @@
 					><div class="grid-content bg-purple">￥{{ orderData.dieselEngineNum }}</div></el-col
 				>
 				<el-col :span="6"><div class="grid-content bg-purple">序列号(撬装)</div></el-col>
-				<el-col :span="6"><div class="grid-content bg-purple"></div></el-col>
+				<el-col :span="6"
+					><div class="grid-content bg-purple">{{ orderData.oilGunNo }}</div></el-col
+				>
 				<el-col :span="6"><div class="grid-content bg-purple"></div></el-col>
 				<el-col :span="6"><div class="grid-content bg-purple"></div></el-col>
 			</el-row>
