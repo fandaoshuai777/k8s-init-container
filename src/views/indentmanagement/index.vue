@@ -52,7 +52,7 @@
 				<div>订单数量：{{ orderNum }}</div>
 				<div>总升数：{{ fuelVolumeTotal }}</div>
 			</div>
-			<el-table style="width: 100%" :data="tableData" border>
+			<el-table style="width: 100%;z-index: 0;" :data="tableData" border>
 				<el-table-column prop="orderNo" label="订单号" align="center" />
 				<el-table-column prop="paymentStatus" label="订单状态" show-overflow-tooltip align="center"></el-table-column>
 				<el-table-column prop="orderTime" label="下单时间" show-overflow-tooltip align="center"></el-table-column>
@@ -66,14 +66,8 @@
 				<el-table-column label="操作" width="200" align="center">
 					<template #default="scope">
 						<el-button size="small" type="text" @click="onOpenEditRole(scope.row)">查看</el-button>
-						<el-button
-							size="small"
-							type="text"
-							:disabled="scope.row.paymentStatus === '已付款' ? false : scope.row.paymentStatus === '退款失败' ? false : true"
-							@click="onRowDel(scope.row)"
-							>发起退款</el-button
-						>
-						<el-button size="small" type="text" @click="receipt(scope.row)">补打小票</el-button>
+						<el-button size="small" type="text" v-if="scope.row.paymentStatus == '已付款' || scope.row.paymentStatus == '退款失败'" @click="onRowDel(scope.row)">发起退款</el-button>
+						<el-button size="small" type="text" v-if="scope.row.paymentStatus == '已付款'" @click="receipt(scope.row)">补打小票</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -209,7 +203,7 @@ export default {
 			compile: false,
 			refund: false,
 			disabled: true,
-
+			refunds: false,
 			formInline: {
 				orderNo: '',
 				cellPhone: '',

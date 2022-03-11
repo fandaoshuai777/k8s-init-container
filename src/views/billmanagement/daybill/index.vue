@@ -130,7 +130,6 @@ export default {
 					label: n.value,
 				};
 			});
-			// this.oilStations = res.result;
 		});
 	},
 	methods: {
@@ -141,8 +140,8 @@ export default {
 				this.formInline.endTime = '';
 				this.formInline.startTime = '';
 			} else {
-				this.formInline.endTime = this.Time[0];
-				this.formInline.startTime = this.Time[1];
+				this.formInline.endTime = this.Time[1];
+				this.formInline.startTime = this.Time[0];
 			}
 			this.getbillList();
 		},

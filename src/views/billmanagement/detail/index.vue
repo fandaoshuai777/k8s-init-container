@@ -8,6 +8,7 @@
 					</el-form-item>
 					<el-form-item label=" 支付时间">
 						<el-date-picker
+							:disabled="this.$route.query.billTime == undefined ? false : true"
 							v-model="Time"
 							type="datetimerange"
 							start-placeholder="开始日期"
@@ -84,6 +85,7 @@ export default {
 				startTime: null,
 				endTime: null,
 			},
+			timeBtn: false,
 			tableList: [],
 			total: 0,
 			pagination: {
@@ -126,9 +128,9 @@ export default {
 	},
 	methods: {
 		arr() {
-			console.log(this.$route.query.billTime);
-			if (this.$route.query.billTime) {
-				console.log(123);
+			// console.log(this.$route.query.billTime);
+			// if (this.$route.query.billTime) {
+			// 	console.log(123);
 				if (this.Time == null) {
 					this.formInline.endTime = '';
 					this.formInline.startTime = '';
@@ -146,8 +148,8 @@ export default {
 					}
 					return;
 				}
-			} else {
-			}
+			// } else {
+			// }
 		},
 		inquire() {
 			this.pagination.pageNum = 1;
@@ -157,7 +159,6 @@ export default {
 				this.formInline.startTime = '';
 				this.Time = [];
 			} else {
-				console.log(this.Time[0]);
 				this.formInline.endTime = this.Time[1];
 				this.formInline.startTime = this.Time[0];
 			}
@@ -171,7 +172,16 @@ export default {
 					return {
 						...n,
 						paymentType: n.paymentType == 1 ? '油卡支付' : n.paymentType == 2 ? '微信支付' : n.paymentType == 3 ? '余额支付' : n.paymentType,
-						orderSource: n.orderSource == 1 ? '团油' : n.orderSource == 2 ? '联动云' : n.orderSource == 3 ? '敬运' :n.orderSource == 4 ? '自己平台' : n.orderSource,
+						orderSource:
+							n.orderSource == 1
+								? '团油'
+								: n.orderSource == 2
+								? '联动云'
+								: n.orderSource == 3
+								? '敬运'
+								: n.orderSource == 4
+								? '自己平台'
+								: n.orderSource,
 						paymentStatus:
 							n.paymentStatus == 1
 								? '已付款'
