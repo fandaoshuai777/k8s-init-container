@@ -171,6 +171,7 @@ export default {
 					return {
 						...n,
 						paymentType: n.paymentType == 1 ? '油卡支付' : n.paymentType == 2 ? '微信支付' : n.paymentType == 3 ? '余额支付' : n.paymentType,
+						orderSource: n.orderSource == 1 ? '团油' : n.orderSource == 2 ? '联动云' : n.orderSource == 3 ? '敬运' :n.orderSource == 4 ? '自己平台' : n.orderSource,
 						paymentStatus:
 							n.paymentStatus == 1
 								? '已付款'
