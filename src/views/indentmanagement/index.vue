@@ -52,19 +52,13 @@
 				<div>订单数量：{{ orderNum }}</div>
 				<div>总升数：{{ fuelVolumeTotal }}</div>
 			</div>
-			<el-table
-				style="width: 100%"
-				:data="tableData"
-				border
-				
-				
-			>
+			<el-table style="width: 100%" :data="tableData" border>
 				<el-table-column prop="orderNo" label="订单号" align="center" />
 				<el-table-column prop="paymentStatus" label="订单状态" show-overflow-tooltip align="center"></el-table-column>
 				<el-table-column prop="orderTime" label="下单时间" show-overflow-tooltip align="center"></el-table-column>
 				<el-table-column prop="paymentTime" label="支付时间" show-overflow-tooltip align="center"></el-table-column>
 				<el-table-column prop="stationName" label="所属油站" show-overflow-tooltip align="center" />
-				<el-table-column prop="thumbnail" label="订单油机金额(元)" show-overflow-tooltip align="center"></el-table-column>
+				<el-table-column prop="dieselEngineNum" label="订单油机金额(元)" show-overflow-tooltip align="center"></el-table-column>
 				<el-table-column prop="oilType" label="油号" show-overflow-tooltip align="center"></el-table-column>
 				<el-table-column prop="oilGunNo" label="枪号" show-overflow-tooltip align="center"></el-table-column>
 				<el-table-column prop="fuelVolume" label="升数(L)" show-overflow-tooltip align="center"></el-table-column>
@@ -104,7 +98,7 @@
 					><div class="grid-content bg-purple">{{ orderData.orderNo }}</div></el-col
 				>
 				<el-col :span="6"><div class="grid-content bg-purple">订单来源</div></el-col>
-				<el-col :span="6"><div class="grid-content bg-purple">{{}}</div></el-col>
+				<el-col :span="6"><div class="grid-content bg-purple"></div></el-col>
 				<el-col :span="6" style="text-algin: center"><div class="grid-content bg-purple">下单时间</div></el-col>
 				<el-col :span="6"
 					><div class="grid-content bg-purple">{{ orderData.orderTime }}</div></el-col
@@ -144,7 +138,7 @@
 				<el-col :span="6"><div class="grid-content bg-purple"></div></el-col>
 				<el-col :span="6"><div class="grid-content bg-purple"></div></el-col>
 				<el-col :span="6" style="text-algin: center"><div class="grid-content bg-purple">退款时间</div></el-col>
-				<el-col :span="6"><div class="grid-content bg-purple">{{}}</div></el-col>
+				<el-col :span="6"><div class="grid-content bg-purple"></div></el-col>
 				<el-col :span="6"><div class="grid-content bg-purple">退款原因</div></el-col>
 				<el-col :span="6"><div class="grid-content bg-purple"></div></el-col>
 				<el-col :span="6"><div class="grid-content bg-purple">拒绝退款原因</div></el-col>
@@ -213,7 +207,6 @@ export default {
 			compile: false,
 			refund: false,
 			disabled: true,
-			
 
 			formInline: {
 				orderNo: '',
@@ -289,7 +282,6 @@ export default {
 		indentList() {
 			//请求之前，开启loading
 
-
 			if (this.Time == null) {
 				this.formInline.endTime = '';
 				this.formInline.startTime = '';
@@ -299,8 +291,6 @@ export default {
 			}
 			let date = { ...this.pagination, ...this.formInline };
 			orderPage(date).then((res) => {
-   
-
 				this.dieselEngineNumCount = res.result.orderPageTotal.dieselEngineNumCount.toFixed(2);
 				this.fuelVolumeTotal = res.result.orderPageTotal.fuelVolumeTotal.toFixed(2);
 				this.orderNum = res.result.orderPageTotal.orderNum.toFixed(2);

@@ -19,7 +19,7 @@
 						</el-date-picker>
 					</el-form-item>
 					<el-form-item label="交易类型">
-						<el-select v-model="formInline.paymentType" clearable>
+						<el-select v-model="formInline.state" clearable>
 							<el-option v-for="(item, index) in billSta" :key="index" :label="item.label" :value="item.code"></el-option>
 						</el-select>
 					</el-form-item>
@@ -79,7 +79,7 @@ export default {
 		return {
 			formInline: {
 				orderNo: null,
-				paymentType: null,
+				state: null,
 				oilType: null,
 				startTime: null,
 				endTime: null,
