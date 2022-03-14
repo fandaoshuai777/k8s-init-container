@@ -108,7 +108,7 @@
 			</div>
 		</el-card>
 		<el-dialog title="订单详情" :visible.sync="compile" :close-on-click-modal="false" @close="close" custom-class="customWidth">
-			<el-row :gutter="20" align="center">
+			<el-row :gutter="20" align="center" class="warp">
 				<el-col :span="6" style="text-algin: center"><div class="grid-content bg-purple">订单号</div></el-col>
 				<el-col :span="6"
 					><div class="grid-content bg-purple">{{ orderData.orderNo }}</div></el-col
@@ -333,7 +333,7 @@ export default {
 				console.log(Sdata > Sdatas);
 				if (Sdata + 7776000000 > Sdatas) {
 				} else {
-					this.$message('只能选择90天之内的');
+					this.$message('选择时间段不能超过90天');
 					this.Time = '';
 				}
 				return;
@@ -566,11 +566,13 @@ export default {
 		margin-bottom: 0;
 	}
 }
-.el-col {
-	// border-radius: 4px;
-	border: 0.5px solid #ccc;
-	margin-left: -1px;
-	margin-top: -1px;
+.warp {
+	.el-col {
+		// border-radius: 4px;
+		border: 0.5px solid #ccc !important;
+		margin-left: -1px;
+		margin-top: -1px;
+	}
 }
 
 .grid-content {
