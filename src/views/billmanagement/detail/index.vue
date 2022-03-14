@@ -80,7 +80,7 @@
 				<el-table-column prop="driverTel" label="司机手机号" show-overflow-tooltip align="center"></el-table-column>
 				<el-table-column prop="state" label="交易类型" show-overflow-tooltip align="center"></el-table-column>
 				<el-table-column prop="dieselEngineNum" label="订单油机金额" show-overflow-tooltip align="center"></el-table-column>
-				<el-table-column prop="solidKnotAmount" label="应结算金额" show-overflow-tooltip align="center" />
+				<el-table-column prop="settleAmount" label="应结算金额" show-overflow-tooltip align="center" />
 				<el-table-column prop="platformMoney" label="让利金额" show-overflow-tooltip align="center"></el-table-column>
 				<el-table-column prop="slottingAllowanceMoney" label="通道费" show-overflow-tooltip align="center"></el-table-column>
 				<el-table-column prop="channelPrice" label="结算单价" show-overflow-tooltip align="center"></el-table-column>
