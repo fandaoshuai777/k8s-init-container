@@ -58,7 +58,7 @@ export default {
 	.login-icon-group {
 		width: 100%;
 		height: 100%;
-		background: url('./back.png');
+		background: url('./background.png');
 		position: relative;
 		// .login-icon-group-title {
 		// 	position: absolute;
