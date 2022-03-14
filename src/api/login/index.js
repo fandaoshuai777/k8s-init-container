@@ -22,6 +22,13 @@ export function verificationCodeLogin(userPhone,code) {
 		method: 'post'
 	});
 }
+//用户信息
+export function user() {
+	return request({
+		url: `/oilUser/userInfo`,
+		method: 'post'
+	});
+}
 
 // // 用户退出登录
 // export function signOut(params) {

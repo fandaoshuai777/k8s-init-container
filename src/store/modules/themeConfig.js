@@ -11,13 +11,13 @@ const themeConfigModule = {
 			// 默认顶栏导航背景颜色，请注意：需要同时修改 `/@/theme/common/var.scss` 对应的值
 			topBar: '#ffffff',
 			// 默认菜单导航背景颜色，请注意：需要同时修改 `/@/theme/common/var.scss` 对应的值
-			menuBar: '#545c64',
+			menuBar: '#F8F8FF',
 			// 默认分栏菜单背景颜色，请注意：需要同时修改 `/@/theme/common/var.scss` 对应的值
 			columnsMenuBar: '#545c64',
 			// 默认顶栏导航字体颜色，请注意：需要同时修改 `/@/theme/common/var.scss` 对应的值
 			topBarColor: '#606266',
 			// 默认菜单导航字体颜色，请注意：需要同时修改 `/@/theme/common/var.scss` 对应的值
-			menuBarColor: '#eaeaea',
+			menuBarColor: 'black',
 			// 默认分栏菜单字体颜色，请注意：需要同时修改 `/@/theme/common/var.scss` 对应的值
 			columnsMenuBarColor: '#e6e6e6',
 			/**

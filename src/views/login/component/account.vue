@@ -63,7 +63,7 @@ export default {
 					{ required: true, message: '账号不能为空' },
 					{ type: 'number', message: '输入错误' },
 				],
-				type: [{ type: 'array', required: true, message: '请勾选', trigger: 'change' }],
+				type: [{ type: 'array', required: true, message: '登录前,请阅读并勾选相关协议', trigger: 'change' }],
 			},
 		};
 	},

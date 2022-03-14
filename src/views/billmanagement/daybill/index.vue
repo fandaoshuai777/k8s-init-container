@@ -1,8 +1,47 @@
 <template>
 	<div class="system-role-container">
 		<el-card shadow="hover">
-			<el-form :model="formInline" class="demo-form-inline">
-				<div class="header">
+			<el-form :model="formInline" label-width="100px">
+				<el-row :gutter="35">
+					<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="5" class="mb20">
+						<el-form-item label="油站">
+							<el-select v-model="formInline.stationName" clearable>
+								<el-option v-for="(item, index) in oilStations" :key="index" :label="item.label" :value="item.code"></el-option>
+							</el-select>
+						</el-form-item>
+					</el-col>
+					<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="5" class="mb20">
+						<el-form-item label="账单状态">
+							<el-select v-model="formInline.billStatus" clearable>
+								<el-option v-for="(item, index) in billSta" :key="index" :label="item.label" :value="item.code"></el-option>
+							</el-select>
+						</el-form-item>
+					</el-col>
+					<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="8" class="mb20">
+						<el-form-item label="账单日期">
+							<el-date-picker
+								v-model="Time"
+								type="daterange"
+								align="right"
+								unlink-panels
+								range-separator="至"
+								start-placeholder="开始日期"
+								end-placeholder="结束日期"
+								value-format="yyyy-MM-dd"
+								style="width: 100%"
+							>
+							</el-date-picker>
+						</el-form-item>
+					</el-col>
+					<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="5" class="mb20">
+						<el-form-item>
+							<div class="right">
+								<el-button type="primary" @click="inquire">查询</el-button>
+							</div>
+						</el-form-item>
+					</el-col>
+				</el-row>
+				<!-- <div class="header">
 					<el-form-item label="油站">
 						<el-select v-model="formInline.stationName" clearable>
 							<el-option v-for="(item, index) in oilStations" :key="index" :label="item.label" :value="item.code"></el-option>
@@ -27,12 +66,7 @@
 						>
 						</el-date-picker>
 					</el-form-item>
-					<el-form-item>
-						<div class="right">
-							<el-button type="primary" @click="inquire">查询</el-button>
-						</div>
-					</el-form-item>
-				</div>
+				</div> -->
 			</el-form>
 			<div class="center">
 				<div>交易总金额（元）：{{ dieselEngineNumTotal }}</div>
@@ -202,10 +236,16 @@ export default {
 		margin-right: 20px;
 	}
 }
-::v-deep{
-	.el-table{
+::v-deep .el-date-editor .el-range-separator{
+	width: auto;
+}
+::v-deep {
+	.el-table {
 		z-index: 0;
 	}
+}
+::v-deep .el-range__close-icon {
+	display: none;
 }
 </style>
 

@@ -1,10 +1,47 @@
 <template>
 	<div class="system-role-container">
 		<el-card shadow="hover">
-			<el-form :model="formInline" class="demo-form-inline">
-				<div class="header">
-					<el-form-item label="订单号">
-						<el-input v-model="formInline.orderNo" placeholder="请输入订单号"></el-input>
+			<el-form :model="formInline"   label-width="100px" >
+				<!-- <div class="header"> -->
+					<el-row :gutter="35">
+						<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="5" class="mb20">
+							<el-form-item label="订单号">
+								<el-input v-model="formInline.orderNo" placeholder="请输入订单号" @change="onVerifiyNumberInteger($event)"></el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="8" class="mb20" >
+							<el-form-item label=" 支付时间">
+								<el-date-picker
+									:disabled="this.$route.query.billTime == undefined ? false : true"
+									v-model="Time"
+									type="datetimerange"
+									start-placeholder="开始日期"
+									end-placeholder="结束日期"
+									:default-time="['00:00:00', '23:59:59']"
+									value-format="yyyy-MM-dd HH:mm:ss"
+									style="width:100%"
+									@change="astrict"
+								>
+								</el-date-picker>
+							</el-form-item>
+						</el-col>
+						<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="5" class="mb20" >
+							<el-form-item label="交易类型">
+								<el-select v-model="formInline.state" clearable>
+									<el-option v-for="(item, index) in billSta" :key="index" :label="item.label" :value="item.code"></el-option>
+								</el-select>
+							</el-form-item>
+						</el-col>
+						<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="5" class="mb20">
+							<el-form-item label="油号">
+								<el-select v-model="formInline.oilType" clearable>
+									<el-option v-for="(item, index) in billStas" :key="index" :label="item" :value="item"></el-option>
+								</el-select>
+							</el-form-item>
+						</el-col>
+					</el-row>
+					<!-- <el-form-item label="订单号">
+						<el-input v-model="formInline.orderNo" placeholder="请输入订单号" @change="onVerifiyNumberInteger($event)"></el-input>
 					</el-form-item>
 					<el-form-item label=" 支付时间">
 						<el-date-picker
@@ -28,8 +65,8 @@
 						<el-select v-model="formInline.oilType" clearable>
 							<el-option v-for="(item, index) in billStas" :key="index" :label="item" :value="item"></el-option>
 						</el-select>
-					</el-form-item>
-				</div>
+					</el-form-item> -->
+				<!-- </div> -->
 				<div class="right">
 					<el-form-item>
 						<div class="right">
@@ -42,7 +79,7 @@
 				<el-table-column prop="orderNo" label="订单编号" align="center" />
 				<el-table-column prop="driverTel" label="司机手机号" show-overflow-tooltip align="center"></el-table-column>
 				<el-table-column prop="state" label="交易类型" show-overflow-tooltip align="center"></el-table-column>
-				<el-table-column prop="fuelVolume" label="订单油机金额" show-overflow-tooltip align="center"></el-table-column>
+				<el-table-column prop="dieselEngineNum" label="订单油机金额" show-overflow-tooltip align="center"></el-table-column>
 				<el-table-column prop="solidKnotAmount" label="应结算金额" show-overflow-tooltip align="center" />
 				<el-table-column prop="platformMoney" label="让利金额" show-overflow-tooltip align="center"></el-table-column>
 				<el-table-column prop="slottingAllowanceMoney" label="通道费" show-overflow-tooltip align="center"></el-table-column>
@@ -74,6 +111,7 @@
 <script>
 import { billDetailList, payTypeDict } from '@/api/bill/index.js';
 import { oilTypeDict } from '@/api/indentmanagement/index.js';
+import { verifiyNumberInteger } from '@/utils/toolsValidate';
 
 export default {
 	data() {
@@ -134,7 +172,12 @@ export default {
 		});
 	},
 	methods: {
-		arr() {
+		onVerifiyNumberInteger(val) {
+			if (verifiyNumberInteger(val) == false) {
+				this.formInline.orderNo = '';
+			}
+		},
+		astrict() {
 			if (this.Time == null) {
 				this.formInline.endTime = '';
 				this.formInline.startTime = '';
@@ -238,5 +281,8 @@ export default {
 	.el-table {
 		z-index: 0;
 	}
+}
+::v-deep .el-range__close-icon{
+	display: none;
 }
 </style>

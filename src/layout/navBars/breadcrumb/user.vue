@@ -1,6 +1,6 @@
 <template>
 	<div class="layout-navbars-breadcrumb-user" :style="{ flex: layoutUserFlexNum }">
-		<el-dropdown :show-timeout="70" :hide-timeout="50" trigger="click" @command="onComponentSizeChange">
+		<!-- <el-dropdown :show-timeout="70" :hide-timeout="50" trigger="click" @command="onComponentSizeChange">
 			<div class="layout-navbars-breadcrumb-user-icon">
 				<i class="iconfont icon-ziti" :title="$t('message.user.title0')"></i>
 			</div>
@@ -45,15 +45,15 @@
 				:title="isScreenfull ? $t('message.user.title6') : $t('message.user.title5')"
 				:class="!isScreenfull ? 'icon-fullscreen' : 'icon-tuichuquanping'"
 			></i>
-		</div>
+		</div> -->
 		<el-dropdown :show-timeout="70" :hide-timeout="50" @command="onDropdownCommand">
 			<span class="layout-navbars-breadcrumb-user-link">
-				<img :src="getUserInfos.photo" class="layout-navbars-breadcrumb-user-link-photo mr5" />
-				user
+				<img :src="userPhoto" class="layout-navbars-breadcrumb-user-link-photo mr5" />
+				{{userName}}
 				<i class="el-icon-arrow-down el-icon--right"></i>
 			</span>
 			<el-dropdown-menu slot="dropdown">
-				<el-dropdown-item command="/indentmanagement/index.vue">{{ $t('message.user.dropdown1') }}</el-dropdown-item>
+				<!-- <el-dropdown-item command="/indentmanagement/index.vue">{{ $t('message.user.dropdown1') }}</el-dropdown-item> -->
 
 				<el-dropdown-item divided command="logOut">{{ $t('message.user.dropdown5') }}</el-dropdown-item>
 			</el-dropdown-menu>
@@ -68,6 +68,7 @@ import { resetRouter } from '@/router/index.js';
 import { Session, Local } from '@/utils/storage.js';
 import UserNews from '@/layout/navBars/breadcrumb/userNews.vue';
 import Search from '@/layout/navBars/breadcrumb/search.vue';
+import { user } from '@/api/login/index';
 export default {
 	name: 'layoutBreadcrumbUser',
 	components: { UserNews, Search },
@@ -77,7 +78,10 @@ export default {
 			isShowUserNewsPopover: false,
 			disabledI18n: 'zh-cn',
 			disabledSize: '',
+			userPhoto:'',
+			userName:''
 		};
+		
 	},
 	computed: {
 		// 获取用户信息
@@ -92,6 +96,12 @@ export default {
 			else num = null;
 			return num;
 		},
+	},
+	created() {
+		user().then((res) => {
+		     this.userName=res.result.userName
+		     this.userPhoto=res.result.userPhoto
+		});
 	},
 	mounted() {
 		if (Local.get('themeConfigPrev')) {

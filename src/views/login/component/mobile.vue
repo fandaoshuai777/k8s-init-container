@@ -82,7 +82,7 @@ export default {
 					{ required: true, message: '请输入手机号', trigger: 'blur' },
 					{ validator: Phone, trigger: 'blur' },
 				],
-				type: [{ type: 'array', required: true, message: '请勾选', trigger: 'change' }],
+				type: [{ type: 'array', required: true, message: '登录前,请阅读并勾选相关协议', trigger: 'change' }],
 			},
 		};
 	},

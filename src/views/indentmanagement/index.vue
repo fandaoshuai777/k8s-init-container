@@ -2,49 +2,65 @@
 	<div class="system-role-container">
 		<el-card shadow="hover">
 			<div class="system-user-search">
-				<el-form :model="formInline" class="demo-form-inline">
-					<div class="header">
-						<el-form-item label="订单号">
-							<el-input v-model="formInline.orderNo" placeholder="请输入订单号" clearable></el-input>
-						</el-form-item>
-						<el-form-item label="手机号">
-							<el-input v-model="formInline.driverTel" placeholder="请输入手机号" clearable></el-input>
-						</el-form-item>
-						<el-form-item label="油号">
-							<el-select v-model="formInline.oilType" clearable>
-								<el-option label="全部" value=""></el-option>
-								<el-option v-for="(item, index) in batchNum" :key="index" :label="item.index" :value="item"></el-option>
-							</el-select>
-						</el-form-item>
-						<el-form-item label="订单状态">
-							<el-select v-model="formInline.paymentStatus" clearable>
-								<el-option v-for="(item, index) in oilStatusDict" :key="index" :label="item.label" :value="item.code"></el-option>
-							</el-select>
-						</el-form-item>
-					</div>
-					<div class="header-buttom">
-						<el-form-item label="支付时间">
-							<el-date-picker
-								v-model="Time"
-								type="datetimerange"
-								start-placeholder="开始日期"
-								end-placeholder="结束日期"
-								:default-time="['00:00:00', '23:59:59']"
-								value-format="yyyy-MM-dd HH:mm:ss"
-							>
-							</el-date-picker>
-						</el-form-item>
-						<el-form-item label="油站">
-							<el-select v-model="formInline.stationName" clearable>
-								<el-option v-for="(item, index) in oilStations" :key="index" :label="item.label" :value="item.code"></el-option>
-							</el-select>
-						</el-form-item>
-						<el-form-item>
-							<div class="right">
-								<el-button type="primary" @click="inquire">查询</el-button>
-							</div>
-						</el-form-item>
-					</div>
+				<el-form :model="formInline" label-width="100px">
+					<el-row :gutter="35">
+						<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="6" class="mb20">
+							<el-form-item label="订单号">
+								<el-input v-model="formInline.orderNo" placeholder="请输入订单号" @change="onVerifiyNumberInteger($event)" clearable></el-input>
+							</el-form-item>
+						</el-col>
+
+						<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="6" class="mb20">
+							<el-form-item label="手机号" prop="driverTel">
+								<el-input v-model="formInline.driverTel" placeholder="请输入手机号" @change="onVerifyPhone($event)" clearable> clearable></el-input>
+							</el-form-item>
+						</el-col>
+
+						<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="6" class="mb20">
+							<el-form-item label="油号">
+								<el-select v-model="formInline.oilType" clearable>
+									<el-option label="全部" value=""></el-option>
+									<el-option v-for="(item, index) in batchNum" :key="index" :label="item.index" :value="item"></el-option>
+								</el-select>
+							</el-form-item>
+						</el-col>
+						<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="6" class="mb20">
+							<el-form-item label="订单状态">
+								<el-select v-model="formInline.paymentStatus" clearable>
+									<el-option v-for="(item, index) in oilStatusDict" :key="index" :label="item.label" :value="item.code"></el-option>
+								</el-select>
+							</el-form-item>
+						</el-col>
+
+						<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="6" class="mb20">
+							<el-form-item label="油站">
+								<el-select v-model="formInline.stationName" clearable>
+									<el-option v-for="(item, index) in oilStations" :key="index" :label="item.label" :value="item.code"></el-option>
+								</el-select>
+							</el-form-item>
+						</el-col>
+						<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="7" class="mb20">
+							<el-form-item label="支付时间">
+								<el-date-picker
+									v-model="Time"
+									type="datetimerange"
+									start-placeholder="开始日期"
+									end-placeholder="结束日期"
+									:default-time="['00:00:00', '23:59:59']"
+									value-format="yyyy-MM-dd HH:mm:ss"
+									@change="astrict"
+								>
+								</el-date-picker>
+							</el-form-item>
+						</el-col>
+						<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="10" class="mb20" :push="8">
+							<el-form-item>
+								<div class="right">
+									<el-button type="primary" @click="inquire">查询</el-button>
+								</div>
+							</el-form-item>
+						</el-col>
+					</el-row>
 				</el-form>
 			</div>
 			<div class="center">
@@ -217,7 +233,7 @@
 </template>
 <script>
 import { orderPage, orderInfo, stamp, refundReview, oilTypeDict, oilStationDict, oilStatusDict } from '@/api/indentmanagement/index.js';
-
+import { verifyPhone, verifiyNumberInteger } from '@/utils/toolsValidate';
 export default {
 	data() {
 		// 验证活动名称的函数
@@ -304,6 +320,25 @@ export default {
 
 			this.indentList();
 		},
+		astrict() {
+			if (this.Time == null) {
+				this.formInline.endTime = '';
+				this.formInline.startTime = '';
+				return;
+			} else {
+				let startDate = this.Time[0].replace(new RegExp('-', 'gm'), '/');
+				let Sdata = new Date(startDate).getTime();
+				let startDates = this.Time[1].replace(new RegExp('-', 'gm'), '/');
+				let Sdatas = new Date(startDates).getTime();
+				console.log(Sdata > Sdatas);
+				if (Sdata + 7776000000 > Sdatas) {
+				} else {
+					this.$message('只能选择90天之内的');
+					this.Time = '';
+				}
+				return;
+			}
+		},
 		//列表
 		indentList() {
 			//请求之前，开启loading
@@ -342,6 +377,7 @@ export default {
 								? '已取消'
 								: n.paymentStatus,
 						fuelVolume: n.fuelVolume.toFixed(2),
+						driverTel: n.driverTel.replace(/(\d{3})\d*(\d{4})/, '$1****$2'),
 					};
 				});
 				this.flag = this.tableData.paymentStatus;
@@ -403,6 +439,17 @@ export default {
 		close() {
 			this.compile = false;
 			this.refund = false;
+		},
+		// 手机号码
+		onVerifyPhone(val) {
+			if (verifyPhone(val) == false) {
+				this.formInline.driverTel = '';
+			}
+		},
+		onVerifiyNumberInteger(val) {
+			if (verifiyNumberInteger(val) == false) {
+				this.formInline.orderNo = '';
+			}
 		},
 		// 页码变化
 		paginationChange(value) {
@@ -473,24 +520,11 @@ export default {
 };
 </script>
 <style scoped lang="scss">
-.header {
-	display: flex;
-	flex-wrap: wrap;
-	align-items: center;
-	.el-form-item {
-		width: 25%;
-		display: flex;
-	}
+::v-deep .el-range__close-icon {
+	display: none;
 }
-.header-buttom {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-
-	.el-form-item {
-		display: flex;
-		margin-right: 80px;
-	}
+.el-col {
+	border: 0 !important;
 }
 .right {
 	margin-right: 125px;
