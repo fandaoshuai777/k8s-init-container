@@ -392,7 +392,7 @@ export default {
 		receipt(row) {
 			stamp(row.orderNo).then((res) => {
 				if (res.code == 200) {
-					this.$message.success('打印成功');
+					this.$message.success('补打成功');
 				} else {
 					this.$message.error(res.msg);
 				}
