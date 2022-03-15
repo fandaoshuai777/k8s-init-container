@@ -114,21 +114,21 @@
 				<div class="grid-content bg-purple">订单来源</div>
 				<div class="grid-content bg-purple">
 					{{
-								orderData.paymentType == 1
+								orderData.orderSource == 1
 								? '小鹰加油'
-								: orderData.paymentType == 2
+								: orderData.orderSource == 2
 								? '小鹰加油'
-								:orderData.paymentType == 3
+								:orderData.orderSource == 3
 								? '小鹰加油'
-								: orderData.paymentType == 4
+								: orderData.orderSource == 4
 								? '团油'
-								: orderData.paymentType == 5
+								: orderData.orderSource == 5
 								? '宝能'
-								: orderData.paymentType == 6
+								: orderData.orderSource == 6
 								? '小鹰加油'
-								: orderData.paymentType == 8
+								: orderData.orderSource == 8
 								? '敬运'
-								: orderData.paymentType,
+								: orderData.orderSource,
 					}}
 				</div>
 
