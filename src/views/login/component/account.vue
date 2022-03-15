@@ -1,5 +1,5 @@
 <template>
-	<div >
+	<div>
 		<el-form size="large" class="login-content-form" :model="form" ref="Userform" :rules="rules">
 			<el-form-item class="login-animation1" prop="userPhone">
 				<el-input type="text" clearable autocomplete="off" placeholder="请输入账号" v-model.number="form.userPhone">
@@ -93,6 +93,7 @@ export default {
 									defaultRoles = testAuthPageList;
 									defaultAuthBtnList = testAuthBtnList;
 								}
+								Local.remove('user');
 								const userInfos = {
 									userName: userName === 'admin' ? 'admin' : 'test',
 									photo:
@@ -147,10 +148,18 @@ export default {
 		consent() {},
 		platform() {
 			this.$router.push('/platform');
+			Local.set('user', this.form);
 		},
 		commercial() {
-			this.$router.push('/commercial');
+			// this.$router.push('/commercial');
 		},
+	},
+	created() {
+		if (Local.get('user')) {
+			this.form.userPhone = Local.get('user').userPhone;
+			this.form.userPassword = Local.get('user').userPassword;
+		} else {
+		}
 	},
 };
 </script>

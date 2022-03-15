@@ -90,23 +90,23 @@ export default {
 		gain() {
 			this.$refs.Userform.validateField('userPhone', (val) => {
 				if (!val) {
-					const TIME_COUNT = 60; //更改倒计时时间
-					if (!this.timer) {
-						this.count = TIME_COUNT;
-						this.show = false;
-						this.timer = setInterval(() => {
-							if (this.count > 0 && this.count <= TIME_COUNT) {
-								this.count--;
-							} else {
-								this.show = true;
-								clearInterval(this.timer); // 清除定时器
-								this.timer = null;
-							}
-						}, 1000);
-					}
 					sendCode(this.form.userPhone).then((res) => {
 						if (res.code == 200) {
 							this.$message.success('验证码发送成功');
+							const TIME_COUNT = 60; //更改倒计时时间
+							if (!this.timer) {
+								this.count = TIME_COUNT;
+								this.show = false;
+								this.timer = setInterval(() => {
+									if (this.count > 0 && this.count <= TIME_COUNT) {
+										this.count--;
+									} else {
+										this.show = true;
+										clearInterval(this.timer); // 清除定时器
+										this.timer = null;
+									}
+								}, 1000);
+							}
 						} else {
 							this.$message.error(res.msg);
 						}
@@ -123,6 +123,7 @@ export default {
 						if (res.code == 200) {
 							let userName = 'admin';
 							setTimeout(() => {
+								Local.remove('users')
 								let defaultRoles = [];
 								let defaultAuthBtnList = [];
 								// admin 页面权限标识，对应路由 meta.roles
@@ -184,6 +185,17 @@ export default {
 				}
 			});
 		},
+		platform() {
+			this.$router.push('/platform');
+			Local.set('users', this.form);
+		},
+	},
+	created() {
+		if (Local.get('users')) {
+			this.form.userPhone = Local.get('users').userPhone;
+			this.form.code = Local.get('users').code;
+		} else {
+		}
 	},
 };
 </script>

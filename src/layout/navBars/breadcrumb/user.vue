@@ -49,7 +49,7 @@
 		<el-dropdown :show-timeout="70" :hide-timeout="50" @command="onDropdownCommand">
 			<span class="layout-navbars-breadcrumb-user-link">
 				<img :src="userPhoto" class="layout-navbars-breadcrumb-user-link-photo mr5" />
-				{{userName}}
+				{{ userName }}
 				<i class="el-icon-arrow-down el-icon--right"></i>
 			</span>
 			<el-dropdown-menu slot="dropdown">
@@ -78,10 +78,9 @@ export default {
 			isShowUserNewsPopover: false,
 			disabledI18n: 'zh-cn',
 			disabledSize: '',
-			userPhoto:'',
-			userName:''
+			userPhoto: '',
+			userName: '',
 		};
-		
 	},
 	computed: {
 		// 获取用户信息
@@ -99,8 +98,8 @@ export default {
 	},
 	created() {
 		user().then((res) => {
-		     this.userName=res.result.userName
-		     this.userPhoto=res.result.userPhoto
+			this.userName = res.result.userName;
+			this.userPhoto = res.result.userPhoto;
 		});
 	},
 	mounted() {
@@ -165,7 +164,7 @@ export default {
 		initComponentSize() {
 			switch (Local.get('themeConfigPrev').globalComponentSize) {
 				case '':
-					this.disabledSize = '';
+					this.disabledSize = 'medium';
 					break;
 				case 'medium':
 					this.disabledSize = 'medium';
@@ -177,6 +176,8 @@ export default {
 					this.disabledSize = 'mini';
 					break;
 			}
+			console.log(this.disabledSize)
+
 		},
 		// `dropdown 下拉菜单` 当前项点击
 		onDropdownCommand(path) {

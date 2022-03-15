@@ -87,7 +87,7 @@ const themeConfigModule = {
 			// 默认初始语言，可选值"<zh-cn|en|zh-tw>"，默认 zh-cn
 			globalI18n: 'zh-cn',
 			// 默认全局组件大小，可选值"<|medium|small|mini>"，默认 ''
-			globalComponentSize: '',
+			globalComponentSize: 'medium',
 		},
 	},
 	mutations: {

@@ -2,65 +2,55 @@
 	<div class="system-role-container">
 		<el-card shadow="hover">
 			<div class="system-user-search">
-				<el-form :model="formInline" label-width="100px">
-					<el-row :gutter="35">
-						<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="6" class="mb20">
-							<el-form-item label="订单号">
-								<el-input v-model="formInline.orderNo" placeholder="请输入订单号" @change="onVerifiyNumberInteger($event)" clearable></el-input>
-							</el-form-item>
-						</el-col>
+				<el-form :model="formInline">
+					<div class="el-form--inline">
+						<el-form-item label="订单号">
+							<el-input v-model="formInline.orderNo" placeholder="请输入订单号" @change="onVerifiyNumberInteger($event)" clearable></el-input>
+						</el-form-item>
 
-						<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="6" class="mb20">
-							<el-form-item label="手机号" prop="driverTel">
-								<el-input v-model="formInline.driverTel" placeholder="请输入手机号" @change="onVerifyPhone($event)" clearable> clearable></el-input>
-							</el-form-item>
-						</el-col>
+						<el-form-item label="手机号" prop="driverTel">
+							<el-input v-model="formInline.driverTel" placeholder="请输入手机号" @change="onVerifyPhone($event)" clearable> clearable></el-input>
+						</el-form-item>
 
-						<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="6" class="mb20">
-							<el-form-item label="油号">
-								<el-select v-model="formInline.oilType" clearable>
-									<el-option label="全部" value=""></el-option>
-									<el-option v-for="(item, index) in batchNum" :key="index" :label="item.index" :value="item"></el-option>
-								</el-select>
-							</el-form-item>
-						</el-col>
-						<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="6" class="mb20">
-							<el-form-item label="订单状态">
-								<el-select v-model="formInline.paymentStatus" clearable>
-									<el-option v-for="(item, index) in oilStatusDict" :key="index" :label="item.label" :value="item.code"></el-option>
-								</el-select>
-							</el-form-item>
-						</el-col>
+						<el-form-item label="油号">
+							<el-select v-model="formInline.oilType" clearable>
+								<el-option label="全部" value=""></el-option>
+								<el-option v-for="(item, index) in batchNum" :key="index" :label="item.index" :value="item"></el-option>
+							</el-select>
+						</el-form-item>
 
-						<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="6" class="mb20">
-							<el-form-item label="油站">
-								<el-select v-model="formInline.stationName" clearable>
-									<el-option v-for="(item, index) in oilStations" :key="index" :label="item.label" :value="item.code"></el-option>
-								</el-select>
-							</el-form-item>
-						</el-col>
-						<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="7" class="mb20">
-							<el-form-item label="支付时间">
-								<el-date-picker
-									v-model="Time"
-									type="datetimerange"
-									start-placeholder="开始日期"
-									end-placeholder="结束日期"
-									:default-time="['00:00:00', '23:59:59']"
-									value-format="yyyy-MM-dd HH:mm:ss"
-									@change="astrict"
-								>
-								</el-date-picker>
-							</el-form-item>
-						</el-col>
-						<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="10" class="mb20" :push="8">
-							<el-form-item>
-								<div class="right">
-									<el-button type="primary" @click="inquire">查询</el-button>
-								</div>
-							</el-form-item>
-						</el-col>
-					</el-row>
+						<el-form-item label="订单状态">
+							<el-select v-model="formInline.paymentStatus" clearable>
+								<el-option v-for="(item, index) in oilStatusDict" :key="index" :label="item.label" :value="item.code"></el-option>
+							</el-select>
+						</el-form-item>
+					</div>
+					<div class="el-form--inlines">
+						<el-form-item label="油站" class="left">
+							<el-select v-model="formInline.stationName" clearable>
+								<el-option v-for="(item, index) in oilStations" :key="index" :label="item.label" :value="item.code"></el-option>
+							</el-select>
+						</el-form-item>
+
+						<el-form-item label="支付时间" class="center">
+							<el-date-picker
+								v-model="Time"
+								type="datetimerange"
+								start-placeholder="开始日期"
+								end-placeholder="结束日期"
+								:default-time="['00:00:00', '23:59:59']"
+								value-format="yyyy-MM-dd HH:mm:ss"
+								@change="astrict"
+							>
+							</el-date-picker>
+						</el-form-item>
+
+						<el-form-item>
+							<div class="right">
+								<el-button type="primary" @click="inquire">查询</el-button>
+							</div>
+						</el-form-item>
+					</div>
 				</el-form>
 			</div>
 			<div class="center">
@@ -68,18 +58,18 @@
 				<div>订单数量：{{ orderNum }}</div>
 				<div>总升数：{{ fuelVolumeTotal }}</div>
 			</div>
-			<el-table style="width: 100%; z-index: 0" :data="tableData" border>
-				<el-table-column prop="orderNo" label="订单号" align="center" />
-				<el-table-column prop="paymentStatus" label="订单状态" show-overflow-tooltip align="center"></el-table-column>
-				<el-table-column prop="orderTime" label="下单时间" show-overflow-tooltip align="center"></el-table-column>
-				<el-table-column prop="paymentTime" label="支付时间" show-overflow-tooltip align="center"></el-table-column>
-				<el-table-column prop="stationName" label="所属油站" show-overflow-tooltip align="center" />
-				<el-table-column prop="dieselEngineNum" label="订单油机金额(元)" show-overflow-tooltip align="center"></el-table-column>
-				<el-table-column prop="oilType" label="油号" show-overflow-tooltip align="center"></el-table-column>
-				<el-table-column prop="oilGunNo" label="枪号" show-overflow-tooltip align="center"></el-table-column>
-				<el-table-column prop="fuelVolume" label="升数(L)" show-overflow-tooltip align="center"></el-table-column>
-				<el-table-column prop="driverTel" label="用户手机号" show-overflow-tooltip align="center"></el-table-column>
-				<el-table-column label="操作" width="200" align="center">
+			<el-table style="width: 100%; z-index: 0" :data="tableData" stripe border>
+				<el-table-column prop="orderNo" label="订单号" align="center" min-width="90px" />
+				<el-table-column prop="paymentStatus" label="订单状态" align="center"></el-table-column>
+				<el-table-column prop="orderTime" label="下单时间" align="center" min-width="120px"></el-table-column>
+				<el-table-column prop="paymentTime" label="支付时间" align="center" min-width="120px"></el-table-column>
+				<el-table-column prop="stationName" label="所属油站" align="center" min-width="120px" />
+				<el-table-column prop="dieselEngineNum" label="订单油机金额(元)" align="center"></el-table-column>
+				<el-table-column prop="oilType" label="油号" align="center"></el-table-column>
+				<el-table-column prop="oilGunNo" label="枪号" align="center"></el-table-column>
+				<el-table-column prop="fuelVolume" label="升数(L)" align="center"></el-table-column>
+				<el-table-column prop="driverTel" label="用户手机号" align="center"></el-table-column>
+				<el-table-column label="操作" width="200" align="center" fixed="right">
 					<template #default="scope">
 						<el-button size="small" type="text" @click="onOpenEditRole(scope.row)">查看</el-button>
 						<el-button
@@ -108,14 +98,97 @@
 			</div>
 		</el-card>
 		<el-dialog title="订单详情" :visible.sync="compile" :close-on-click-modal="false" @close="close" custom-class="customWidth">
-			<el-row :gutter="20" align="center" class="warp">
-				<el-col :span="6" style="text-algin: center"><div class="grid-content bg-purple">订单号</div></el-col>
-				<el-col :span="6"
-					><div class="grid-content bg-purple">{{ orderData.orderNo }}</div></el-col
+			<div class="warp">
+				<div class="grid-content bg-purple">订单号</div>
+				<div class="grid-content bg-purple">{{ orderData.orderNo }}</div>
+				<div class="grid-content bg-purple">订单来源</div>
+				<div class="grid-content bg-purple">
+					{{
+								orderData.paymentType == 1
+								? '小鹰加油'
+								: orderData.paymentType == 2
+								? '小鹰加油'
+								:orderData.paymentType == 3
+								? '小鹰加油'
+								: orderData.paymentType == 4
+								? '团油'
+								: orderData.paymentType == 5
+								? '宝能'
+								: orderData.paymentType == 6
+								? '小鹰加油'
+								: orderData.paymentType == 8
+								? '敬运'
+								: orderData.paymentType,
+					}}
+				</div>
+
+				<div class="grid-content bg-purple">下单时间</div>
+				<div class="grid-content bg-purple">{{ orderData.orderTime }}</div>
+
+				<div class="grid-content bg-purple">支付时间</div>
+				<div class="grid-content bg-purple">{{ orderData.paymentTime }}</div>
+
+				<div class="grid-content bg-purple">订单状态</div>
+				<div class="grid-content bg-purple">
+					{{
+						orderData.paymentStatus == 1
+							? '已付款'
+							: orderData.paymentStatus == 2
+							? '退款成功'
+							: orderData.paymentStatus == 3
+							? '付款中'
+							: orderData.paymentStatus == 4
+							? '待退款'
+							: orderData.paymentStatus == 5
+							? '退款失败'
+							: orderData.paymentStatus == 6
+							? '已结算'
+							: orderData.paymentStatus
+					}}
+				</div>
+
+				<div class="grid-content bg-purple"></div>
+				<div class="grid-content bg-purple"></div>
+				<div class="grid-content bg-purple">所属油站</div>
+				<div class="grid-content bg-purple">{{ orderData.stationName }}</div>
+
+				<div class="grid-content bg-purple"></div>
+				<div class="grid-content bg-purple"></div>
+				<div class="grid-content bg-purple">退款时间</div>
+				<div class="grid-content bg-purple">{{ orderData.rfndTime }}</div>
+
+				<div class="grid-content bg-purple">退款原因</div>
+				<div class="grid-content bg-purple">{{ orderData.rfndReason }}</div>
+
+				<div class="grid-content bg-purple">拒绝退款原因</div>
+				<div class="grid-content bg-purple"></div>
+				<div class="grid-content bg-purple"></div>
+				<div class="grid-content bg-purple"></div>
+				<div class="grid-content bg-purple">油品</div>
+				<div class="grid-content bg-purple">{{ orderData.oilType }}</div>
+
+				<div class="grid-content bg-purple">油枪</div>
+				<div class="grid-content bg-purple">{{ orderData.oilGunNo }}号枪</div>
+
+				<div class="grid-content bg-purple">加油量</div>
+				<div class="grid-content bg-purple">{{ orderData.fuelVolume }}L</div>
+
+				<div class="grid-content bg-purple">订单油机金额</div>
+				<div class="grid-content bg-purple">￥{{ orderData.dieselEngineNum }}</div>
+
+				<div class="grid-content bg-purple">序列号(撬装)</div>
+				<div class="grid-content bg-purple">{{ orderData.oilGunNo }}</div>
+
+				<div class="grid-content bg-purple"></div>
+				<div class="grid-content bg-purple"></div>
+			</div>
+
+			<!-- <el-row :gutter="20" align="center" class="warp">
+			<div class="grid-content bg-purple">订单号</div>
+				<div class="grid-content bg-purple">{{ orderData.orderNo }}</div>
 				>
-				<el-col :span="6"><div class="grid-content bg-purple">订单来源</div></el-col>
-				<el-col :span="6"
-					><div class="grid-content bg-purple">
+				<div class="grid-content bg-purple">订单来源</div>
+				<div class="grid-content bg-purple">
 						{{
 								orderData.paymentType == 1
 								? '小鹰加油'
@@ -133,19 +206,16 @@
 								? '敬运'
 								: orderData.paymentType,
 						}}
-					</div></el-col
+					</div>
 				>
-				<el-col :span="6" style="text-algin: center"><div class="grid-content bg-purple">下单时间</div></el-col>
-				<el-col :span="6"
-					><div class="grid-content bg-purple">{{ orderData.orderTime }}</div></el-col
+			<div class="grid-content bg-purple">下单时间</div>
+				<div class="grid-content bg-purple">{{ orderData.orderTime }}</div>
 				>
-				<el-col :span="6"><div class="grid-content bg-purple">支付时间</div></el-col>
-				<el-col :span="6"
-					><div class="grid-content bg-purple">{{ orderData.paymentTime }}</div></el-col
+				<div class="grid-content bg-purple">支付时间</div>
+				<div class="grid-content bg-purple">{{ orderData.paymentTime }}</div>
 				>
-				<el-col :span="6" style="text-algin: center"><div class="grid-content bg-purple">订单状态</div></el-col>
-				<el-col :span="6"
-					><div class="grid-content bg-purple">
+			<div class="grid-content bg-purple">订单状态</div>
+				<div class="grid-content bg-purple">
 						{{
 							orderData.paymentStatus == 1
 								? '已付款'
@@ -161,51 +231,43 @@
 								? '已结算'
 								: orderData.paymentStatus
 						}}
-					</div></el-col
+					</div>
 				>
-				<el-col :span="6"><div class="grid-content bg-purple"></div></el-col>
-				<el-col :span="6"><div class="grid-content bg-purple"></div></el-col>
-				<el-col :span="6" style="text-algin: center"><div class="grid-content bg-purple">所属油站</div></el-col>
-				<el-col :span="6"
-					><div class="grid-content bg-purple">{{ orderData.stationName }}</div></el-col
+				<div class="grid-content bg-purple"></div>
+				<div class="grid-content bg-purple"></div>
+			<div class="grid-content bg-purple">所属油站</div>
+				<div class="grid-content bg-purple">{{ orderData.stationName }}</div>
 				>
-				<el-col :span="6"><div class="grid-content bg-purple"></div></el-col>
-				<el-col :span="6"><div class="grid-content bg-purple"></div></el-col>
-				<el-col :span="6" style="text-algin: center"><div class="grid-content bg-purple">退款时间</div></el-col>
-				<el-col :span="6"
-					><div class="grid-content bg-purple">{{ orderData.rfndTime }}</div></el-col
+				<div class="grid-content bg-purple"></div>
+				<div class="grid-content bg-purple"></div>
+			<div class="grid-content bg-purple">退款时间</div>
+				<div class="grid-content bg-purple">{{ orderData.rfndTime }}</div>
 				>
-				<el-col :span="6"><div class="grid-content bg-purple">退款原因</div></el-col>
-				<el-col :span="6"
-					><div class="grid-content bg-purple">{{ orderData.rfndReason }}</div></el-col
+				<div class="grid-content bg-purple">退款原因</div>
+				<div class="grid-content bg-purple">{{ orderData.rfndReason }}</div>
 				>
-				<el-col :span="6"><div class="grid-content bg-purple">拒绝退款原因</div></el-col>
-				<el-col :span="6"><div class="grid-content bg-purple"></div></el-col>
-				<el-col :span="6"><div class="grid-content bg-purple"></div></el-col>
-				<el-col :span="6"><div class="grid-content bg-purple"></div></el-col>
-				<el-col :span="6"><div class="grid-content bg-purple">油品</div></el-col>
-				<el-col :span="6"
-					><div class="grid-content bg-purple">{{ orderData.oilType }}</div></el-col
+				<div class="grid-content bg-purple">拒绝退款原因</div>
+				<div class="grid-content bg-purple"></div>
+				<div class="grid-content bg-purple"></div>
+				<div class="grid-content bg-purple"></div>
+				<div class="grid-content bg-purple">油品</div>
+				<div class="grid-content bg-purple">{{ orderData.oilType }}</div>
 				>
-				<el-col :span="6"><div class="grid-content bg-purple">油枪</div></el-col>
-				<el-col :span="6"
-					><div class="grid-content bg-purple">{{ orderData.oilGunNo }}号枪</div></el-col
+				<div class="grid-content bg-purple">油枪</div>
+				<div class="grid-content bg-purple">{{ orderData.oilGunNo }}号枪</div>
 				>
-				<el-col :span="6"><div class="grid-content bg-purple">加油量</div></el-col>
-				<el-col :span="6"
-					><div class="grid-content bg-purple">{{ orderData.fuelVolume }}L</div></el-col
+				<div class="grid-content bg-purple">加油量</div>
+				<div class="grid-content bg-purple">{{ orderData.fuelVolume }}L</div>
 				>
-				<el-col :span="6"><div class="grid-content bg-purple">订单油机金额</div></el-col>
-				<el-col :span="6"
-					><div class="grid-content bg-purple">￥{{ orderData.dieselEngineNum }}</div></el-col
+				<div class="grid-content bg-purple">订单油机金额</div>
+				<div class="grid-content bg-purple">￥{{ orderData.dieselEngineNum }}</div>
 				>
-				<el-col :span="6"><div class="grid-content bg-purple">序列号(撬装)</div></el-col>
-				<el-col :span="6"
-					><div class="grid-content bg-purple">{{ orderData.oilGunNo }}</div></el-col
+				<div class="grid-content bg-purple">序列号(撬装)</div>
+				<div class="grid-content bg-purple">{{ orderData.oilGunNo }}</div>
 				>
-				<el-col :span="6"><div class="grid-content bg-purple"></div></el-col>
-				<el-col :span="6"><div class="grid-content bg-purple"></div></el-col>
-			</el-row>
+				<div class="grid-content bg-purple"></div>
+				<div class="grid-content bg-purple"></div>
+			</el-row> -->
 		</el-dialog>
 		<el-dialog title="退款" :visible.sync="refund" :close-on-click-modal="false" @close="close">
 			<el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
@@ -246,7 +308,7 @@ export default {
 			}
 		};
 		return {
-			compile: false,
+			compile: true,
 			refund: false,
 			disabled: true,
 			refunds: false,
@@ -520,6 +582,41 @@ export default {
 };
 </script>
 <style scoped lang="scss">
+.el-form--inline {
+	display: flex;
+	justify-content: space-around;
+	flex-wrap: wrap;
+	align-items: center;
+	.el-form-item {
+		width: 20%;
+	}
+}
+.el-form--inlines {
+	display: table;
+	width: 100%;
+	.el-form-item {
+		display: inline-block;
+	}
+	::v-deep {
+		.el-form-item__label {
+			display: inline-block;
+		}
+		.el-form-item__content {
+			display: inline-block;
+		}
+	}
+	.left {
+		margin-left: 50px;
+	}
+	.center {
+		margin-left: 120px;
+	}
+	.right {
+		width: 100%;
+		text-align: right;
+	}
+}
+
 ::v-deep .el-range__close-icon {
 	display: none;
 }
@@ -575,11 +672,21 @@ export default {
 	}
 }
 
+.warp {
+	display: flex;
+	flex-wrap: wrap;
+}
+
 .grid-content {
-	border-radius: 4px;
-	min-height: 36px;
-	line-height: 36px;
+	border: 1px solid #ccc;
+	width: 25%;
+	min-height: 40px;
+	line-height: 40px;
 	text-align: center;
+	padding: 1px;
+	 margin-bottom:-1px ;
+	 margin-left:-1px ;
+	// height: 25%;
 }
 .row-bg {
 	padding: 10px 0;
@@ -592,6 +699,9 @@ export default {
 			text-align: center !important;
 		}
 	}
+}
+.form {
+	display: flex;
 }
 </style>
  
