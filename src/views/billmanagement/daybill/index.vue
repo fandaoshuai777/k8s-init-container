@@ -55,8 +55,8 @@
 				<el-table-column prop="dieselEngineNum" label="加油金额(元)"  align="center"></el-table-column>
 				<el-table-column prop="money" label="应结金额(元)"  align="center" />
 				<el-table-column prop="slottingAllowanceMoney" label="通道费(元)"  align="center"></el-table-column>
-				<el-table-column prop="plummet" label="商家承担直降金额(元）"  align="center"></el-table-column>
-				<el-table-column prop="discount" label="商家承担平台优惠券金额(元)"  align="center"></el-table-column>
+				<el-table-column prop="plummet" label="商家承担直降金额(元）" min-width="130px"  align="center"></el-table-column>
+				<el-table-column prop="discount" label="商家承担平台优惠券金额(元)" min-width="130px" align="center"></el-table-column>
 				<el-table-column prop="oldSolidKnotAmount" label="实结金额(元)"  align="center"></el-table-column>
 				<el-table-column prop="fuelVolume" label="升数"  align="center"></el-table-column>
 				<el-table-column prop="orderNum" label="交易笔数"  align="center"></el-table-column>

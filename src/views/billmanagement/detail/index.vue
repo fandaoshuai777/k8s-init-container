@@ -40,33 +40,7 @@
 							</el-form-item>
 						</el-col>
 					</el-row>
-					<!-- <el-form-item label="订单号">
-						<el-input v-model="formInline.orderNo" placeholder="请输入订单号" @change="onVerifiyNumberInteger($event)"></el-input>
-					</el-form-item>
-					<el-form-item label=" 支付时间">
-						<el-date-picker
-							:disabled="this.$route.query.billTime == undefined ? false : true"
-							v-model="Time"
-							type="datetimerange"
-							start-placeholder="开始日期"
-							end-placeholder="结束日期"
-							:default-time="['00:00:00', '23:59:59']"
-							value-format="yyyy-MM-dd HH:mm:ss"
-							@change="arr"
-						>
-						</el-date-picker>
-					</el-form-item>
-					<el-form-item label="交易类型">
-						<el-select v-model="formInline.state" clearable>
-							<el-option v-for="(item, index) in billSta" :key="index" :label="item.label" :value="item.code"></el-option>
-						</el-select>
-					</el-form-item>
-					<el-form-item label="油号">
-						<el-select v-model="formInline.oilType" clearable>
-							<el-option v-for="(item, index) in billStas" :key="index" :label="item" :value="item"></el-option>
-						</el-select>
-					</el-form-item> -->
-				<!-- </div> -->
+					
 				<div class="right">
 					<el-form-item>
 						<div class="right">
@@ -75,22 +49,22 @@
 					</el-form-item>
 				</div>
 			</el-form>
-			<el-table style="width: 100%" :data="tableList">
-				<el-table-column prop="orderNo" label="订单编号" align="center" />
-				<el-table-column prop="driverTel" label="司机手机号" align="center"></el-table-column>
-				<el-table-column prop="state" label="交易类型" align="center"></el-table-column>
-				<el-table-column prop="dieselEngineNum" label="订单油机金额" align="center"></el-table-column>
-				<el-table-column prop="settleAmount" label="应结算金额" align="center" />
-				<el-table-column prop="platformMoney" label="让利金额" align="center"></el-table-column>
-				<el-table-column prop="slottingAllowanceMoney" label="通道费" align="center"></el-table-column>
-				<el-table-column prop="channelPrice" label="结算单价" align="center"></el-table-column>
-				<el-table-column prop="gunno" label="枪号" align="center"></el-table-column>
-				<el-table-column prop="oilType" label="油品类型" align="center"></el-table-column>
-				<el-table-column prop="fuelVolume" label="加油量" align="center"></el-table-column>
-				<el-table-column prop="paymentStatus" label="订单状态" align="center"></el-table-column>
-				<el-table-column prop="orderSource" label="订单来源" align="center"></el-table-column>
-				<el-table-column prop="paymentTime" label="创建时间" align="center"></el-table-column>
-				<el-table-column prop="orderTime" label="支付时间" align="center"></el-table-column>
+			<el-table style="width: 100%" :data="tableList" border>
+				<el-table-column prop="orderNo" label="订单编号" align="center" min-width="130" />
+				<el-table-column prop="driverTel" label="司机手机号" align="center"  min-width="130"></el-table-column>
+				<el-table-column prop="state" label="交易类型" align="center"  min-width="100"></el-table-column>
+				<el-table-column prop="dieselEngineNum" label="订单油机金额" align="center"  min-width="120"></el-table-column>
+				<el-table-column prop="settleAmount" label="应结算金额" align="center"  min-width="100"/>
+				<el-table-column prop="platformMoney" label="让利金额" align="center"  min-width="100"></el-table-column>
+				<el-table-column prop="slottingAllowanceMoney" label="通道费" align="center"  min-width="100"></el-table-column>
+				<el-table-column prop="channelPrice" label="结算单价" align="center"  min-width="100"></el-table-column>
+				<el-table-column prop="gunno" label="枪号" align="center"  min-width="100"></el-table-column>
+				<el-table-column prop="oilType" label="油品类型" align="center"  min-width="100"></el-table-column>
+				<el-table-column prop="fuelVolume" label="加油量" align="center"  min-width="100"></el-table-column>
+				<el-table-column prop="paymentStatus" label="订单状态" align="center"  min-width="100"></el-table-column>
+				<el-table-column prop="orderSource" label="订单来源" align="center" min-width="100"></el-table-column>
+				<el-table-column prop="paymentTime" label="创建时间" align="center" min-width="230"></el-table-column>
+				<el-table-column prop="orderTime" label="支付时间" align="center"  min-width="230"></el-table-column>
 			</el-table>
 			<div class="right">
 				<el-pagination
@@ -151,10 +125,11 @@ export default {
 			this.Time[1] = this.formInline.endTime;
 			this.indentList();
 		} else {
-			this.formInline.startTime = this.$route.query.billTime;
+			this.formInline.startTime = this.$route.query.billTime+' 00:00:00';
 			this.formInline.endTime = this.$route.query.billTime.split(' ', 1) + ' 23:59:59';
 			this.Time[0] = this.formInline.startTime;
 			this.Time[1] = this.formInline.endTime;
+			console.log(this.Time)
 			this.indentList();
 		}
 	},

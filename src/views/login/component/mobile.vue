@@ -123,7 +123,7 @@ export default {
 						if (res.code == 200) {
 							let userName = 'admin';
 							setTimeout(() => {
-								Local.remove('users')
+								Local.remove('users');
 								let defaultRoles = [];
 								let defaultAuthBtnList = [];
 								// admin 页面权限标识，对应路由 meta.roles
@@ -178,6 +178,9 @@ export default {
 									}, 300);
 								}
 							}, 300);
+						} else {
+							this.$message.error('验证码输入错误');
+							this.form.code = '';
 						}
 					});
 				} else {
@@ -254,5 +257,8 @@ export default {
 .color {
 	color: #87cefa;
 	cursor: pointer;
+}
+.login-animation3{
+	margin: 0 !important;
 }
 </style>

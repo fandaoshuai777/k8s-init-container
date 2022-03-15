@@ -73,7 +73,7 @@
 				<el-table-column prop="paymentStatus" label="订单状态" align="center" min-width="120px"></el-table-column>
 				<el-table-column prop="orderTime" label="下单时间" align="center" min-width="240px"></el-table-column>
 				<el-table-column prop="paymentTime" label="支付时间" align="center" min-width="240px"></el-table-column>
-				<el-table-column prop="stationName" label="所属油站" align="center" min-width="200px" />
+				<el-table-column prop="stationName" label="所属油站" align="center" min-width="220px" />
 				<el-table-column prop="dieselEngineNum" label="订单油机金额(元)" align="center" min-width="120px"></el-table-column>
 				<el-table-column prop="oilType" label="油号" align="center" min-width="120px"></el-table-column>
 				<el-table-column prop="oilGunNo" label="枪号" align="center" min-width="120px"></el-table-column>

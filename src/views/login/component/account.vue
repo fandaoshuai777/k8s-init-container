@@ -26,6 +26,7 @@
 				<div style="margin-right: 5px; height: 30px">
 					<span>我已阅读并同意</span>
 					<span class="color" @click="platform()">《平台服务协议》</span>
+
 					和<span class="color" @click="commercial()">《商户隐私协议》</span>
 				</div>
 			</el-form-item>
@@ -223,8 +224,8 @@ export default {
 ::v-deep .el-radio__inner {
 	border-radius: 0% !important;
 }
-::v-deep .item {
-	margin: 0;
+::v-deep .login-animation3 {
+	margin: 0 !important;
 }
 .color {
 	color: #87cefa;
