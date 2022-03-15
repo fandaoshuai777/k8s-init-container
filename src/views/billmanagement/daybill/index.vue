@@ -191,6 +191,7 @@ export default {
 					return {
 						...n,
 						billStatus: n.billStatus == 1 ? '未确认' : n.billStatus == 2 ? '已确认' : n.billStatus == 3 ? '已结算' : n.billStatus,
+						billTime:n.billTime.slice(0,10)
 					};
 				});
 				this.total = res.result.oilStationDailyBillPage.totalNum;
