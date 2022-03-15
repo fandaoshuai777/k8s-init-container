@@ -3,7 +3,7 @@
 		<el-card shadow="hover">
 			<el-form :model="formInline"   label-width="100px" >
 				<!-- <div class="header"> -->
-					<el-row :gutter="35">
+					<el-row :gutter="12">
 						<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="5" class="mb20">
 							<el-form-item label="订单号">
 								<el-input v-model="formInline.orderNo" placeholder="请输入订单号" @change="onVerifiyNumberInteger($event)"></el-input>
@@ -19,8 +19,8 @@
 									end-placeholder="结束日期"
 									:default-time="['00:00:00', '23:59:59']"
 									value-format="yyyy-MM-dd HH:mm:ss"
-									style="width:100%"
 									@change="astrict"
+									
 								>
 								</el-date-picker>
 							</el-form-item>
@@ -77,20 +77,20 @@
 			</el-form>
 			<el-table style="width: 100%" :data="tableList">
 				<el-table-column prop="orderNo" label="订单编号" align="center" />
-				<el-table-column prop="driverTel" label="司机手机号" show-overflow-tooltip align="center"></el-table-column>
-				<el-table-column prop="state" label="交易类型" show-overflow-tooltip align="center"></el-table-column>
-				<el-table-column prop="dieselEngineNum" label="订单油机金额" show-overflow-tooltip align="center"></el-table-column>
-				<el-table-column prop="settleAmount" label="应结算金额" show-overflow-tooltip align="center" />
-				<el-table-column prop="platformMoney" label="让利金额" show-overflow-tooltip align="center"></el-table-column>
-				<el-table-column prop="slottingAllowanceMoney" label="通道费" show-overflow-tooltip align="center"></el-table-column>
-				<el-table-column prop="channelPrice" label="结算单价" show-overflow-tooltip align="center"></el-table-column>
-				<el-table-column prop="gunno" label="枪号" show-overflow-tooltip align="center"></el-table-column>
-				<el-table-column prop="oilType" label="油品类型" show-overflow-tooltip align="center"></el-table-column>
-				<el-table-column prop="fuelVolume" label="加油量" show-overflow-tooltip align="center"></el-table-column>
-				<el-table-column prop="paymentStatus" label="订单状态" show-overflow-tooltip align="center"></el-table-column>
-				<el-table-column prop="orderSource" label="订单来源" show-overflow-tooltip align="center"></el-table-column>
-				<el-table-column prop="paymentTime" label="创建时间" show-overflow-tooltip align="center"></el-table-column>
-				<el-table-column prop="orderTime" label="支付时间" show-overflow-tooltip align="center"></el-table-column>
+				<el-table-column prop="driverTel" label="司机手机号" align="center"></el-table-column>
+				<el-table-column prop="state" label="交易类型" align="center"></el-table-column>
+				<el-table-column prop="dieselEngineNum" label="订单油机金额" align="center"></el-table-column>
+				<el-table-column prop="settleAmount" label="应结算金额" align="center" />
+				<el-table-column prop="platformMoney" label="让利金额" align="center"></el-table-column>
+				<el-table-column prop="slottingAllowanceMoney" label="通道费" align="center"></el-table-column>
+				<el-table-column prop="channelPrice" label="结算单价" align="center"></el-table-column>
+				<el-table-column prop="gunno" label="枪号" align="center"></el-table-column>
+				<el-table-column prop="oilType" label="油品类型" align="center"></el-table-column>
+				<el-table-column prop="fuelVolume" label="加油量" align="center"></el-table-column>
+				<el-table-column prop="paymentStatus" label="订单状态" align="center"></el-table-column>
+				<el-table-column prop="orderSource" label="订单来源" align="center"></el-table-column>
+				<el-table-column prop="paymentTime" label="创建时间" align="center"></el-table-column>
+				<el-table-column prop="orderTime" label="支付时间" align="center"></el-table-column>
 			</el-table>
 			<div class="right">
 				<el-pagination
@@ -276,6 +276,9 @@ export default {
 .right {
 	text-align: right;
 	z-index: 0;
+}
+.el-date-editor{
+	width: 101%;
 }
 ::v-deep {
 	.el-table {

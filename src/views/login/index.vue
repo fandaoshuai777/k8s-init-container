@@ -6,29 +6,26 @@
 			</div>
 			<!-- <img src="./login-icon-two.svg" class="login-icon-group-icon" /> -->
 		</div>
-		
-			<div class="login-content">
-			
-					<div class="login-content-main">
-						<h4 class="login-content-title ml15">管理后台</h4>
-						<div v-if="!isScan">
-							<el-tabs v-model="tabsActiveName">
-								<el-tab-pane :label="'用户名登录'" name="account">
-									<Account />
-								</el-tab-pane>
-								<el-tab-pane :label="'手机号登录'" name="mobile">
-									<Mobile />
-								</el-tab-pane>
-							</el-tabs>
-						</div>
-						<div class="login-content-main-sacn" @click="isScan = !isScan">
-							<i class="iconfont" :class="isScan ? 'icon-diannao1' : 'icon-barcode-qr'"></i>
-							<div class="login-content-main-sacn-delta">123</div>
-						</div>
-					</div>
-			
+
+		<div class="login-content">
+			<div class="login-content-main">
+				<h4 class="login-content-title ml15">管理后台</h4>
+				<div v-if="!isScan">
+					<el-tabs v-model="tabsActiveName">
+						<el-tab-pane :label="'用户名登录'" name="account">
+							<Account />
+						</el-tab-pane>
+						<el-tab-pane :label="'手机号登录'" name="mobile">
+							<Mobile />
+						</el-tab-pane>
+					</el-tabs>
+				</div>
+				<div class="login-content-main-sacn" @click="isScan = !isScan">
+					<i class="iconfont" :class="isScan ? 'icon-diannao1' : 'icon-barcode-qr'"></i>
+					<div class="login-content-main-sacn-delta">123</div>
+				</div>
 			</div>
-	
+		</div>
 	</div>
 </template>
 <script>
@@ -59,7 +56,10 @@ export default {
 		width: 100%;
 		height: 100%;
 		background: url('./background.png');
-		position: relative;
+		// background-size: 100% 100%;
+		// position: relative;
+		margin: 0 auto;
+		// background-repeat: no-repeat;
 		// .login-icon-group-title {
 		// 	position: absolute;
 		// 	top: 50px;
@@ -172,5 +172,4 @@ export default {
 		}
 	}
 }
-
 </style>

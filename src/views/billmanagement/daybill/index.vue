@@ -2,7 +2,7 @@
 	<div class="system-role-container">
 		<el-card shadow="hover">
 			<el-form :model="formInline" label-width="100px">
-				<el-row :gutter="35">
+				<el-row :gutter="12">
 					<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="5" class="mb20">
 						<el-form-item label="油站">
 							<el-select v-model="formInline.stationName" clearable>
@@ -28,7 +28,6 @@
 								start-placeholder="开始日期"
 								end-placeholder="结束日期"
 								value-format="yyyy-MM-dd"
-								style="width: 100%"
 							>
 							</el-date-picker>
 						</el-form-item>
@@ -41,32 +40,7 @@
 						</el-form-item>
 					</el-col>
 				</el-row>
-				<!-- <div class="header">
-					<el-form-item label="油站">
-						<el-select v-model="formInline.stationName" clearable>
-							<el-option v-for="(item, index) in oilStations" :key="index" :label="item.label" :value="item.code"></el-option>
-						</el-select>
-					</el-form-item>
-					<el-form-item label="账单状态">
-						<el-select v-model="formInline.billStatus" clearable>
-							<el-option v-for="(item, index) in billSta" :key="index" :label="item.label" :value="item.code"></el-option>
-						</el-select>
-					</el-form-item>
-					<el-form-item label="账单日期">
-						<el-date-picker
-							v-model="Time"
-							type="daterange"
-							align="right"
-							unlink-panels
-							range-separator="至"
-							start-placeholder="开始日期"
-							end-placeholder="结束日期"
-							value-format="yyyy-MM-dd"
-							style="width: 400px"
-						>
-						</el-date-picker>
-					</el-form-item>
-				</div> -->
+		
 			</el-form>
 			<div class="center">
 				<div>交易总金额（元）：{{ dieselEngineNumTotal }}</div>
@@ -75,20 +49,20 @@
 				<div>实际结算总金额（元）：{{ solidKnotAmountTotal }}</div>
 			</div>
 			<el-table style="width: 100%" :data="tableData" border>
-				<el-table-column prop="billNo" label="账单编号" show-overflow-tooltip align="center" />
-				<el-table-column prop="billTime" label="账单日期" show-overflow-tooltip align="center"></el-table-column>
-				<el-table-column prop="stationName" label="油站名称" show-overflow-tooltip align="center"></el-table-column>
-				<el-table-column prop="dieselEngineNum" label="加油金额(元)" show-overflow-tooltip align="center"></el-table-column>
-				<el-table-column prop="money" label="应结金额(元)" show-overflow-tooltip align="center" />
-				<el-table-column prop="slottingAllowanceMoney" label="通道费(元)" show-overflow-tooltip align="center"></el-table-column>
-				<el-table-column prop="plummet" label="商家承担直降金额(元）" show-overflow-tooltip align="center"></el-table-column>
-				<el-table-column prop="discount" label="商家承担平台优惠券金额(元)" show-overflow-tooltip align="center"></el-table-column>
-				<el-table-column prop="oldSolidKnotAmount" label="实结金额(元)" show-overflow-tooltip align="center"></el-table-column>
-				<el-table-column prop="fuelVolume" label="升数" show-overflow-tooltip align="center"></el-table-column>
-				<el-table-column prop="orderNum" label="交易笔数" show-overflow-tooltip align="center"></el-table-column>
-				<el-table-column prop="serviceCharge" label="手续费(元)" show-overflow-tooltip align="center"></el-table-column>
-				<el-table-column prop="billStatus" label="账单状态" show-overflow-tooltip align="center"></el-table-column>
-				<el-table-column label="操作" align="center">
+				<el-table-column prop="billNo" label="账单编号" min-width="210px"  align="center" />
+				<el-table-column prop="billTime" label="账单日期"  min-width="150px"  align="center"></el-table-column>
+				<el-table-column prop="stationName" label="油站名称" min-width="210px"  align="center"></el-table-column>
+				<el-table-column prop="dieselEngineNum" label="加油金额(元)"  align="center"></el-table-column>
+				<el-table-column prop="money" label="应结金额(元)"  align="center" />
+				<el-table-column prop="slottingAllowanceMoney" label="通道费(元)"  align="center"></el-table-column>
+				<el-table-column prop="plummet" label="商家承担直降金额(元）"  align="center"></el-table-column>
+				<el-table-column prop="discount" label="商家承担平台优惠券金额(元)"  align="center"></el-table-column>
+				<el-table-column prop="oldSolidKnotAmount" label="实结金额(元)"  align="center"></el-table-column>
+				<el-table-column prop="fuelVolume" label="升数"  align="center"></el-table-column>
+				<el-table-column prop="orderNum" label="交易笔数"  align="center"></el-table-column>
+				<el-table-column prop="serviceCharge" label="手续费(元)"  align="center"></el-table-column>
+				<el-table-column prop="billStatus" label="账单状态"  align="center"></el-table-column>
+				<el-table-column label="操作" align="center" fixed="right">
 					<template #default="scope">
 						<el-button size="small" type="text" @click="onOpenBill(scope.row)">账单明细</el-button>
 					</template>
