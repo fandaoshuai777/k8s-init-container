@@ -187,7 +187,7 @@
 				<div class="grid-content bg-purple">￥{{ orderData.dieselEngineNum }}</div>
 
 				<div class="grid-content bg-purple">序列号(撬装)</div>
-				<div class="grid-content bg-purple">{{ orderData.source }}</div>
+				<div class="grid-content bg-purple">{{ orderData.deviceImei }}</div>
 
 				<div class="grid-content bg-purple"></div>
 				<div class="grid-content bg-purple"></div>
