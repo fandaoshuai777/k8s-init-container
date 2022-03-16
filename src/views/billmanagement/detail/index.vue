@@ -20,7 +20,6 @@
 									:default-time="['00:00:00', '23:59:59']"
 									value-format="yyyy-MM-dd HH:mm:ss"
 									@change="astrict"
-									
 								>
 								</el-date-picker>
 							</el-form-item>
@@ -53,14 +52,14 @@
 				<el-table-column prop="orderNo" label="订单编号" align="center" min-width="130" />
 				<el-table-column prop="driverTel" label="司机手机号" align="center"  min-width="130"></el-table-column>
 				<el-table-column prop="state" label="交易类型" align="center"  min-width="100"></el-table-column>
-				<el-table-column prop="dieselEngineNum" label="订单油机金额" align="center"  min-width="120"></el-table-column>
-				<el-table-column prop="settleAmount" label="应结算金额" align="center"  min-width="100"/>
-				<el-table-column prop="platformMoney" label="让利金额" align="center"  min-width="100"></el-table-column>
-				<el-table-column prop="slottingAllowanceMoney" label="通道费" align="center"  min-width="100"></el-table-column>
-				<el-table-column prop="channelPrice" label="结算单价" align="center"  min-width="100"></el-table-column>
+				<el-table-column prop="dieselEngineNum" label="订单油机金额(元)" align="center"  min-width="120"></el-table-column>
+				<el-table-column prop="settleAmount" label="应结算金额(元)" align="center"  min-width="100"/>
+				<el-table-column prop="platformMoney" label="让利金额(元)" align="center"  min-width="100"></el-table-column>
+				<el-table-column prop="slottingAllowanceMoney" label="通道费(元)" align="center"  min-width="100"></el-table-column>
+				<el-table-column prop="channelPrice" label="结算单价(元)" align="center"  min-width="100"></el-table-column>
 				<el-table-column prop="gunno" label="枪号" align="center"  min-width="100"></el-table-column>
 				<el-table-column prop="oilType" label="油品类型" align="center"  min-width="100"></el-table-column>
-				<el-table-column prop="fuelVolume" label="加油量" align="center"  min-width="100"></el-table-column>
+				<el-table-column prop="fuelVolume" label="加油量(升)" align="center"  min-width="100"></el-table-column>
 				<el-table-column prop="paymentStatus" label="订单状态" align="center"  min-width="100"></el-table-column>
 				<el-table-column prop="orderSource" label="订单来源" align="center" min-width="100"></el-table-column>
 				<el-table-column prop="paymentTime" label="创建时间" align="center" min-width="230"></el-table-column>
