@@ -1,24 +1,24 @@
 <template>
 	<div class="system-role-container">
 		<el-card shadow="hover">
-			<el-form :model="formInline" label-width="100px">
+			<el-form :model="formInline" label-width="40px">
 				<el-row :gutter="12">
-					<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="5" class="mb20">
-						<el-form-item label="油站">
+					<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="5" >
+						<el-form-item label="油站"  >
 							<el-select v-model="formInline.stationName" clearable>
 								<el-option v-for="(item, index) in oilStations" :key="index" :label="item.label" :value="item.code"></el-option>
 							</el-select>
 						</el-form-item>
 					</el-col>
-					<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="5" class="mb20">
-						<el-form-item label="账单状态">
+					<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="5" >
+						<el-form-item label="账单状态"  label-width="70px">
 							<el-select v-model="formInline.billStatus" clearable>
 								<el-option v-for="(item, index) in billSta" :key="index" :label="item.label" :value="item.code"></el-option>
 							</el-select>
 						</el-form-item>
 					</el-col>
-					<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="8" class="mb20">
-						<el-form-item label="账单日期">
+					<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="8" >
+						<el-form-item label="账单日期"  label-width="70px">
 							<el-date-picker
 								v-model="Time"
 								type="daterange"
@@ -32,8 +32,8 @@
 							</el-date-picker>
 						</el-form-item>
 					</el-col>
-					<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="5" class="mb20">
-						<el-form-item>
+					<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="5"  >
+						<el-form-item >
 							<div class="right">
 								<el-button type="primary" @click="inquire">查询</el-button>
 							</div>
@@ -43,10 +43,10 @@
 		
 			</el-form>
 			<div class="center">
-				<div>交易总金额（元）：{{ dieselEngineNumTotal }}</div>
-				<div>让利总金额（元）：{{ platformMoneyTotal }}</div>
-				<div>应结算总金额（元）：{{ settleAmountTotal }}</div>
-				<div>实际结算总金额（元）：{{ solidKnotAmountTotal }}</div>
+				<div>交易总金额(元)：{{ dieselEngineNumTotal }}</div>
+				<div>让利总金额(元)：{{ platformMoneyTotal }}</div>
+				<div>应结算总金额(元)：{{ settleAmountTotal }}</div>
+				<div>实际结算总金额(元)：{{ solidKnotAmountTotal }}</div>
 			</div>
 			<el-table style="width: 100%" :data="tableData" border>
 				<el-table-column prop="billNo" label="账单编号" min-width="210px"  align="center" />
@@ -156,11 +156,11 @@ export default {
 		getbillList() {
 			let date = { ...this.pagination, ...this.formInline };
 			billList(date).then((res) => {
-				this.dieselEngineNumTotal = res.result.stationTotalVO.dieselEngineNumTotal;
-				this.platformMoneyTotal = res.result.stationTotalVO.platformMoneyTotal;
+				this.dieselEngineNumTotal = res.result.stationTotalVO.dieselEngineNumTotal.toFixed(2);
+				this.platformMoneyTotal = res.result.stationTotalVO.platformMoneyTotal.toFixed(2);
 				this.plummetTotal = res.result.stationTotalVO.plummetTotal;
-				this.settleAmountTotal = res.result.stationTotalVO.settleAmountTotal;
-				this.solidKnotAmountTotal = res.result.stationTotalVO.solidKnotAmountTotal;
+				this.settleAmountTotal = res.result.stationTotalVO.settleAmountTotal.toFixed(2);
+				this.solidKnotAmountTotal = res.result.stationTotalVO.solidKnotAmountTotal.toFixed(2);
 				this.tableData = res.result.oilStationDailyBillPage.data.map((n) => {
 					return {
 						...n,

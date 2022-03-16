@@ -2,45 +2,45 @@
 	<div class="system-role-container">
 		<el-card shadow="hover">
 			<div class="system-user-search">
-				<el-form :model="formInline" label-width="100px">
+				<el-form :model="formInline" label-width="55px">
 					<el-row :gutter="12">
-						<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="6" class="mb20">
+						<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="6">
 							<el-form-item label="订单号">
 								<el-input v-model="formInline.orderNo" placeholder="请输入订单号" @change="onVerifiyNumberInteger($event)" clearable></el-input>
 							</el-form-item>
 						</el-col>
 
-						<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="6" class="mb20">
+						<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="6" label-width="70px">
 							<el-form-item label="手机号" prop="driverTel">
 								<el-input v-model="formInline.driverTel" placeholder="请输入手机号" @change="onVerifyPhone($event)" clearable> clearable></el-input>
 							</el-form-item>
 						</el-col>
 
-						<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="6" class="mb20">
-							<el-form-item label="油号">
+						<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="6">
+							<el-form-item label="油号" label-width="70px">
 								<el-select v-model="formInline.oilType" clearable>
 									<el-option label="全部" value=""></el-option>
 									<el-option v-for="(item, index) in batchNum" :key="index" :label="item.index" :value="item"></el-option>
 								</el-select>
 							</el-form-item>
 						</el-col>
-						<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="6" class="mb20">
-							<el-form-item label="订单状态">
+						<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="6">
+							<el-form-item label="订单状态" label-width="70px">
 								<el-select v-model="formInline.paymentStatus" clearable>
 									<el-option v-for="(item, index) in oilStatusDict" :key="index" :label="item.label" :value="item.code"></el-option>
 								</el-select>
 							</el-form-item>
 						</el-col>
 
-						<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="6" class="mb20">
+						<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="6">
 							<el-form-item label="油站">
 								<el-select v-model="formInline.stationName" clearable>
 									<el-option v-for="(item, index) in oilStations" :key="index" :label="item.label" :value="item.code"></el-option>
 								</el-select>
 							</el-form-item>
 						</el-col>
-						<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="7" class="mb20">
-							<el-form-item label="支付时间">
+						<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="7">
+							<el-form-item label="支付时间" label-width="100px">
 								<el-date-picker
 									v-model="Time"
 									type="datetimerange"
@@ -53,7 +53,7 @@
 								</el-date-picker>
 							</el-form-item>
 						</el-col>
-						<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="10" class="mb20" :push="8">
+						<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="10" :push="8">
 							<el-form-item>
 								<div class="right">
 									<el-button type="primary" @click="inquire">查询</el-button>
@@ -64,9 +64,9 @@
 				</el-form>
 			</div>
 			<div class="center">
-				<div>交易总金额：{{ dieselEngineNumCount }}</div>
-				<div>订单数量：{{ orderNum }}</div>
-				<div>总升数：{{ fuelVolumeTotal }}</div>
+				<div>交易总金额(元)：{{ dieselEngineNumCount }}</div>
+				<div>订单数量(单)：{{ orderNum }}</div>
+				<div>总升数(升)：{{ fuelVolumeTotal }}</div>
 			</div>
 			<el-table style="width: 100%; z-index: 0" :data="tableData" stripe border>
 				<el-table-column prop="orderNo" label="订单号" align="center" min-width="160px" />
@@ -187,7 +187,7 @@
 				<div class="grid-content bg-purple">￥{{ orderData.dieselEngineNum }}</div>
 
 				<div class="grid-content bg-purple">序列号(撬装)</div>
-				<div class="grid-content bg-purple">{{ orderData.oilGunNo }}</div>
+				<div class="grid-content bg-purple">{{ orderData.source }}</div>
 
 				<div class="grid-content bg-purple"></div>
 				<div class="grid-content bg-purple"></div>
@@ -340,7 +340,7 @@ export default {
 			orderPage(date).then((res) => {
 				this.dieselEngineNumCount = res.result.orderPageTotal.dieselEngineNumCount.toFixed(2);
 				this.fuelVolumeTotal = res.result.orderPageTotal.fuelVolumeTotal.toFixed(2);
-				this.orderNum = res.result.orderPageTotal.orderNum
+				this.orderNum = res.result.orderPageTotal.orderNum;
 				this.tableData = res.result.orderVOPage.data.map((n) => {
 					return {
 						...n,
@@ -592,5 +592,6 @@ export default {
 .form {
 	display: flex;
 }
+
 </style>
  

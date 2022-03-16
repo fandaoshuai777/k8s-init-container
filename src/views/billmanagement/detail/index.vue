@@ -1,16 +1,16 @@
 <template>
 	<div class="system-role-container">
 		<el-card shadow="hover">
-			<el-form :model="formInline"   label-width="100px" >
+			<el-form :model="formInline"   label-width="55px" >
 				<!-- <div class="header"> -->
 					<el-row :gutter="12">
-						<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="5" class="mb20">
+						<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="5" >
 							<el-form-item label="订单号">
 								<el-input v-model="formInline.orderNo" placeholder="请输入订单号" @change="onVerifiyNumberInteger($event)"></el-input>
 							</el-form-item>
 						</el-col>
-						<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="8" class="mb20" >
-							<el-form-item label=" 支付时间">
+						<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="8"  >
+							<el-form-item label=" 支付时间"  label-width="70px">
 								<el-date-picker
 									:disabled="this.$route.query.billTime == undefined ? false : true"
 									v-model="Time"
@@ -25,15 +25,15 @@
 								</el-date-picker>
 							</el-form-item>
 						</el-col>
-						<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="5" class="mb20" >
-							<el-form-item label="交易类型">
+						<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="5"  >
+							<el-form-item label="交易类型" label-width="70px">
 								<el-select v-model="formInline.state" clearable>
 									<el-option v-for="(item, index) in billSta" :key="index" :label="item.label" :value="item.code"></el-option>
 								</el-select>
 							</el-form-item>
 						</el-col>
-						<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="5" class="mb20">
-							<el-form-item label="油号">
+						<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="5" >
+							<el-form-item label="油号" label-width="70px">
 								<el-select v-model="formInline.oilType" clearable>
 									<el-option v-for="(item, index) in billStas" :key="index" :label="item" :value="item"></el-option>
 								</el-select>
