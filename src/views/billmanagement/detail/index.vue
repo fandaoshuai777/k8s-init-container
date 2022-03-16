@@ -54,7 +54,7 @@
 				<el-table-column prop="state" label="交易类型" align="center"  min-width="100"></el-table-column>
 				<el-table-column prop="dieselEngineNum" label="订单油机金额(元)" align="center"  min-width="120"></el-table-column>
 				<el-table-column prop="settleAmount" label="应结算金额(元)" align="center"  min-width="100"/>
-				<el-table-column prop="platformMoney" label="让利金额(元)" align="center"  min-width="100"></el-table-column>
+				<el-table-column prop="" label="让利金额(元)" align="center"  min-width="100"></el-table-column>
 				<el-table-column prop="slottingAllowanceMoney" label="通道费(元)" align="center"  min-width="100"></el-table-column>
 				<el-table-column prop="channelPrice" label="结算单价(元)" align="center"  min-width="100"></el-table-column>
 				<el-table-column prop="gunno" label="枪号" align="center"  min-width="100"></el-table-column>
@@ -220,6 +220,7 @@ export default {
 								: n.paymentStatus,
 						state: n.state == 1 ? '消费 ' : n.state == 2 ? '退款' : n.state,
 						driverTel: n.driverTel.replace(/(\d{3})\d*(\d{4})/, '$1****$2'),
+						fuelVolume:n.fuelVolume.toFixed(2)
 					};
 				});
 				this.total = res.result.totalNum;

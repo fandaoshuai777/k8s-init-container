@@ -178,16 +178,16 @@
 				<div class="grid-content bg-purple">{{ orderData.oilType }}</div>
 
 				<div class="grid-content bg-purple">油枪</div>
-				<div class="grid-content bg-purple">{{ orderData.oilGunNo }}号枪</div>
+				<div class="grid-content bg-purple">{{ orderData.deviceImei ? '' : orderData.oilGunNo + '号枪' }}</div>
 
 				<div class="grid-content bg-purple">加油量</div>
-				<div class="grid-content bg-purple">{{ orderData.fuelVolume }}L</div>
+				<div class="grid-content bg-purple">{{ orderData.fuelVolume ? orderData.fuelVolume.toFixed(2) + 'L' : '' }}</div>
 
 				<div class="grid-content bg-purple">订单油机金额</div>
-				<div class="grid-content bg-purple">￥{{ orderData.dieselEngineNum }}</div>
+				<div class="grid-content bg-purple">{{ orderData.dieselEngineNum ?'￥'+ orderData.dieselEngineNum   : '' }}</div>
 
 				<div class="grid-content bg-purple">序列号(撬装)</div>
-				<div class="grid-content bg-purple">{{ orderData.deviceImei }}</div>
+				<div class="grid-content bg-purple">{{ orderData.oilGunNo ? '' : orderData.deviceImei }}</div>
 
 				<div class="grid-content bg-purple"></div>
 				<div class="grid-content bg-purple"></div>
@@ -373,7 +373,7 @@ export default {
 		//查看详情
 		onOpenEditRole(row) {
 			orderInfo(row.orderNo).then((res) => {
-				this.orderData = res.result;
+				this.orderData = res.result
 
 				this.compile = true;
 			});
@@ -592,6 +592,5 @@ export default {
 .form {
 	display: flex;
 }
-
 </style>
  
