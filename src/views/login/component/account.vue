@@ -9,7 +9,7 @@
 				</el-input>
 			</el-form-item>
 			<el-form-item class="login-animation2" prop="userPassword">
-				<el-input autocomplete="off" placeholder="请输入密码" v-model.number="form.userPassword" :show-password="true">
+				<el-input autocomplete="off" placeholder="请输入密码" v-model="form.userPassword" :show-password="true">
 					<template #prefix>
 						<i class="el-icon-lock left"></i>
 					</template>
@@ -44,6 +44,17 @@ import { account } from '@/api/login/index.js';
 import { Local, Session } from '@/utils/storage.js';
 export default {
 	data() {
+		var validQC = (rule, value, callback) => {
+			if (value) {
+				if (/[\u4E00-\u9FA5]/g.test(value)) {
+					callback(new Error('不能输入汉字'));
+				} else {
+					// 验证通过
+					callback();
+				}
+				callback();
+			}
+		};
 		return {
 			addOrUpdateVisible: false,
 			form: {
@@ -56,10 +67,7 @@ export default {
 			},
 			volunt: true,
 			rules: {
-				userPassword: [
-					{ required: true, message: '密码不能为空' },
-					{ type: 'number', message: '输入错误' },
-				],
+				userPassword: [{ validator: validQC, trigger: 'blur' }],
 				userPhone: [
 					{ required: true, message: '账号不能为空' },
 					{ type: 'number', message: '输入错误' },
