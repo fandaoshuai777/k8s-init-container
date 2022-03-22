@@ -153,8 +153,11 @@
 							? '退款失败'
 							: orderData.paymentStatus == 6
 							? '已结算'
+							: orderData.paymentStatus == 7
+							? '退款中'
 							: orderData.paymentStatus == 8
-							? '已取消':orderData.paymentStatus
+							? '已取消'
+							: orderData.paymentStatus
 					}}
 				</div>
 
@@ -185,7 +188,7 @@
 				<div class="grid-content bg-purple">{{ orderData.fuelVolume ? orderData.fuelVolume.toFixed(2) + 'L' : '' }}</div>
 
 				<div class="grid-content bg-purple">订单油机金额</div>
-				<div class="grid-content bg-purple">{{ orderData.dieselEngineNum ?'￥'+ orderData.dieselEngineNum   : '' }}</div>
+				<div class="grid-content bg-purple">{{ orderData.dieselEngineNum ? '￥' + orderData.dieselEngineNum : '' }}</div>
 
 				<div class="grid-content bg-purple">序列号(撬装)</div>
 				<div class="grid-content bg-purple">{{ orderData.oilGunNo ? '' : orderData.deviceImei }}</div>
@@ -360,6 +363,8 @@ export default {
 								? '退款失败'
 								: n.paymentStatus == 6
 								? '已结算'
+								: n.paymentStatus == 7
+								? '退款中'
 								: n.paymentStatus == 8
 								? '已取消'
 								: n.paymentStatus,
@@ -374,7 +379,7 @@ export default {
 		//查看详情
 		onOpenEditRole(row) {
 			orderInfo(row.orderNo).then((res) => {
-				this.orderData = res.result
+				this.orderData = res.result;
 
 				this.compile = true;
 			});
