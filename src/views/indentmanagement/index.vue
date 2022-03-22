@@ -153,7 +153,8 @@
 							? '退款失败'
 							: orderData.paymentStatus == 6
 							? '已结算'
-							: orderData.paymentStatus
+							: orderData.paymentStatus == 8
+							? '已取消':orderData.paymentStatus
 					}}
 				</div>
 
