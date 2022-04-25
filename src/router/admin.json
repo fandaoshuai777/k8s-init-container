@@ -27,14 +27,11 @@
 			"meta": {
 				"title": "账单管理",
 				"isLink": "",
-				"isHide": false,
+				"isHide": true,
+				"hidden": true,
 				"isKeepAlive": true,
 				"isAffix": false,
 				"isIframe": false,
-				"roles": [
-					"admin",
-					"common"
-				],
 				"icon": "iconfont icon-crew_feature"
 			},
 			"children": [
@@ -45,6 +42,7 @@
 					"meta": {
 						"title": "结算账单明细",
 						"isLink": "",
+						"hidden": true,
 						"isHide": false,
 						"isKeepAlive": true,
 						"isAffix": false,
@@ -67,6 +65,7 @@
 						"isKeepAlive": true,
 						"isAffix": false,
 						"isIframe": false,
+						"hidden": true,
 						"roles": [
 							"admin",
 							"common"

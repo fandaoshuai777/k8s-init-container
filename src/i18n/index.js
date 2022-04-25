@@ -57,4 +57,5 @@ export const i18n = new VueI18n({
 	locale: store.state.themeConfig.themeConfig.globalI18n,
 	fallbackLocale: 'zh-cn',
 	messages,
+	silentTranslationWarn: true,
 });

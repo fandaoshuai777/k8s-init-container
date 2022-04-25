@@ -42,6 +42,8 @@
 			"name": "billmanagemenDetail",
 			"component": "layout/routerView/parent",
 			"redirect": "/billmanagement/detail",
+			"hidden":true,
+		
 			"meta": {
 				"title": "账单管理",
 				"isLink": "",
@@ -58,7 +60,7 @@
 			"children": [
 				{
 					"path": "/billmanagement/detail",
-					"name": "billmanagemenDetail",
+					"name": "billmanagemen",
 					"component": "billmanagement/detail/index",
 					"meta": {
 						"title": "结算账单明细",

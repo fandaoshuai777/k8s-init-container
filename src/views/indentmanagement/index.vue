@@ -1,66 +1,45 @@
 <template>
 	<div class="system-role-container">
 		<el-card shadow="hover">
-			<div class="system-user-search">
-				<el-form :model="formInline" label-width="55px">
-					<el-row :gutter="12">
-						<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="6">
-							<el-form-item label="订单号">
-								<el-input v-model="formInline.orderNo" placeholder="请输入订单号" @change="onVerifiyNumberInteger($event)" clearable></el-input>
-							</el-form-item>
-						</el-col>
-
-						<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="6" label-width="70px">
-							<el-form-item label="手机号" prop="driverTel">
-								<el-input v-model="formInline.driverTel" placeholder="请输入手机号" @change="onVerifyPhone($event)" clearable> clearable></el-input>
-							</el-form-item>
-						</el-col>
-
-						<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="6">
-							<el-form-item label="油号" label-width="70px">
-								<el-select v-model="formInline.oilType" clearable>
-									<el-option label="全部" value=""></el-option>
-									<el-option v-for="(item, index) in batchNum" :key="index" :label="item.index" :value="item"></el-option>
-								</el-select>
-							</el-form-item>
-						</el-col>
-						<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="6">
-							<el-form-item label="订单状态" label-width="70px">
-								<el-select v-model="formInline.paymentStatus" clearable>
-									<el-option v-for="(item, index) in oilStatusDict" :key="index" :label="item.label" :value="item.code"></el-option>
-								</el-select>
-							</el-form-item>
-						</el-col>
-
-						<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="6">
-							<el-form-item label="油站">
-								<el-select v-model="formInline.stationName" clearable>
-									<el-option v-for="(item, index) in oilStations" :key="index" :label="item.label" :value="item.code"></el-option>
-								</el-select>
-							</el-form-item>
-						</el-col>
-						<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="7">
-							<el-form-item label="支付时间" label-width="100px">
-								<el-date-picker
-									v-model="Time"
-									type="datetimerange"
-									start-placeholder="开始日期"
-									end-placeholder="结束日期"
-									:default-time="['00:00:00', '23:59:59']"
-									value-format="yyyy-MM-dd HH:mm:ss"
-									@change="astrict"
-								>
-								</el-date-picker>
-							</el-form-item>
-						</el-col>
-						<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="10" :push="8">
-							<el-form-item>
-								<div class="right">
-									<el-button type="primary" @click="inquire">查询</el-button>
-								</div>
-							</el-form-item>
-						</el-col>
-					</el-row>
+			<div>
+				<el-form :model="formInline" label-width="95px" :inline="true" label-position="right">
+					<el-form-item label="订单号">
+						<el-input v-model="formInline.orderNo" placeholder="请输入订单号" @change="onVerifiyNumberInteger($event)" clearable></el-input>
+					</el-form-item>
+					<el-form-item label="手机号" prop="driverTel">
+						<el-input v-model="formInline.driverTel" placeholder="请输入手机号" @change="onVerifyPhone($event)" clearable> clearable></el-input>
+					</el-form-item>
+					<el-form-item label="油号">
+						<el-select v-model="formInline.oilType" clearable>
+							<el-option label="全部" value=""></el-option>
+							<el-option v-for="(item, index) in oilMark" :key="index" :label="item.index" :value="item"></el-option>
+						</el-select>
+					</el-form-item>
+					<el-form-item label="订单状态">
+						<el-select v-model="formInline.paymentStatus" clearable>
+							<el-option v-for="(item, index) in orderFomr" :key="index" :label="item.label" :value="item.code"></el-option>
+						</el-select>
+					</el-form-item>
+					<el-form-item label="油站">
+						<el-select v-model="formInline.stationName" clearable>
+							<el-option v-for="(item, index) in oilStation" :key="index" :label="item.label" :value="item.code"></el-option>
+						</el-select>
+					</el-form-item>
+					<el-form-item label="支付时间">
+						<el-date-picker
+							v-model="Time"
+							type="datetimerange"
+							start-placeholder="开始日期"
+							end-placeholder="结束日期"
+							:default-time="['00:00:00', '23:59:59']"
+							value-format="yyyy-MM-dd HH:mm:ss"
+							@change="astrict"
+						>
+						</el-date-picker>
+					</el-form-item>
+					<el-form-item>
+						<el-button type="primary" @click="inquire">查询</el-button>
+					</el-form-item>
 				</el-form>
 			</div>
 			<div class="center">
@@ -68,13 +47,13 @@
 				<div>订单数量(单)：{{ orderNum }}</div>
 				<div>总升数(升)：{{ fuelVolumeTotal }}</div>
 			</div>
-			<el-table style="width: 100%; z-index: 0" :data="tableData" stripe border>
+			<el-table style="width: 100%; z-index: 0" :data="tableData" stripe border v-loading="loading">
 				<el-table-column prop="orderNo" label="订单号" align="center" min-width="160px" />
 				<el-table-column prop="paymentStatus" label="订单状态" align="center" min-width="120px"></el-table-column>
 				<el-table-column prop="orderTime" label="下单时间" align="center" min-width="240px"></el-table-column>
 				<el-table-column prop="paymentTime" label="支付时间" align="center" min-width="240px"></el-table-column>
 				<el-table-column prop="stationName" label="所属油站" align="center" min-width="220px" />
-				<el-table-column prop="dieselEngineNum" label="订单油机金额(元)" align="center" min-width="120px"></el-table-column>
+				<el-table-column prop="dieselEngineNum" label="订单油机金额(元)" align="center" min-width="140px"></el-table-column>
 				<el-table-column prop="oilType" label="油号" align="center" min-width="120px"></el-table-column>
 				<el-table-column prop="oilGunNo" label="枪号" align="center" min-width="120px"></el-table-column>
 				<el-table-column prop="fuelVolume" label="升数(L)" align="center" min-width="120px"></el-table-column>
@@ -93,7 +72,7 @@
 					</template>
 				</el-table-column>
 			</el-table>
-			<div class="righ">
+			<div class="right">
 				<el-pagination
 					class="mt15"
 					:pager-count="5"
@@ -212,7 +191,7 @@
 					</el-input>
 				</el-form-item>
 				<el-form-item>
-					<div class="Button">
+					<div class="buttonSwitch">
 						<el-button type="info" size="small" @click="close">取消</el-button>
 						<el-button type="primary" size="small" @click="apply('ruleForm')">确认申请</el-button>
 					</div>
@@ -226,9 +205,7 @@ import { orderPage, orderInfo, stamp, refundReview, oilTypeDict, oilStationDict,
 import { verifyPhone, verifiyNumberInteger } from '@/utils/toolsValidate';
 export default {
 	data() {
-		// 验证活动名称的函数
 		let validateName = (rule, value, callback) => {
-			// 当活动名称为空值且为必填时，抛出错误，反之通过校验
 			if (this.ruleForm.name === '' && this.isHaveTo) {
 				callback(new Error('不能为空'));
 			} else {
@@ -236,11 +213,10 @@ export default {
 			}
 		};
 		return {
-			compile: false,
-			refund: false,
-			disabled: true,
-			refunds: false,
+			compile: false, //订单详情dialog
+			refund: false, //退款dialog
 			formInline: {
+				//筛选
 				orderNo: '',
 				cellPhone: '',
 				oilMark: null,
@@ -250,46 +226,28 @@ export default {
 				endTime: null,
 			},
 			Time: [],
-			dieselEngineNumCount: 0,
-			fuelVolumeTotal: 0,
-			orderNum: 0,
-			tableData: [],
+			dieselEngineNumCount: 0, //交易总金额
+			fuelVolumeTotal: 0, //总升数
+			orderNum: 0, //订单数量
+			tableData: [], //数据表格
 			orderData: [],
-
-			total: 0,
-			rfndReason: '',
+			loading: true, //table loading
+			total: 0, //总条数
+			rfndReason: '', //退款原因
 			pagination: {
+				//分页
 				pageSize: 10,
 				pageNum: 1,
 			},
-			textarea: '',
-			serial: '',
-			options: [
-				{
-					value: 1,
-					label: '错付油站',
-				},
-				{
-					value: 2,
-					label: '错付金额',
-				},
-				{
-					value: 3,
-					label: '付款未加油',
-				},
-				{
-					value: 4,
-					label: '其他',
-				},
-			],
-			batchNum: [],
-			oilStations: [],
-			oilStatusDict: [],
+			serial: '', //退款数据号
+			oilMark: [], //油号
+			oilStation: [], //油站
+			orderFomr: [], //订单详情
 			ruleForm: {
+				//退款form
 				name: '',
 				region: '其他',
 			},
-			flag: '',
 			rules: {
 				name: [{ validator: validateName }],
 				region: [{ required: true, message: '请选择类型', trigger: 'blur' }],
@@ -305,11 +263,13 @@ export default {
 		},
 	},
 	methods: {
+		// 搜索
 		inquire() {
 			this.pagination.pageNum = 1;
-
+			this.loading = true;
 			this.indentList();
 		},
+		// 时间限制
 		astrict() {
 			if (this.Time == null) {
 				this.formInline.endTime = '';
@@ -320,7 +280,6 @@ export default {
 				let Sdata = new Date(startDate).getTime();
 				let startDates = this.Time[1].replace(new RegExp('-', 'gm'), '/');
 				let Sdatas = new Date(startDates).getTime();
-				console.log(Sdata > Sdatas);
 				if (Sdata + 7776000000 > Sdatas) {
 				} else {
 					this.$message('选择时间段不能超过90天');
@@ -332,7 +291,6 @@ export default {
 		//列表
 		indentList() {
 			//请求之前，开启loading
-
 			if (this.Time == null) {
 				this.formInline.endTime = '';
 				this.formInline.startTime = '';
@@ -342,6 +300,7 @@ export default {
 			}
 			let date = { ...this.pagination, ...this.formInline };
 			orderPage(date).then((res) => {
+				this.loading = false;
 				this.dieselEngineNumCount = res.result.orderPageTotal.dieselEngineNumCount.toFixed(2);
 				this.fuelVolumeTotal = res.result.orderPageTotal.fuelVolumeTotal.toFixed(2);
 				this.orderNum = res.result.orderPageTotal.orderNum;
@@ -372,7 +331,6 @@ export default {
 						driverTel: n.driverTel.replace(/(\d{3})\d*(\d{4})/, '$1****$2'),
 					};
 				});
-				this.flag = this.tableData.paymentStatus;
 				this.total = res.result.orderVOPage.totalNum;
 			});
 		},
@@ -380,14 +338,12 @@ export default {
 		onOpenEditRole(row) {
 			orderInfo(row.orderNo).then((res) => {
 				this.orderData = res.result;
-
 				this.compile = true;
 			});
 		},
 		//发起退款
 		onRowDel(row) {
 			this.refund = true;
-			console.log(row.orderNo);
 			this.serial = row.orderNo;
 		},
 		//申请退款
@@ -407,7 +363,6 @@ export default {
 							this.$refs.ruleForm.resetFields();
 							this.inquire();
 						} else {
-							// this.$refs.ruleForm.resetFields();
 							this.$message.error(res.msg);
 						}
 					});
@@ -438,6 +393,7 @@ export default {
 				this.formInline.driverTel = '';
 			}
 		},
+		// 限制订单号不能为其他类型
 		onVerifiyNumberInteger(val) {
 			if (verifiyNumberInteger(val) == false) {
 				this.formInline.orderNo = '';
@@ -460,7 +416,6 @@ export default {
 			const end = new Date();
 			const start = new Date();
 			start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-			console.log(this.Time);
 			this.Time[0] = this.formatDate(start) + ' 00:00:00';
 			this.Time[1] = this.formatDate(end) + ' 23:59:59';
 		},
@@ -483,20 +438,23 @@ export default {
 	},
 	mounted() {
 		this.indentList();
+		//油号
 		oilTypeDict().then((res) => {
-			this.batchNum = res.result;
+			this.oilMark = res.result;
 		});
+		//油站
 		oilStationDict().then((res) => {
-			this.oilStations = res.result.map((n) => {
+			this.oilStation = res.result.map((n) => {
 				return {
 					...n,
 					label: n.value,
+					value: n.code,
 				};
 			});
-			// this.oilStations = res.result;
 		});
+		//订单状态
 		oilStatusDict().then((res) => {
-			this.oilStatusDict = res.result.map((n) => {
+			this.orderFomr = res.result.map((n) => {
 				return {
 					...n,
 					label: n.value,
@@ -515,11 +473,8 @@ export default {
 ::v-deep .el-range__close-icon {
 	display: none;
 }
-.el-col {
-	border: 0 !important;
-}
 .right {
-	margin-right: 125px;
+	text-align: right;
 }
 .center {
 	margin: 20px 0;
@@ -528,50 +483,23 @@ export default {
 		margin-right: 20px;
 	}
 }
-.righ {
-	text-align: right;
-}
-.refund {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	margin-bottom: 20px;
-	.refundleft {
-		width: 9%;
-	}
-}
-.refundRight {
-	display: flex;
-	justify-content: right;
-}
 ::v-deep .el-dialog {
 	min-height: 30%;
 }
-.Button {
+.buttonSwitch {
 	margin-top: 70px;
 	display: flex;
 	justify-content: right;
 }
-.el-row {
-	margin-bottom: 20px;
-	&:last-child {
-		margin-bottom: 0;
-	}
-}
 .warp {
+	display: flex;
+	flex-wrap: wrap;
 	.el-col {
-		// border-radius: 4px;
 		border: 0.5px solid #ccc !important;
 		margin-left: -1px;
 		margin-top: -1px;
 	}
 }
-
-.warp {
-	display: flex;
-	flex-wrap: wrap;
-}
-
 .grid-content {
 	border: 1px solid #ccc;
 	width: 25%;
@@ -581,22 +509,13 @@ export default {
 	padding: 1px;
 	margin-bottom: -1px;
 	margin-left: -1px;
-	// height: 25%;
 }
-.row-bg {
-	padding: 10px 0;
-	background-color: #f9fafc;
-}
-
 ::v-deep {
 	.customWidth {
 		.el-dialog__header {
 			text-align: center !important;
 		}
 	}
-}
-.form {
-	display: flex;
 }
 </style>
  
