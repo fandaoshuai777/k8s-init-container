@@ -327,7 +327,7 @@ export default {
 								: n.paymentStatus == 8
 								? '已取消'
 								: n.paymentStatus,
-						fuelVolume: n.fuelVolume.toFixed(2),
+						fuelVolume:n.fuelVolume===null?'': n.fuelVolume.toFixed(2),
 						driverTel: n.driverTel.replace(/(\d{3})\d*(\d{4})/, '$1****$2'),
 					};
 				});
