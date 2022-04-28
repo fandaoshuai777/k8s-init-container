@@ -93,21 +93,23 @@
 				<div class="grid-content bg-purple">订单来源</div>
 				<div class="grid-content bg-purple">
 					{{
-								orderData.orderSource == 1
-								? '小鹰加油'
-								: orderData.orderSource == 2
-								? '小鹰加油'
-								:orderData.orderSource == 3
-								? '小鹰加油'
-								: orderData.orderSource == 4
-								? '团油'
-								: orderData.orderSource == 5
-								? '宝能'
-								: orderData.orderSource == 6
-								? '小鹰加油'
-								: orderData.orderSource == 8
-								? '敬运'
-								: orderData.orderSource,
+						orderData.orderSource == 1
+							? '小鹰加油'
+							: orderData.orderSource == 2
+							? '小鹰加油'
+							: orderData.orderSource == 3
+							? '小鹰加油'
+							: orderData.orderSource == 4
+							? '团油'
+							: orderData.orderSource == 5
+							? '宝能'
+							: orderData.orderSource == 6
+							? '小鹰加油'
+							: orderData.orderSource == 8
+							? '敬运'
+							: orderData.orderSource == 9
+							? '零售店铺'
+							: orderData.orderSource
 					}}
 				</div>
 
@@ -327,7 +329,7 @@ export default {
 								: n.paymentStatus == 8
 								? '已取消'
 								: n.paymentStatus,
-						fuelVolume:n.fuelVolume===null?'': n.fuelVolume.toFixed(2),
+						fuelVolume: n.fuelVolume === null ? '' : n.fuelVolume.toFixed(2),
 						driverTel: n.driverTel.replace(/(\d{3})\d*(\d{4})/, '$1****$2'),
 					};
 				});
@@ -518,4 +520,3 @@ export default {
 	}
 }
 </style>
- 
