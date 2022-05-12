@@ -138,6 +138,8 @@
 							? '退款中'
 							: orderData.paymentStatus == 8
 							? '已取消'
+							: orderData.paymentStatus == 9
+							?'支付失败'
 							: orderData.paymentStatus
 					}}
 				</div>
@@ -328,7 +330,7 @@ export default {
 								? '退款中'
 								: n.paymentStatus == 8
 								? '已取消'
-								: n.paymentStatus,
+								: n.paymentStatus == 9?'支付失败':n.paymentStatus,
 						fuelVolume: n.fuelVolume === null ? '' : n.fuelVolume.toFixed(2),
 						driverTel: n.driverTel.replace(/(\d{3})\d*(\d{4})/, '$1****$2'),
 					};
