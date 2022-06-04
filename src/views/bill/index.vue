@@ -1,8 +1,8 @@
 <template>
 	<div class="Main">
 		<!-- 搜索 -->
-		<el-form ref="searchForm" :model="searchForm" label-width="120px" :inline="true">
-			<el-form-item label="账单日期" prop="billTime">
+		<el-form ref="searchForm" :model="searchForm" label-width="100px" :inline="true">
+			<el-form-item label="账单日期" prop="billTime" style="margin-left:-20px">
 				<el-date-picker v-model="searchForm.billTime" type="date" placeholder="选择日期" />
 			</el-form-item>
 			<el-form-item label="数据是否为0" prop="amountFlag">
@@ -58,7 +58,7 @@ export default {
 		return {
 			searchForm: {
 				billTime: '',
-				amountFlag: 0,
+				amountFlag: 1,
 			},
 			loading: true,
 			tableData: [{ billNo: 1 }], // 列表
