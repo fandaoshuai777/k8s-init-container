@@ -23,7 +23,7 @@
 			<el-table-column prop="stationName" label="商户名称" />
 			<el-table-column prop="billingAmount" label="订单总额" />
 			<el-table-column prop="oneCardAmount" label="一卡通总额" />
-			<el-table-column prop="employeeCardAmount" label="员工总额" />
+			<el-table-column prop="employeeCardAmount" label="员工卡总额" />
 			<el-table-column prop="couponsAmount" label="券总额" />
 			<el-table-column prop="billTime" label="账单日期" />
 			<el-table-column label="操作">
