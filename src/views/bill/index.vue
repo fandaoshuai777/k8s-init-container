@@ -87,9 +87,9 @@ export default {
 		// 获取列表
 		init() {
 			const data = this.searchForm;
-			// let stationId = window.sessionStorage.getItem('enterpriseId');
-			// data.stationId = stationId;
-			data.stationId = 1111130551;
+			let stationId = window.sessionStorage.getItem('enterpriseId');
+			data.stationId = stationId;
+			// data.stationId = 1111130551;
 			this.loading = true;
 			billList(data).then((res) => {
 				if (res.code === 200) {
