@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<el-dialog title="关联订单" :visible.sync="dialogVisible" width="80%" :before-close="handleClose">
+		<el-dialog title="关联订单" :visible.sync="dialogVisible" width="80%" :before-close="handleClose" :close-on-click-modal="false">
 			<el-form ref="searchForm" :model="searchForm" :inline="true">
 				<el-form-item label="用户手机号" prop="driverTel">
 					<el-input v-model="searchForm.driverTel" placeholder="" />
@@ -11,7 +11,11 @@
 			</el-form>
 			<!-- 表单 -->
 			<el-table v-loading="loading" :data="tableData" border :header-cell-style="{ background: '#eff3f6' }" style="width: 100%">
-				<el-table-column prop="ids" label="编号" />
+				<el-table-column label="编号" width="90" align="center">
+					<template slot-scope="scope">
+						{{ scope.$index + 1 + (pagination.pageIndex - 1) * pagination.pageSize }}
+					</template>
+				</el-table-column>
 				<el-table-column prop="orderNo" label="订单编号" />
 				<el-table-column prop="driverTel" label="付款用户" />
 				<el-table-column prop="billingAmount" label="订单金额" />
@@ -56,26 +60,23 @@ export default {
 	},
 	methods: {
 		doSearch() {
-      this.getList()
-    },
+			this.getList();
+		},
 		getList() {
 			const data = { ...this.searchForm, ...this.pagination };
 			data.billNo = this.billNo;
 			this.loading = true;
 			commitOrder(data).then((res) => {
 				if (res.code === 200) {
-					this.tableData = res.result.map((item) => {
-						item.ids = this.pagination.pageIndex * this.pagination.pageSize - 9;
-						return {
-							...item,
-						};
-					});
+					this.tableData = res.result.list;
 					this.loading = false;
-					this.total = res.data.stationDailyBillCardDto.totalCount;
+					this.total = res.result.total;
 				}
 			});
 		},
 		handleClose() {
+			this.pagination.pageSize = 10;
+			this.pagination.pageIndex = 1;
 			this.dialogVisible = false;
 		},
 		handleSizeChange(val) {

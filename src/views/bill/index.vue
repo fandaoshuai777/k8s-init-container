@@ -2,7 +2,7 @@
 	<div class="Main">
 		<!-- 搜索 -->
 		<el-form ref="searchForm" :model="searchForm" label-width="100px" :inline="true">
-			<el-form-item label="账单日期" prop="billTime" style="margin-left:-20px">
+			<el-form-item label="账单日期" prop="billTime" style="margin-left: -20px">
 				<el-date-picker v-model="searchForm.billTime" type="date" placeholder="选择日期" />
 			</el-form-item>
 			<el-form-item label="数据是否为0" prop="amountFlag">
@@ -18,15 +18,19 @@
 		</el-form>
 		<!-- 表单 -->
 		<el-table v-loading="loading" :data="tableData" border style="width: 100%">
-			<el-table-column prop="ids" label="编号" width="180" />
-			<el-table-column prop="stationId" label="商户编号" width="180" />
-			<el-table-column prop="stationName" label="商户名称" />
+			<el-table-column label="编号" width="90" align="center">
+				<template slot-scope="scope">
+					{{ scope.$index + 1 + (pagination.pageIndex - 1) * pagination.pageSize }}
+				</template>
+			</el-table-column>
+			<el-table-column prop="stationId" label="商户编号" width="140" align="center" />
+			<el-table-column prop="stationName" label="商户名称" align="center" width="140" />
 			<el-table-column prop="billingAmount" label="订单总额" />
 			<el-table-column prop="oneCardAmount" label="一卡通总额" />
 			<el-table-column prop="employeeCardAmount" label="员工卡总额" />
 			<el-table-column prop="couponsAmount" label="券总额" />
-			<el-table-column prop="billTime" label="账单日期" />
-			<el-table-column label="操作">
+			<el-table-column prop="billTime" label="账单日期" width="180" align="center" />
+			<el-table-column label="操作" align="center">
 				<template slot-scope="scope">
 					<el-button type="text" @click="Associated(scope.row)">关联订单</el-button>
 				</template>
@@ -61,10 +65,10 @@ export default {
 				amountFlag: 1,
 			},
 			loading: true,
-			tableData: [{ billNo: 1 }], // 列表
+			tableData: [], // 列表
 			pagination: {
 				pageSize: 10,
-				currPage: 1,
+				pageIndex: 1,
 			},
 			total: 0,
 		};
@@ -73,6 +77,9 @@ export default {
 		this.init();
 	},
 	methods: {
+		getData(str) {
+			return str.split(' ')[0];
+		},
 		// 搜索
 		doSearch() {
 			this.init();
@@ -80,15 +87,15 @@ export default {
 		// 获取列表
 		init() {
 			const data = this.searchForm;
-			let stationId = window.sessionStorage.getItem('enterpriseId')
-			data.stationId = stationId
-			// data.stationId = 1;
+			// let stationId = window.sessionStorage.getItem('enterpriseId');
+			// data.stationId = stationId;
+			data.stationId = 1111130551;
 			this.loading = true;
 			billList(data).then((res) => {
 				if (res.code === 200) {
-					if (res.result.length > 0) {
-						this.tableData = res.result.map((item) => {
-							item.ids = this.pagination.currPage * this.pagination.pageSize - 9;
+					if (res.result.list.length > 0) {
+						this.tableData = res.result.list.map((item) => {
+							item.billTime = this.getData(item.billTime);
 							return {
 								...item,
 							};
@@ -97,6 +104,7 @@ export default {
 						this.tableData = [];
 					}
 					this.loading = false;
+					this.total = res.result.total
 				}
 			});
 		},
@@ -106,11 +114,14 @@ export default {
 			this.$refs.Associated.dialogVisible = true;
 			this.$refs.Associated.getList();
 		},
-		handleSizeChange() {
-			//   console.log(`每页 ${val} 条`)
+		handleSizeChange(val) {
+			this.pagination.pageSize = val;
+			this.pagination.pageIndex = 1;
+			this.init();
 		},
-		handleCurrentChange() {
-			//   console.log(`当前页: ${val}`)
+		handleCurrentChange(val) {
+			this.pagination.pageIndex = val;
+			this.init();
 		},
 	},
 };
