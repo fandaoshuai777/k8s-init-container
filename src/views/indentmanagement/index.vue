@@ -142,13 +142,13 @@
 					}}
 				</div>
 
-				<div class="grid-content bg-purple"></div>
-				<div class="grid-content bg-purple"></div>
+				<div class="grid-content bg-purple">优惠金额</div>
+				<div class="grid-content bg-purple">{{orderData.amount}}</div>
 				<div class="grid-content bg-purple">所属油站</div>
 				<div class="grid-content bg-purple">{{ orderData.stationName }}</div>
 
-				<div class="grid-content bg-purple"></div>
-				<div class="grid-content bg-purple"></div>
+				<div class="grid-content bg-purple">优惠券类型编号</div>
+				<div class="grid-content bg-purple">{{ orderData.couponTemplateId }}</div>
 				<div class="grid-content bg-purple">退款时间</div>
 				<div class="grid-content bg-purple">{{ orderData.rfndTime }}</div>
 
@@ -157,8 +157,8 @@
 
 				<div class="grid-content bg-purple">拒绝退款原因</div>
 				<div class="grid-content bg-purple"></div>
-				<div class="grid-content bg-purple"></div>
-				<div class="grid-content bg-purple"></div>
+				<div class="grid-content bg-purple">一卡通付款金额</div>
+				<div class="grid-content bg-purple">{{ orderData.oneCardPaymentAmount }}</div>
 				<div class="grid-content bg-purple">油品</div>
 				<div class="grid-content bg-purple">{{ orderData.oilType }}</div>
 
@@ -174,8 +174,8 @@
 				<div class="grid-content bg-purple">序列号(撬装)</div>
 				<div class="grid-content bg-purple">{{ orderData.oilGunNo ? '' : orderData.deviceImei }}</div>
 
-				<div class="grid-content bg-purple"></div>
-				<div class="grid-content bg-purple"></div>
+				<div class="grid-content bg-purple">员工卡付款金额</div>
+				<div class="grid-content bg-purple">{{ orderData.employeeCardPaymentAmount ? '￥' + orderData.employeeCardPaymentAmount:''}}</div>
 			</div>
 		</el-dialog>
 		<el-dialog title="退款" :visible.sync="refund" :close-on-click-modal="false" @close="close">
