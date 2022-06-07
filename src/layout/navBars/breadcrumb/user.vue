@@ -100,6 +100,7 @@ export default {
 		user().then((res) => {
 			this.userName = res.result.userName;
 			this.userPhoto = res.result.userPhoto;
+			window.sessionStorage.setItem('enterpriseId',res.result.enterpriseId)
 		});
 	},
 	mounted() {

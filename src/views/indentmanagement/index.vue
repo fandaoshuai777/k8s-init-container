@@ -61,13 +61,13 @@
 				<el-table-column label="操作" width="200" align="center" fixed="right">
 					<template #default="scope">
 						<el-button size="small" type="text" @click="onOpenEditRole(scope.row)">查看</el-button>
-						<el-button
+						<!-- <el-button
 							size="small"
 							type="text"
 							v-if="scope.row.paymentStatus == '已付款' || scope.row.paymentStatus == '退款失败'"
 							@click="onRowDel(scope.row)"
 							>发起退款</el-button
-						>
+						> -->
 						<el-button size="small" type="text" v-if="scope.row.paymentStatus == '已付款'" @click="receipt(scope.row)">补打小票</el-button>
 					</template>
 				</el-table-column>
@@ -144,13 +144,13 @@
 					}}
 				</div>
 
-				<div class="grid-content bg-purple"></div>
-				<div class="grid-content bg-purple"></div>
+				<div class="grid-content bg-purple">优惠金额</div>
+				<div class="grid-content bg-purple">{{orderData.amount? '￥'+ orderData.amount :''}}</div>
 				<div class="grid-content bg-purple">所属油站</div>
 				<div class="grid-content bg-purple">{{ orderData.stationName }}</div>
 
-				<div class="grid-content bg-purple"></div>
-				<div class="grid-content bg-purple"></div>
+				<div class="grid-content bg-purple">优惠券类型编号</div>
+				<div class="grid-content bg-purple">{{ orderData.couponTemplateId }}</div>
 				<div class="grid-content bg-purple">退款时间</div>
 				<div class="grid-content bg-purple">{{ orderData.rfndTime }}</div>
 
@@ -159,8 +159,8 @@
 
 				<div class="grid-content bg-purple">拒绝退款原因</div>
 				<div class="grid-content bg-purple"></div>
-				<div class="grid-content bg-purple"></div>
-				<div class="grid-content bg-purple"></div>
+				<div class="grid-content bg-purple">一卡通付款金额</div>
+				<div class="grid-content bg-purple">{{ orderData.oneCardPaymentAmount?'￥'+ orderData.oneCardPaymentAmount:''}}</div>
 				<div class="grid-content bg-purple">油品</div>
 				<div class="grid-content bg-purple">{{ orderData.oilType }}</div>
 
@@ -176,8 +176,8 @@
 				<div class="grid-content bg-purple">序列号(撬装)</div>
 				<div class="grid-content bg-purple">{{ orderData.oilGunNo ? '' : orderData.deviceImei }}</div>
 
-				<div class="grid-content bg-purple"></div>
-				<div class="grid-content bg-purple"></div>
+				<div class="grid-content bg-purple">员工卡付款金额</div>
+				<div class="grid-content bg-purple">{{ orderData.employeeCardPaymentAmount ? '￥' + orderData.employeeCardPaymentAmount:''}}</div>
 			</div>
 		</el-dialog>
 		<el-dialog title="退款" :visible.sync="refund" :close-on-click-modal="false" @close="close">

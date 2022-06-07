@@ -74,6 +74,24 @@
 					}
 				}
 			]
+		},
+		{
+			"path": "/bill/index.vue",
+			"name": "bill",
+			"component": "bill",
+			"meta": {
+				"title": "东疆日账单列表",
+				"isLink": "",
+				"isHide": false,
+				"isKeepAlive": true,
+				"isAffix": false,
+				"isIframe": false,
+				"roles": [
+					"admin",
+					"common"
+				],
+				"icon": "iconfont icon-gongju"
+			}
 		}
 	]
 }
