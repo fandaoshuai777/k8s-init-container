@@ -61,13 +61,13 @@
 				<el-table-column label="操作" width="200" align="center" fixed="right">
 					<template #default="scope">
 						<el-button size="small" type="text" @click="onOpenEditRole(scope.row)">查看</el-button>
-						<el-button
+						<!-- <el-button
 							size="small"
 							type="text"
 							v-if="scope.row.paymentStatus == '已付款' || scope.row.paymentStatus == '退款失败'"
 							@click="onRowDel(scope.row)"
 							>发起退款</el-button
-						>
+						> -->
 						<el-button size="small" type="text" v-if="scope.row.paymentStatus == '已付款'" @click="receipt(scope.row)">补打小票</el-button>
 					</template>
 				</el-table-column>
