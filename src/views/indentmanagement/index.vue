@@ -143,7 +143,7 @@
 				</div>
 
 				<div class="grid-content bg-purple">优惠金额</div>
-				<div class="grid-content bg-purple">{{orderData.amount}}</div>
+				<div class="grid-content bg-purple">{{orderData.amount? '￥'+ orderData.amount :''}}</div>
 				<div class="grid-content bg-purple">所属油站</div>
 				<div class="grid-content bg-purple">{{ orderData.stationName }}</div>
 
@@ -158,7 +158,7 @@
 				<div class="grid-content bg-purple">拒绝退款原因</div>
 				<div class="grid-content bg-purple"></div>
 				<div class="grid-content bg-purple">一卡通付款金额</div>
-				<div class="grid-content bg-purple">{{ orderData.oneCardPaymentAmount }}</div>
+				<div class="grid-content bg-purple">{{ orderData.oneCardPaymentAmount?'￥'+ orderData.oneCardPaymentAmount:''}}</div>
 				<div class="grid-content bg-purple">油品</div>
 				<div class="grid-content bg-purple">{{ orderData.oilType }}</div>
 
