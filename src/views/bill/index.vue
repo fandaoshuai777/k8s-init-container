@@ -26,9 +26,9 @@
 			<el-table-column prop="stationId" label="商户编号" width="140" align="center" />
 			<el-table-column prop="stationName" label="商户名称" align="center" width="140" />
 			<el-table-column prop="billingAmount" label="订单总额" />
-			<el-table-column prop="oneCardAmount" label="一卡通总额" />
-			<el-table-column prop="employeeCardAmount" label="员工卡总额" />
-			<el-table-column prop="couponsAmount" label="券总额" />
+			<el-table-column prop="oneCardAmount" label="一卡通消费总额" />
+			<el-table-column prop="employeeCardAmount" label="员工卡消费总额" />
+			<el-table-column prop="couponsAmount" label="券消费总额" />
 			<el-table-column prop="billTime" label="账单日期" width="180" align="center" />
 			<el-table-column label="操作" align="center">
 				<template slot-scope="scope">
