@@ -92,6 +92,73 @@
 				],
 				"icon": "iconfont icon-gongju"
 			}
+		},
+		{
+			"path": "/withdrawdeposit",
+			"name": "Withdrawdeposit",
+			"component": "layout/routerView/parent",
+			"redirect": "withdrawdeposit",
+			"meta": {
+				"title": "提现管理",
+				"isLink": "",
+				"isKeepAlive": true,
+				"isAffix": false,
+				"isIframe": false,
+				"icon": "iconfont icon-crew_feature"
+			},
+			"children": [
+				{
+					"path": "/withdrawdeposit/balance",
+					"name": "balance",
+					"component": "withdrawdeposit/balance",
+					"meta": {
+						"title": "账户余额",
+						"isLink": "",
+						"isKeepAlive": true,
+						"isAffix": false,
+						"isIframe": false,
+						"roles": [
+							"admin",
+							"common"
+						],
+						"icon": "el-icon-thumb"
+					}
+				},
+				{
+					"path": "/withdrawdeposit/orderform",
+					"name": "orderform",
+					"component": "withdrawdeposit/orderform",
+					"meta": {
+						"title": "提现订单",
+						"isLink": "",
+						"isKeepAlive": true,
+						"isAffix": false,
+						"isIframe": false,
+						"roles": [
+							"admin",
+							"common"
+						],
+						"icon": "el-icon-edit"
+					}
+				},
+				{
+					"path": "/withdrawdeposit/account",
+					"name": "account",
+					"component": "withdrawdeposit/account",
+					"meta": {
+						"title": "提现账户管理",
+						"isLink": "",
+						"isKeepAlive": true,
+						"isAffix": false,
+						"isIframe": false,
+						"roles": [
+							"admin",
+							"common"
+						],
+						"icon": "el-icon-s-tools"
+					}
+				}
+			]
 		}
 	]
 }
