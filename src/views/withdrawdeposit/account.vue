@@ -38,7 +38,6 @@
 						<el-input v-model="form.driverTel" clearable />
 					</el-form-item>
 					<el-form-item label="身份证正面" prop="driverTel">
-            {{!dialogImageUrl}}
 						<el-upload
 							action="#"
 							list-type="picture-card"
