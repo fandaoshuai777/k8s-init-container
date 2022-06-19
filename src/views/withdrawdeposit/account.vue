@@ -72,6 +72,7 @@
 </template>
 <script>
 import SysDialgoEdit from '@/components/system/SysDialogEdit.vue';
+import { getmerList } from '@/api/withdrawdeposit';
 
 export default {
 	components: {
@@ -103,6 +104,10 @@ export default {
 		};
 	},
 	methods: {
+		async init() {
+			const res = await getmerList();
+			
+		},
 		add() {
 			this.assignDialog.visible = true;
 		},

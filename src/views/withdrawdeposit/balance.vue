@@ -2,15 +2,15 @@
 	<div>
 		<el-card shadow="hover">
 			<div class="card">
-				<div>账户总额</div>
+				<div>账户总额：</div>
 				<div>123456.09元</div>
 			</div>
 			<div class="card">
-				<div>账户总额</div>
+				<div>可提现金额：</div>
 				<div>123456.09元</div>
 			</div>
 			<div class="card">
-				<div>账户总额</div>
+				<div>冻结总额：</div>
 				<div>123456.09元</div>
 			</div>
 			<el-button @click="withdrawDeposit">提现</el-button>
@@ -99,5 +99,6 @@ export default {
 <style scoped>
 .card {
 	display: flex;
+	height: 30px;
 }
 </style>
