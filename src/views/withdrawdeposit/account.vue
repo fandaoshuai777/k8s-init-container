@@ -103,10 +103,13 @@ export default {
 			disabled: false,
 		};
 	},
+	created() {
+		this.init();
+	},
 	methods: {
 		async init() {
-			const res = await getmerList();
-			
+			const res = await getmerList({merchantId: sessionStorage.getItem("enterpriseId")});
+			console.log(res, 'res')
 		},
 		add() {
 			this.assignDialog.visible = true;
