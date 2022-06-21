@@ -18,9 +18,7 @@
 
 				<el-form-item label="提现账户" >
 					<el-select v-model="formInfo.payee">
-						<el-option label="汽油" :value="1" />
-						<el-option label="柴油" :value="2" />
-						<el-option label="天然气" :value="3" />
+						<el-option v-for="(item, index) in selectList" :key="index" :label="item.supplierName" :value="item.id"></el-option>
 					</el-select>
 				</el-form-item>
 				<el-form-item label="提现账号" >
@@ -30,11 +28,7 @@
 					<el-input v-model="formInfo.channelOrderNo"></el-input>
 				</el-form-item>
 				<el-form-item label="开户行">
-					<el-select v-model="formInfo.bankName">
-						<el-option label="A" :value="1" />
-						<el-option label="B" :value="2" />
-						<el-option label="C" :value="3" />
-					</el-select>
+					<el-input v-model="formInfo.bankName"></el-input>
 				</el-form-item>
 				<el-form-item >
 					<el-button type="primary" size="small" @click="onSubmit">查询</el-button>
@@ -67,13 +61,9 @@
 	</div>
 </template>
 <script>
-import SysDialgoEdit from '@/components/system/SysDialogEdit.vue';
-import { getList } from "@/api/withdrawdeposit";
+import { getList, getmerList } from "@/api/withdrawdeposit";
 
 export default {
-	components: {
-		SysDialgoEdit,
-	},
 	data() {
 		return {
 			tableData: [],
@@ -87,11 +77,13 @@ export default {
 				bankName: '', // 开户行
 				time: '',
 			},
-      total:0
+      total: 0,
+			selectList: [],
 		};
 	},
 	created() {
 		this.init();
+		this.getmerList();
 	},
 	methods: {
 		async init() {
@@ -105,6 +97,12 @@ export default {
 			if (res.code == 0) {
 				this.tableData = res.data.list;
 				this.total = Number(res.data.total)
+			}
+		},
+		async getmerList() {
+			const res = await getmerList({merchantId: sessionStorage.getItem("enterpriseId")});
+			if (res.code == 0) {
+				this.selectList = res.data;
 			}
 		},
 		onSubmit() {

@@ -1,105 +1,48 @@
 <template>
 	<div>
 		<el-card shadow="hover">
-			<div style="margin-bottom: 10px"><el-button type="primary" @click="add">添加提现账户</el-button></div>
+			<div style="margin-bottom: 10px"><el-button type="primary" @click="handleAdd">添加提现账户</el-button></div>
 
 			<el-table :data="tableData" border style="width: 100%">
-				<el-table-column prop="date" label="编号" width="180" align="center"> </el-table-column>
-				<el-table-column prop="name" label="提现账户名" width="180" align="center"> </el-table-column>
-				<el-table-column prop="address" label="账户类型" align="center"> </el-table-column>
-				<el-table-column prop="address" label="账户状态" align="center"> </el-table-column>
+				<el-table-column prop="id" label="编号" width="180" align="center"></el-table-column>
+				<el-table-column prop="supplierName" label="提现账户名" width="180" align="center"></el-table-column>
+				<el-table-column label="账户类型" align="center">
+					<template slot-scope="scope">
+						<span v-if="scope.row.supplierType == 'PERSON'">个人</span>
+						<span v-else-if="scope.row.supplierType == 'BUSINESS'">企业</span>
+					</template>
+				</el-table-column>
+				<el-table-column label="账户状态" align="center">
+					<template slot-scope="scope">
+						<span v-if="scope.row.stats == 1101">审核中</span>
+						<span v-else-if="scope.row.stats == 1102">审核失败</span>
+						<span v-else-if="scope.row.stats == 1103">已添加</span>
+					</template>
+				</el-table-column>
 				<el-table-column prop="address" label="操作" align="center">
 					<template slot-scope="scope">
-						<el-button type="text" @click="editForm(scope.row)"> 详情 </el-button>
-						<el-button type="text" @click="editForm(scope.row)"> 再次提交 </el-button>
-						<el-button type="text" @click="editForm(scope.row)"> 删除 </el-button>
+						<el-button type="text" @click="handleDetail(scope.row)">详情</el-button>
+						<el-button type="text" v-if="scope.row.stats == 1102" @click="handleClick(scope.row)">再次提交</el-button>
+						<el-button type="text" v-if="scope.row.stats == 1102" @click="handleDelete(scope.row)">删除</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
 		</el-card>
-		<!-- 添加提现账户 -->
-		<SysDialgoEdit
-			:title="assignDialog.title"
-			:width="assignDialog.width"
-			:visible="assignDialog.visible"
-			:display="assignDialog.display"
-			@onClone="onClose"
-			@onComfig="onComfig"
-		>
-			<div slot="content">
-				<el-form ref="form" :model="form" label-width="100px" size="small">
-					<el-form-item label="账户名" prop="driverTel">
-						<el-input v-model="form.driverTel" clearable />
-					</el-form-item>
-					<el-form-item label="账户类型" prop="driverTel">
-						<el-input v-model="form.driverTel" clearable />
-					</el-form-item>
-					<el-form-item label="身份证号" prop="driverTel">
-						<el-input v-model="form.driverTel" clearable />
-					</el-form-item>
-					<el-form-item label="身份证正面" prop="driverTel">
-						<el-upload
-							action="#"
-							list-type="picture-card"
-							:http-request="upload"
-             :on-success="beforeAvatarUpload"
-						>
-							<i slot="default" class="el-icon-plus"></i>
-							<div slot="file" slot-scope="{ file }">
-								<img class="el-upload-list__item-thumbnail" :src="file.url" alt="" />
-								<span class="el-upload-list__item-actions">
-									<span class="el-upload-list__item-preview" @click="handlePictureCardPreview(file)">
-										<i class="el-icon-zoom-in"></i>
-									</span>
-									<span v-if="!disabled" class="el-upload-list__item-delete" @click="handleRemove(file)">
-										<i class="el-icon-delete"></i>
-									</span>
-								</span>
-							</div>
-						</el-upload>
-						<div style="color: red">请上传JPG、PNG格式文件</div>
-					</el-form-item>
-					<el-form-item prop="driverTel">
-						<el-checkbox v-model="checked">最多添加5个账户，添加成功后，暂不支持修改与删除，请谨慎操作！</el-checkbox>
-					</el-form-item>
-				</el-form>
-			</div>
-		</SysDialgoEdit>
-		<el-dialog :visible.sync="dialogVisible">
-			<img width="100%" :src="dialogImageUrl" alt="" />
-		</el-dialog>
+		<add-dialog :show.sync="show" @change="change" ref="child" :disabled="disabled"></add-dialog>
 	</div>
 </template>
 <script>
-import SysDialgoEdit from '@/components/system/SysDialogEdit.vue';
-import { getmerList } from '@/api/withdrawdeposit';
+import { allow_or_not, getmerList, deleteUser, submit_again } from '@/api/withdrawdeposit';
+import AddDialog from './components/AddDialog';
 
 export default {
 	components: {
-		SysDialgoEdit,
+		AddDialog,
 	},
 	data() {
 		return {
-			tableData: [
-				{
-					date: '2016-05-02',
-					name: '王小虎',
-					address: '上海市普陀区金沙江路 1518 弄',
-				},
-			],
-			checked: false,
-			form: {},
-			// 设置弹窗组件所需数据
-			assignDialog: {
-				title: '添加提现账户',
-				width: 700,
-				height: 550,
-				visible: false,
-				display: true,
-			},
-			upDisabled: false,
-			dialogImageUrl: '',
-			dialogVisible: false,
+			show: false,
+			tableData: [],
 			disabled: false,
 		};
 	},
@@ -109,37 +52,61 @@ export default {
 	methods: {
 		async init() {
 			const res = await getmerList({merchantId: sessionStorage.getItem("enterpriseId")});
-			console.log(res, 'res')
-		},
-		add() {
-			this.assignDialog.visible = true;
-		},
-		onClose() {
-			this.assignDialog.visible = false;
-		},
-		onComfig() {
-			this.assignDialog.visible = false;
-			this.$refs.pictureUpload.submit()
-		},
-		handleRemove(file) {
-			const uploadFiles = this.$refs.pictureUpload.uploadFiles;
-			for (let i = 0; i < uploadFiles.length; i++) {
-				if (uploadFiles[i]['url'] === file.url) {
-					uploadFiles.splice(i, 1);
-				}
+			if (res.code == 0) {
+				this.tableData = res.data;
 			}
 		},
-		handlePictureCardPreview(file) {
-      console.log(file)
-			this.dialogImageUrl = file.url;
-			this.dialogVisible = true;
+		handleAdd() {
+			allow_or_not({merchantId: sessionStorage.getItem("enterpriseId")}).then( res => {
+				if (res.code == 0) {
+					if (res.data) {
+						this.show = true;
+						this.disabled = false;
+					} else {
+						this.$message({
+							type: 'error',
+							message: '最多添加3个对公、5个对私账户!'
+						});
+					}
+				}
+			})
 		},
-    beforeAvatarUpload(file){
-      console.log(123,file)
-    },
-		upload(item) {
-			// console.log(item);
+		handleClick(row) {
+			submit_again({id: row.id}).then( res => {
+				if (res.code == 0) {
+					this.$message({
+						type: 'success',
+						message: '提交成功!'
+					});
+					this.init();
+				}
+			})
 		},
+		handleDelete(row) {
+			this.$confirm('确定删除吗?', '提示', {
+				confirmButtonText: '确定',
+				cancelButtonText: '取消',
+				type: 'warning'
+			}).then(() => {
+				deleteUser({id: row.id}).then( res => {
+					if (res.code == 0) {
+						this.$message({
+							type: 'success',
+							message: '删除成功!'
+						});
+						this.init();
+					}
+				})
+			})
+		},
+		handleDetail(row) {
+			this.show = true;
+			this.disabled = true;
+			this.$refs.child.getDetail(row.id);
+		},
+		change() {
+			this.init();
+		}
 	},
 };
 </script>
