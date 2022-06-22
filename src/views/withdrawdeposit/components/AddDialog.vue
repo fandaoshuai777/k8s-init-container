@@ -35,7 +35,7 @@
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm('formInfo')">确定</el-button>
+        <el-button v-if="!disabled" type="primary" @click="submitForm('formInfo')">确定</el-button>
         <el-button @click="resetForm('formInfo')">取消</el-button>
       </span>
     </el-dialog>
@@ -152,7 +152,7 @@
       uploadAvatar(item) {
         this.$message.warning('图片上传中，请稍等')
         const formData = new FormData()
-        formData.append('file', item.file)
+        formData.append('multpartFile', item.file)
   
         uploadPhoto(formData).then(res => {
           console.log(res.data.name, 'res.data.name')
