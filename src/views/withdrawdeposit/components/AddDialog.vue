@@ -18,8 +18,8 @@
           <el-upload
             class="avatar-uploader"
             :show-file-list="false"
-            :on-success="riskSuccess"
-            :action="actionUrl"
+            action="#"
+            :http-request="uploadAvatar"
             :headers="{ token: token }"
             :before-upload="beforeAvatarUpload"
           >
@@ -43,20 +43,30 @@
 </template>
 <script>
   import { Local } from '@/utils/storage';
-  import { createUser, detailUser } from '@/api/withdrawdeposit';
+  import { createUser, detailUser, uploadPhoto } from '@/api/withdrawdeposit';
 
   export default {
     data() {
+      var checkSUP = (rule, value, callback) => {
+        var reg = /(^\d{8}(0\d|10|11|12)([0-2]\d|30|31)\d{3}$)|(^\d{6}(18|19|20)\d{2}(0\d|10|11|12)([0-2]\d|30|31)\d{3}(\d|X|x)$)/;
+        if (!value) {
+          return callback(new Error('请填写身份证号'));
+        }
+        if (!reg.test(value)) {
+          callback(new Error('请填写正确的身份证号'))
+        } else {
+          callback()
+        }
+      }
       return {
         dialogVisible: true,
         token: Local.get('token'),
-        actionUrl: 'http://operation-server.ciecdev.com/oilStation/upOssImg',
         dialogFormVisible: true,
         formInfo: {
           supplierName: '', // 账户名
           supplierType: 'PERSON', // 账户类型 PERSON：个人, BUSINESS:企业
           supplierLicenceNo: '',  // 身份证号
-          supplierLicenceUrlL: 'https://oil-chain-oss-001.oss-cn-hangzhou.aliyuncs.com/fefe70ea94a24b20aa1b75a338d69f53.png', // 身份证图片地址
+          supplierLicenceUrlL: '', // 身份证图片地址
           type: [],
         },
         rules: {
@@ -64,7 +74,7 @@
             { required: true, message: '请输入账户名', trigger: 'blur' }
           ],
           supplierLicenceNo: [
-            { required: true, message: '请输入身份证号', trigger: 'blur' }
+            { required: true, validator: checkSUP, trigger: 'blur' }
           ],
           supplierType: [
             { required: true, message: '请选择账户类型', trigger: 'change' }
@@ -139,12 +149,18 @@
         this.$refs[formName].resetFields();
         this.$emit('update:show', false)
       },
-      riskSuccess(file) {
-        console.log(file, 'file')
-        // if (file.code === 1) {
-        //   this.$message.success('上传成功')
-        //   this.oilList.chemicalsBusinessLicense = file.data.name
-        // }
+      uploadAvatar(item) {
+        this.$message.warning('图片上传中，请稍等')
+        const formData = new FormData()
+        formData.append('file', item.file)
+  
+        uploadPhoto(formData).then(res => {
+          console.log(res.data.name, 'res.data.name')
+          this.formInfo.supplierLicenceUrlL = res.data.name
+          this.$message.success('上传图片成功！')
+        }).catch(() => {
+          this.$message.error('上传图片失败')
+        })
       },
       beforeAvatarUpload(file) {
         const isTypeTrue = /^image\/(jpeg|png|jpg)$/.test(file.type)

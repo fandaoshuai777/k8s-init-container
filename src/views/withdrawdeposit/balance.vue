@@ -16,22 +16,21 @@
 			<el-button @click="handleClick">提现</el-button>
 		</el-card>
 
-		<el-dialog title="提现申请" :visible.sync="dialogFormVisible">
+		<el-dialog title="提现申请" :visible.sync="dialogFormVisible" :before-close="onClose" :close-on-click-modal="false">
 			<el-form ref="formInfo" :rules="rules" :model="formInfo" label-width="100px">
 				<el-form-item label="可提现金额:">
 					<span>{{availableAmount}}元</span>
 				</el-form-item>
-				<el-form-item label="提现账户:" prop="supplierType">
-					<el-select v-model="formInfo.supplierType" placeholder="请选择活动区域">
-						<el-option label="区域一" value="shanghai"></el-option>
-						<el-option label="区域二" value="beijing"></el-option>
+				<el-form-item label="提现账户:" prop="payee">
+					<el-select v-model="formInfo.payee">
+						<el-option v-for="(item, index) in payeeList" :key="index" :label="item.supplierName" :value="item.id"></el-option>
 					</el-select>
 				</el-form-item>
-				<el-form-item label="提现账号:" prop="supplierType">
-					<el-input v-model="formInfo.supplierType" autocomplete="off" type="number"  maxlength="30"></el-input>
+				<el-form-item label="提现账号:" prop="payeeAccount">
+					<el-input v-model="formInfo.payeeAccount" autocomplete="off" type="number"  maxlength="30"></el-input>
 				</el-form-item>
-				<el-form-item label="开户行:" prop="supplierType">
-					<el-select v-model="formInfo.supplierType" filterable placeholder="请选择活动区域">
+				<el-form-item label="开户行:" prop="bankName">
+					<el-select v-model="formInfo.bankName" filterable placeholder="请选择开户行">
 						<el-option
 							v-for="item in selectList"
 							:key="item.value"
@@ -40,19 +39,19 @@
 						</el-option>
 					</el-select>
 				</el-form-item>
-				<el-form-item label="提现金额:" prop="supplierType">
-					<el-input v-model="formInfo.supplierType" autocomplete="off" type="number"></el-input>
+				<el-form-item label="提现金额:" prop="amount">
+					<el-input v-model="formInfo.amount" autocomplete="off" type="number"></el-input>
 				</el-form-item>
 			</el-form>
-			<div slot="footer" class="dialog-footer">
-				<el-button @click="dialogFormVisible = false">取 消</el-button>
-				<el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
-			</div>
+			<span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitForm('formInfo')">确定</el-button>
+        <el-button @click="resetForm('formInfo')">取消</el-button>
+      </span>
 		</el-dialog>
 	</div>
 </template>
 <script>
-import { getBalance, getmerList, query_bank_info } from "@/api/withdrawdeposit"
+import { getBalance, getmerList, query_bank_info, withdrawl } from "@/api/withdrawdeposit"
 
 export default {
 	data() {
@@ -62,14 +61,27 @@ export default {
 			totalAmount: 0,
 			dialogFormVisible: false,
 			formInfo: {
-				supplierType: ''
+				payee: '',
+				payeeAccount: '',
+				bankName: '',
+				amount: '',
 			},
 			rules: {
-				supplierType: [
-					{ required: true, message: '请输入账户名', trigger: 'blur' }
+				payee: [
+					{ required: true, message: '请输入提现账户', trigger: 'blur' }
+				],
+				payeeAccount: [
+					{ required: true, message: '请输入提现账号', trigger: 'blur' }
+				],
+				bankName: [
+					{ required: true, message: '请输入开户行', trigger: 'blur' }
+				],
+				amount: [
+					{ required: true, message: '请输入提现金额', trigger: 'blur' }
 				],
 			},
-			selectList: []
+			selectList: [],
+			payeeList: [],
 		};
 	},
 	created() {
@@ -88,6 +100,7 @@ export default {
 			const res = await getmerList({merchantId: sessionStorage.getItem("enterpriseId")});
 			if (res.code == 0 && res.data.length != 0) {
 				this.dialogFormVisible = true;
+				this.payeeList = res.data;
 				query_bank_info().then( r => {
 					this.selectList = r.data.list;
 				})
@@ -100,6 +113,42 @@ export default {
 					this.$router.push({ path: '/withdrawdeposit/account' })
 				})
 			}
+		},
+		onClose() {
+			this.$refs['formInfo'].resetFields();
+		},
+		submitForm(formName) {
+			if (this.formInfo.amount > this.availableAmount) {
+				this.$message.error('提现金额不足');
+				return false;
+			}
+			this.$refs[formName].validate((valid) => {
+				if (valid) {
+					const { enterpriseId } = JSON.parse(sessionStorage.getItem("loginUser"));
+					const { payee, payeeAccount, bankName, amount, } = this.formInfo;
+					let data = {
+						merchantId: enterpriseId,         // 商户ID
+						payee,
+						payeeAccount,
+						bankName,
+						amount,
+					}
+					withdrawl(data).then( res => {
+						console.log(res, 'resresres');
+						if (res.code == 0) {
+							this.$message.success('添加成功');
+							this.$emit('change');
+							this.$refs[formName].resetFields();
+						}
+					})
+				} else {
+					console.log('error submit!!');
+					return false;
+				}
+			});
+		},
+		resetForm(formName) {
+			this.$refs[formName].resetFields();
 		},
 	},
 };

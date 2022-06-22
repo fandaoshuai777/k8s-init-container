@@ -23,7 +23,7 @@ body,
 	height: 100%;
 	.layout-aside {
 		background: var(--bg-menuBar);
-		box-shadow: 2px 0 6px rgb(0 21 41 / 1%);
+		box-shadow: 2px 0 6px rgba(0,21,41,.01);
 		height: inherit;
 		position: relative;
 		z-index: 1;
@@ -189,7 +189,14 @@ body,
 .overflow {
 	overflow: hidden !important;
 }
-
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none!important;
+    appearance: none!important;
+}
+input {
+  -moz-appearance:textfield!important;
+}
 /* 字体大小全局样式
 ------------------------------- */
 @for $i from 10 through 32 {
