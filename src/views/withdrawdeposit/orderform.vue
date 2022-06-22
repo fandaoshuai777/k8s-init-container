@@ -3,7 +3,7 @@
 		<el-card shadow="hover">
 			<el-form  :model="formInfo"  :inline="true" size="small" >
 				<el-form-item label="提现编码" >
-					<el-input v-model="formInfo.orderNo"></el-input>
+					<el-input v-model="formInfo.orderNo" type="number" maxlength="30"></el-input>
 				</el-form-item>
 				<el-form-item label="发起时间" >
 					<el-date-picker
@@ -21,11 +21,11 @@
 						<el-option v-for="(item, index) in selectList" :key="index" :label="item.supplierName" :value="item.id"></el-option>
 					</el-select>
 				</el-form-item>
-				<el-form-item label="提现账号" >
-					<el-input v-model="formInfo.payeeAccount"></el-input>
+				<el-form-item label="提现账号">
+					<el-input v-model="formInfo.payeeAccount" type="number" maxlength="30"></el-input>
 				</el-form-item>
 				<el-form-item label="交易流水号" >
-					<el-input v-model="formInfo.channelOrderNo"></el-input>
+					<el-input v-model="formInfo.channelOrderNo" type="number" maxlength="30"></el-input>
 				</el-form-item>
 				<el-form-item label="开户行">
 					<el-input v-model="formInfo.bankName"></el-input>

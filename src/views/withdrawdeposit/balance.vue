@@ -28,7 +28,7 @@
 					</el-select>
 				</el-form-item>
 				<el-form-item label="提现账号:" prop="supplierType">
-					<el-input v-model="formInfo.supplierType" autocomplete="off"></el-input>
+					<el-input v-model="formInfo.supplierType" autocomplete="off" type="number"  maxlength="30"></el-input>
 				</el-form-item>
 				<el-form-item label="开户行:" prop="supplierType">
 					<el-select v-model="formInfo.supplierType" filterable placeholder="请选择活动区域">
@@ -41,7 +41,7 @@
 					</el-select>
 				</el-form-item>
 				<el-form-item label="提现金额:" prop="supplierType">
-					<el-input v-model="formInfo.supplierType" autocomplete="off"></el-input>
+					<el-input v-model="formInfo.supplierType" autocomplete="off" type="number"></el-input>
 				</el-form-item>
 			</el-form>
 			<div slot="footer" class="dialog-footer">

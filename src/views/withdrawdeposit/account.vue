@@ -4,8 +4,8 @@
 			<div style="margin-bottom: 10px"><el-button type="primary" @click="handleAdd">添加提现账户</el-button></div>
 
 			<el-table :data="tableData" border style="width: 100%">
-				<el-table-column prop="id" label="编号" width="180" align="center"></el-table-column>
-				<el-table-column prop="supplierName" label="提现账户名" width="180" align="center"></el-table-column>
+				<el-table-column prop="id" label="编号" width="220" align="center"></el-table-column>
+				<el-table-column prop="supplierName" label="提现账户名" width="220" align="center"></el-table-column>
 				<el-table-column label="账户类型" align="center">
 					<template slot-scope="scope">
 						<span v-if="scope.row.supplierType == 'PERSON'">个人</span>
@@ -62,12 +62,12 @@ export default {
 					if (res.data) {
 						this.show = true;
 						this.disabled = false;
-					} else {
-						this.$message({
-							type: 'error',
-							message: '最多添加3个对公、5个对私账户!'
-						});
 					}
+				} else {
+					this.$message({
+						type: 'error',
+						message: '最多添加3个对公、5个对私账户!'
+					});
 				}
 			})
 		},

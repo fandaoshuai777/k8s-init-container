@@ -1,9 +1,9 @@
 <template>
   <div class="diolog" v-if="show">
-    <el-dialog title="收货地址" :visible.sync="dialogVisible" :before-close="onClose" :close-on-click-modal="false">
+    <el-dialog title="添加提现账户" :visible.sync="dialogVisible" :before-close="onClose" :close-on-click-modal="false">
       <el-form ref="formInfo" :rules="rules" :model="formInfo" label-width="100px" size="small" :disabled="disabled">
         <el-form-item label="账户名" prop="supplierName">
-          <el-input v-model="formInfo.supplierName" clearable />
+          <el-input v-model="formInfo.supplierName" clearable maxlength="30" />
         </el-form-item>
         <el-form-item label="账户类型" prop="supplierType">
           <el-select v-model="formInfo.supplierType" placeholder="请选择活动区域">
@@ -12,7 +12,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="身份证号" prop="supplierLicenceNo">
-          <el-input v-model="formInfo.supplierLicenceNo" clearable  maxlength="18" />
+          <el-input v-model="formInfo.supplierLicenceNo" clearable maxlength="18" />
         </el-form-item>
         <el-form-item label="身份证正面" prop="supplierLicenceUrlL">
           <el-upload
@@ -103,7 +103,8 @@
         })
       },
       onClose() {
-        this.$emit('update:show', false)
+        this.$emit('update:show', false);
+        this.$refs['formInfo'].resetFields();
       },
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
@@ -125,6 +126,7 @@
                 this.$message.success('添加成功');
                 this.$emit('update:show', false);
                 this.$emit('change');
+                this.$refs[formName].resetFields();
               }
             })
           } else {

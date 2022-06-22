@@ -59,7 +59,7 @@ export function submit_again(params) {
 // 获取银行信息
 export function query_bank_info(params) {
   return request({
-    url: 'https://internal.dev.op-api-gateway.wonder-link.net/gotone-settlement-api/eb/merchant/supplier/query_bank_info',
+    url: 'https://internal.dev.op-api-gateway.wonder-link.net/gotone-settlement-api/mp/merchant/supplier/query_bank_info',
     method: 'get',
     params,
   })
