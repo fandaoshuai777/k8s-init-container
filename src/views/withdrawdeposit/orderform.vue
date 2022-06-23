@@ -100,7 +100,7 @@ export default {
 			}
 		},
 		async getmerList() {
-			const res = await getmerList({merchantId: sessionStorage.getItem("enterpriseId")});
+			const res = await getmerList({merchantId: 1111129709});
 			if (res.code == 0) {
 				this.selectList = res.data;
 			}

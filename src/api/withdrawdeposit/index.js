@@ -3,23 +3,23 @@ import request from '@/utils/request'
 // 提现余额
 export function getBalance(params) {
   return request({
-    url: `https://internal.dev.op-api-gateway.wonder-link.net/gotone-payment-api/mp/withdrawl/balance/query`,
+    url: `https://internal.dev.op-api-gateway.wonder-link.net/gotone-payment-api/mp/balance/query`,
     method: 'get',
     params
-  })
-}
-// 提现订单列表
-export function getList(params) {
-  return request({
-    url: 'https://internal.dev.op-api-gateway.wonder-link.net/gotone-payment-api/mp/withdrawl/list',
-    method: 'post',
-    params,
   })
 }
 // 提现申请
 export function withdrawl(params) {
   return request({
     url: 'https://internal.dev.op-api-gateway.wonder-link.net/gotone-payment-api/mp/withdrawl',
+    method: 'post',
+    params,
+  })
+}
+// 提现订单列表
+export function getList(params) {
+  return request({
+    url: 'https://internal.dev.op-api-gateway.wonder-link.net/gotone-payment-api/mp/withdrawl/list',
     method: 'post',
     params,
   })

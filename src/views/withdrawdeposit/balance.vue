@@ -16,18 +16,18 @@
 			<el-button @click="handleClick">提现</el-button>
 		</el-card>
 
-		<el-dialog title="提现申请" :visible.sync="dialogFormVisible" :before-close="onClose" :close-on-click-modal="false">
+		<el-dialog title="提现申请" :visible.sync="dialogFormVisible" :before-close="onClose" :close-on-click-modal="false" width="30%">
 			<el-form ref="formInfo" :rules="rules" :model="formInfo" label-width="100px">
 				<el-form-item label="可提现金额:">
 					<span>{{availableAmount}}元</span>
 				</el-form-item>
 				<el-form-item label="提现账户:" prop="payee">
-					<el-select v-model="formInfo.payee">
-						<el-option v-for="(item, index) in payeeList" :key="index" :label="item.supplierName" :value="item.id"></el-option>
+					<el-select v-model="formInfo.payee" value-key="id">
+						<el-option v-for="(item, index) in payeeList" :key="index" :label="item.supplierName" :value="item"></el-option>
 					</el-select>
 				</el-form-item>
 				<el-form-item label="提现账号:" prop="payeeAccount">
-					<el-input v-model="formInfo.payeeAccount" autocomplete="off" type="number"  maxlength="30"></el-input>
+					<el-input v-model="formInfo.payeeAccount" autocomplete="off" type="number"  maxlength="30" style="width: 217px;"></el-input>
 				</el-form-item>
 				<el-form-item label="开户行:" prop="bankName">
 					<el-select v-model="formInfo.bankName" filterable placeholder="请选择开户行">
@@ -40,7 +40,7 @@
 					</el-select>
 				</el-form-item>
 				<el-form-item label="提现金额:" prop="amount">
-					<el-input v-model="formInfo.amount" autocomplete="off" type="number"></el-input>
+					<el-input v-model="formInfo.amount" autocomplete="off" type="number" style="width: 217px;"></el-input>
 				</el-form-item>
 			</el-form>
 			<span slot="footer" class="dialog-footer">
@@ -89,15 +89,15 @@ export default {
 	},
 	methods: {
 		async init() {
-			const res = await getBalance({stationId: sessionStorage.getItem("enterpriseId")});
-			if (res.code == 0) {
+			const res = await getBalance({stationId: 1111129709});
+			if (res) {
 				this.frozenAmount = res.data.frozenAmount;
 				this.availableAmount = res.data.availableAmount;
 				this.totalAmount = res.data.totalAmount;
 			}
 		},
 		async handleClick() {
-			const res = await getmerList({merchantId: sessionStorage.getItem("enterpriseId")});
+			const res = await getmerList({merchantId: 1111129709});
 			if (res.code == 0 && res.data.length != 0) {
 				this.dialogFormVisible = true;
 				this.payeeList = res.data;
@@ -116,6 +116,7 @@ export default {
 		},
 		onClose() {
 			this.$refs['formInfo'].resetFields();
+			this.dialogFormVisible = false;
 		},
 		submitForm(formName) {
 			if (this.formInfo.amount > this.availableAmount) {
@@ -128,10 +129,11 @@ export default {
 					const { payee, payeeAccount, bankName, amount, } = this.formInfo;
 					let data = {
 						merchantId: enterpriseId,         // 商户ID
-						payee,
+						payee: payee.supplierName,
 						payeeAccount,
 						bankName,
 						amount,
+						customerType: payee.supplierType,
 					}
 					withdrawl(data).then( res => {
 						console.log(res, 'resresres');
@@ -140,6 +142,7 @@ export default {
 							this.$emit('change');
 							this.$refs[formName].resetFields();
 						}
+						this.dialogFormVisible = false;
 					})
 				} else {
 					console.log('error submit!!');
@@ -149,6 +152,7 @@ export default {
 		},
 		resetForm(formName) {
 			this.$refs[formName].resetFields();
+			this.dialogFormVisible = false;
 		},
 	},
 };

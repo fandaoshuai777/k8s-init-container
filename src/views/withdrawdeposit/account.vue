@@ -51,13 +51,13 @@ export default {
 	},
 	methods: {
 		async init() {
-			const res = await getmerList({merchantId: sessionStorage.getItem("enterpriseId")});
+			const res = await getmerList({merchantId: 1111129709});
 			if (res.code == 0) {
 				this.tableData = res.data;
 			}
 		},
 		handleAdd() {
-			allow_or_not({merchantId: sessionStorage.getItem("enterpriseId")}).then( res => {
+			allow_or_not({merchantId: 1111129709}).then( res => {
 				if (res.code == 0) {
 					if (res.data) {
 						this.show = true;

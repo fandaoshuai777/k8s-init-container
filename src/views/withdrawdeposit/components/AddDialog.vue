@@ -26,7 +26,7 @@
             <img v-if="formInfo.supplierLicenceUrlL" :src="formInfo.supplierLicenceUrlL" class="avatar">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
-          <div style="color: red">请上传JPG、PNG格式文件</div>
+          <div style="color: red">请上传JPG、PNG格式文件，文件不超过2M</div>
         </el-form-item>
         <el-form-item label="描述" prop="type">
           <el-checkbox-group v-model="formInfo.type">
@@ -152,11 +152,10 @@
       uploadAvatar(item) {
         this.$message.warning('图片上传中，请稍等')
         const formData = new FormData()
-        formData.append('multpartFile', item.file)
+        formData.append('multipartFile', item.file)
   
         uploadPhoto(formData).then(res => {
-          console.log(res.data.name, 'res.data.name')
-          this.formInfo.supplierLicenceUrlL = res.data.name
+          this.formInfo.supplierLicenceUrlL = res.data;
           this.$message.success('上传图片成功！')
         }).catch(() => {
           this.$message.error('上传图片失败')
