@@ -3,7 +3,7 @@
     <el-dialog title="添加提现账户" :visible.sync="dialogVisible" :before-close="onClose" :close-on-click-modal="false">
       <el-form ref="formInfo" :rules="rules" :model="formInfo" label-width="100px" size="small" :disabled="disabled">
         <el-form-item label="账户名" prop="supplierName">
-          <el-input v-model="formInfo.supplierName" clearable maxlength="30" />
+          <el-input v-model="formInfo.supplierName" clearable maxlength="30" style="width: 217px;" />
         </el-form-item>
         <el-form-item label="账户类型" prop="supplierType">
           <el-select v-model="formInfo.supplierType" placeholder="请选择活动区域">
@@ -12,9 +12,9 @@
           </el-select>
         </el-form-item>
         <el-form-item label="身份证号" prop="supplierLicenceNo">
-          <el-input v-model="formInfo.supplierLicenceNo" clearable maxlength="18" />
+          <el-input v-model="formInfo.supplierLicenceNo" clearable maxlength="18" style="width: 217px;" />
         </el-form-item>
-        <el-form-item label="身份证正面" prop="supplierLicenceUrlL">
+        <el-form-item label="身份证正面" prop="supplierLicenceUrl">
           <el-upload
             class="avatar-uploader"
             :show-file-list="false"
@@ -23,7 +23,7 @@
             :headers="{ token: token }"
             :before-upload="beforeAvatarUpload"
           >
-            <img v-if="formInfo.supplierLicenceUrlL" :src="formInfo.supplierLicenceUrlL" class="avatar">
+            <img v-if="formInfo.supplierLicenceUrl" :src="formInfo.supplierLicenceUrl" class="avatar">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
           <div style="color: red">请上传JPG、PNG格式文件，文件不超过2M</div>
@@ -66,7 +66,7 @@
           supplierName: '', // 账户名
           supplierType: 'PERSON', // 账户类型 PERSON：个人, BUSINESS:企业
           supplierLicenceNo: '',  // 身份证号
-          supplierLicenceUrlL: '', // 身份证图片地址
+          supplierLicenceUrl: '', // 身份证图片地址
           type: [],
         },
         rules: {
@@ -79,7 +79,7 @@
           supplierType: [
             { required: true, message: '请选择账户类型', trigger: 'change' }
           ],
-          supplierLicenceUrlL: [
+          supplierLicenceUrl: [
            { required: true, message: '请选择图片', trigger: 'change' }
           ],
           type: [
@@ -106,7 +106,7 @@
               supplierName: res.data.supplierName, // 账户名
               supplierType: res.data.supplierType, // 账户类型 PERSON：个人, BUSINESS:企业
               supplierLicenceNo: res.data.supplierLicenceNo,  // 身份证号
-              supplierLicenceUrlL: res.data.supplierLicenceUrlL, // 身份证图片地址
+              supplierLicenceUrl: res.data.supplierLicenceUrl, // 身份证图片地址
               type: ['A'],
             }
           }
@@ -120,13 +120,13 @@
         this.$refs[formName].validate((valid) => {
           if (valid) {
             const { enterpriseId, userId, userName } = JSON.parse(sessionStorage.getItem("loginUser"));
-            const { supplierLicenceNo, supplierLicenceUrlL, supplierName, supplierType, } = this.formInfo;
+            const { supplierLicenceNo, supplierLicenceUrl, supplierName, supplierType, } = this.formInfo;
             let data = {
               merchantId: enterpriseId,         // 商户ID
               operatorId: userId,         // 操作人ID
               operatorName: userName,       // 操作人姓名
               supplierLicenceNo: supplierLicenceNo,  // 身份证号
-              supplierLicenceUrl: supplierLicenceUrlL, //身份证地址
+              supplierLicenceUrl: supplierLicenceUrl, //身份证地址
               supplierName: supplierName, // 账户名称
               supplierType: supplierType, // 账户类型 PERSON：个人, BUSINESS:企业
             }
@@ -155,7 +155,7 @@
         formData.append('multipartFile', item.file)
   
         uploadPhoto(formData).then(res => {
-          this.formInfo.supplierLicenceUrlL = res.data;
+          this.formInfo.supplierLicenceUrl = res.data;
           this.$message.success('上传图片成功！')
         }).catch(() => {
           this.$message.error('上传图片失败')

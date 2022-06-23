@@ -42,6 +42,7 @@
 				<el-form-item label="提现金额:" prop="amount">
 					<el-input v-model="formInfo.amount" autocomplete="off" type="number" style="width: 217px;"></el-input>
 				</el-form-item>
+				<span>备注：提现会产生手续费</span>
 			</el-form>
 			<span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm('formInfo')">确定</el-button>
