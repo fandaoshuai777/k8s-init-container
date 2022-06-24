@@ -30,15 +30,25 @@
 					<el-input v-model="formInfo.payeeAccount" autocomplete="off" type="number" maxlength="30" style="width: 217px;"></el-input>
 				</el-form-item>
 				<el-form-item label="开户行:" prop="bankName">
-					<el-select v-model="formInfo.bankName" filterable placeholder="请选择开户行">
+					<el-select v-model="formInfo.bankName" value-key="id" filterable placeholder="请选择开户行">
 						<el-option
 							v-for="item in selectList"
 							:key="item.value"
 							:label="item.bankName"
-							:value="item.bankCode">
+							:value="item">
 						</el-option>
 					</el-select>
 				</el-form-item>
+				<el-form-item label="卡类型" prop="cardType">
+          <el-select v-model="formInfo.cardType" placeholder="请选择卡类型">
+            <el-option label="借记卡" :value="1"></el-option>
+						<el-option label="贷记卡" :value="2"></el-option>
+						<el-option label="准贷卡" :value="3"></el-option>
+						<el-option label="存折" :value="4"></el-option>
+						<el-option label="单位结算卡" :value="5"></el-option>
+						<el-option label="对公卡" :value="6"></el-option>
+          </el-select>
+        </el-form-item>
 				<el-form-item label="提现金额:" prop="amount">
 					<el-input v-model="formInfo.amount" autocomplete="off" type="number" style="width: 217px;"></el-input>
 				</el-form-item>
@@ -65,7 +75,9 @@ export default {
 				payee: '',
 				payeeAccount: '',
 				bankName: '',
+				receiverBankCode: '',
 				amount: '',
+				cardType: 1,
 			},
 			rules: {
 				payee: [
@@ -96,7 +108,7 @@ export default {
 				spinner: "el-icon-loading",
 				background: "rgba(0, 0, 0, 0.7)",
 			});
-			const res = await getBalance({merchantId: sessionStorage.getItem("enterpriseId")});
+			const res = await getBalance({merchantId: 1111129709});
 			if (res) {
 				this.frozenAmount = res.data.frozenAmount;
 				this.availableAmount = res.data.availableAmount;
@@ -105,7 +117,7 @@ export default {
 			loading.close();
 		},
 		async handleClick() {
-			const res = await getmerList({merchantId: sessionStorage.getItem("enterpriseId")});
+			const res = await getmerList({merchantId: 1111129709});
 			if (res.code == 0 && res.data.length != 0) {
 				this.dialogFormVisible = true;
 				this.payeeList = res.data;
@@ -134,14 +146,17 @@ export default {
 			this.$refs[formName].validate((valid) => {
 				if (valid) {
 					// const { enterpriseId } = JSON.parse(sessionStorage.getItem("loginUser"));
-					const { payee, payeeAccount, bankName, amount, } = this.formInfo;
+					const { payee, payeeAccount, bankName, amount, cardType } = this.formInfo;
 					let data = {
-						merchantId: sessionStorage.getItem("enterpriseId"),         // 商户ID
+						merchantId: 1111129709,         // 商户ID
 						payee: payee.supplierName,
+						supplierId: payee.supplierId,
 						payeeAccount,
-						bankName,
+						bankName: bankName.bankName,
+						receiverBankCode: bankName.bankCode,
 						amount,
 						customerType: payee.supplierType == 'PERSON' ? 1 : 0,
+						cardType,
 					}
 					console.log(data, 'aaaaaaaa')
 					withdrawl(data).then( res => {

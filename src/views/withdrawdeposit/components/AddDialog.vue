@@ -6,7 +6,7 @@
           <el-input v-model="formInfo.supplierName" clearable maxlength="30" style="width: 217px;" />
         </el-form-item>
         <el-form-item label="账户类型" prop="supplierType">
-          <el-select v-model="formInfo.supplierType" placeholder="请选择活动区域">
+          <el-select v-model="formInfo.supplierType" placeholder="请选择账户类型">
             <el-option label="个人" value="PERSON"></el-option>
             <el-option label="企业" value="BUSINESS"></el-option>
           </el-select>
@@ -119,10 +119,10 @@
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            const { userId, userName } = JSON.parse(sessionStorage.getItem("loginUser"));
+            const { enterpriseId, userId, userName } = JSON.parse(sessionStorage.getItem("loginUser"));
             const { supplierLicenceNo, supplierLicenceUrl, supplierName, supplierType, } = this.formInfo;
             let data = {
-              merchantId: sessionStorage.getItem("enterpriseId"),  // 商户ID
+              merchantId: 1111129709,         // 商户ID
               operatorId: userId,         // 操作人ID
               operatorName: userName,       // 操作人姓名
               supplierLicenceNo: supplierLicenceNo,  // 身份证号
