@@ -96,7 +96,7 @@ export default {
 				spinner: "el-icon-loading",
 				background: "rgba(0, 0, 0, 0.7)",
 			});
-			const res = await getBalance({merchantId: 1111129709});
+			const res = await getBalance({merchantId: sessionStorage.getItem("enterpriseId")});
 			if (res) {
 				this.frozenAmount = res.data.frozenAmount;
 				this.availableAmount = res.data.availableAmount;
@@ -105,7 +105,7 @@ export default {
 			loading.close();
 		},
 		async handleClick() {
-			const res = await getmerList({merchantId: 1111129709});
+			const res = await getmerList({merchantId: sessionStorage.getItem("enterpriseId")});
 			if (res.code == 0 && res.data.length != 0) {
 				this.dialogFormVisible = true;
 				this.payeeList = res.data;
@@ -133,10 +133,10 @@ export default {
 			}
 			this.$refs[formName].validate((valid) => {
 				if (valid) {
-					const { enterpriseId } = JSON.parse(sessionStorage.getItem("loginUser"));
+					// const { enterpriseId } = JSON.parse(sessionStorage.getItem("loginUser"));
 					const { payee, payeeAccount, bankName, amount, } = this.formInfo;
 					let data = {
-						merchantId: 1111129709,         // 商户ID
+						merchantId: sessionStorage.getItem("enterpriseId"),         // 商户ID
 						payee: payee.supplierName,
 						payeeAccount,
 						bankName,
