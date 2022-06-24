@@ -35,7 +35,7 @@
 				</el-form-item>
 			</el-form>
 
-			<el-table :data="tableData" border style="width: 100%">
+			<el-table :data="tableData" border style="width: 100%" v-loading="loading">
 				<el-table-column prop="orderNo" label="提现编码" width="180" align="center"> </el-table-column>
 				<el-table-column prop="channelOrderNo" label="交易流水号" width="180" align="center"> </el-table-column>
 				<el-table-column prop="amount" label="提现金额（元）" align="center"> </el-table-column>
@@ -79,6 +79,7 @@ export default {
 			},
       total: 0,
 			selectList: [],
+			loading: false,
 		};
 	},
 	created() {
@@ -87,6 +88,7 @@ export default {
 	},
 	methods: {
 		async init() {
+			this.loading = true;
 			const {time} = this.formInfo;
 			let data = {
 				...this.formInfo,
@@ -94,6 +96,7 @@ export default {
 				endTime: time && time[1]
 			}
 			const res = await getList(data);
+			this.loading = false;
 			if (res.code == 0) {
 				this.tableData = res.data.list;
 				this.total = Number(res.data.total)
@@ -101,6 +104,7 @@ export default {
 		},
 		async getmerList() {
 			const res = await getmerList({merchantId: 1111129709});
+			// const res = await getmerList({merchantId: sessionStorage.getItem("enterpriseId")});
 			if (res.code == 0) {
 				this.selectList = res.data;
 			}

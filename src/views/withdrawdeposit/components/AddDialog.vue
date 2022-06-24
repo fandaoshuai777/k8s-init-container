@@ -122,7 +122,7 @@
             const { enterpriseId, userId, userName } = JSON.parse(sessionStorage.getItem("loginUser"));
             const { supplierLicenceNo, supplierLicenceUrl, supplierName, supplierType, } = this.formInfo;
             let data = {
-              merchantId: enterpriseId,         // 商户ID
+              merchantId: 1111129709,         // 商户ID
               operatorId: userId,         // 操作人ID
               operatorName: userName,       // 操作人姓名
               supplierLicenceNo: supplierLicenceNo,  // 身份证号
@@ -130,6 +130,12 @@
               supplierName: supplierName, // 账户名称
               supplierType: supplierType, // 账户类型 PERSON：个人, BUSINESS:企业
             }
+            const loading = this.$loading({
+              lock: true,
+              text: "loading",
+              spinner: "el-icon-loading",
+              background: "rgba(0, 0, 0, 0.7)",
+            });
             createUser(data).then( res => {
               console.log(res, 'resresres');
               if (res.code == 0) {
@@ -138,6 +144,7 @@
                 this.$emit('change');
                 this.$refs[formName].resetFields();
               }
+              loading.close();
             })
           } else {
             console.log('error submit!!');
@@ -150,15 +157,22 @@
         this.$emit('update:show', false)
       },
       uploadAvatar(item) {
-        this.$message.warning('图片上传中，请稍等')
+        const loading = this.$loading({
+          lock: true,
+          text: "正在上传",
+          spinner: "el-icon-loading",
+          background: "rgba(0, 0, 0, 0.7)",
+        });
         const formData = new FormData()
         formData.append('multipartFile', item.file)
   
         uploadPhoto(formData).then(res => {
           this.formInfo.supplierLicenceUrl = res.data;
           this.$message.success('上传图片成功！')
+          loading.close();
         }).catch(() => {
-          this.$message.error('上传图片失败')
+          this.$message.error('上传图片失败');
+          loading.close();
         })
       },
       beforeAvatarUpload(file) {

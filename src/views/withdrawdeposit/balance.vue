@@ -27,7 +27,7 @@
 					</el-select>
 				</el-form-item>
 				<el-form-item label="提现账号:" prop="payeeAccount">
-					<el-input v-model="formInfo.payeeAccount" autocomplete="off" type="number"  maxlength="30" style="width: 217px;"></el-input>
+					<el-input v-model="formInfo.payeeAccount" autocomplete="off" type="number" maxlength="30" style="width: 217px;"></el-input>
 				</el-form-item>
 				<el-form-item label="开户行:" prop="bankName">
 					<el-select v-model="formInfo.bankName" filterable placeholder="请选择开户行">
@@ -42,7 +42,7 @@
 				<el-form-item label="提现金额:" prop="amount">
 					<el-input v-model="formInfo.amount" autocomplete="off" type="number" style="width: 217px;"></el-input>
 				</el-form-item>
-				<span>备注：提现会产生手续费</span>
+				<span style="font-size: 12px; color: red;">备注：提现将会产生手续费</span>
 			</el-form>
 			<span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm('formInfo')">确定</el-button>
@@ -90,12 +90,19 @@ export default {
 	},
 	methods: {
 		async init() {
-			const res = await getBalance({stationId: 1111129709});
+			const loading = this.$loading({
+				lock: true,
+				text: "loading",
+				spinner: "el-icon-loading",
+				background: "rgba(0, 0, 0, 0.7)",
+			});
+			const res = await getBalance({merchantId: 1111129709});
 			if (res) {
 				this.frozenAmount = res.data.frozenAmount;
 				this.availableAmount = res.data.availableAmount;
 				this.totalAmount = res.data.totalAmount;
 			}
+			loading.close();
 		},
 		async handleClick() {
 			const res = await getmerList({merchantId: 1111129709});
@@ -129,21 +136,22 @@ export default {
 					const { enterpriseId } = JSON.parse(sessionStorage.getItem("loginUser"));
 					const { payee, payeeAccount, bankName, amount, } = this.formInfo;
 					let data = {
-						merchantId: enterpriseId,         // 商户ID
+						merchantId: 1111129709,         // 商户ID
 						payee: payee.supplierName,
 						payeeAccount,
 						bankName,
 						amount,
-						customerType: payee.supplierType,
+						customerType: payee.supplierType == 'PERSON' ? 1 : 0,
 					}
+					console.log(data, 'aaaaaaaa')
 					withdrawl(data).then( res => {
 						console.log(res, 'resresres');
 						if (res.code == 0) {
-							this.$message.success('添加成功');
-							this.$emit('change');
+							this.$message.success('提现成功');
+							this.init();
 							this.$refs[formName].resetFields();
+							this.dialogFormVisible = false;
 						}
-						this.dialogFormVisible = false;
 					})
 				} else {
 					console.log('error submit!!');

@@ -3,7 +3,7 @@
 		<el-card shadow="hover">
 			<div style="margin-bottom: 10px"><el-button type="primary" @click="handleAdd">添加提现账户</el-button></div>
 
-			<el-table :data="tableData" border style="width: 100%">
+			<el-table :data="tableData" border style="width: 100%" v-loading="loading">
 				<el-table-column prop="id" label="编号" width="220" align="center"></el-table-column>
 				<el-table-column prop="supplierName" label="提现账户名" width="220" align="center"></el-table-column>
 				<el-table-column label="账户类型" align="center">
@@ -44,6 +44,7 @@ export default {
 			show: false,
 			tableData: [],
 			disabled: false,
+			loading: false,
 		};
 	},
 	created() {
@@ -51,7 +52,9 @@ export default {
 	},
 	methods: {
 		async init() {
+			this.loading = true;
 			const res = await getmerList({merchantId: 1111129709});
+			this.loading = false;
 			if (res.code == 0) {
 				this.tableData = res.data;
 			}
