@@ -21,11 +21,11 @@
 						<el-option v-for="(item, index) in selectList" :key="index" :label="item.supplierName" :value="item.id"></el-option>
 					</el-select>
 				</el-form-item>
-				<el-form-item label="提现账号">
-					<el-input v-model="formInfo.payeeAccount" type="number" maxlength="30"></el-input>
-				</el-form-item>
 				<el-form-item label="交易流水号" >
 					<el-input v-model="formInfo.channelOrderNo" type="number" maxlength="30"></el-input>
+				</el-form-item>
+				<el-form-item label="提现账号">
+					<el-input v-model="formInfo.payeeAccount" type="number" maxlength="30"></el-input>
 				</el-form-item>
 				<el-form-item label="开户行">
 					<el-input v-model="formInfo.bankName"></el-input>
@@ -35,14 +35,14 @@
 				</el-form-item>
 			</el-form>
 
-			<el-table :data="tableData" border style="width: 100%" v-loading="loading">
+			<el-table :data="tableData" border style="width: 100%" v-loading="loading" :span-method="objectSpanMethod">
 				<el-table-column prop="orderNo" label="提现编码" width="180" align="center"> </el-table-column>
-				<el-table-column prop="channelOrderNo" label="交易流水号" width="180" align="center"> </el-table-column>
+				<el-table-column prop="channelOrderNo" label="交易流水号" width="220" align="center"> </el-table-column>
 				<el-table-column prop="amount" label="提现金额（元）" align="center"> </el-table-column>
-				<el-table-column prop="payeeAccount" label="提现账户" align="center"> </el-table-column>
+				<el-table-column prop="payeeAccount" label="提现账户" width="220" align="center"> </el-table-column>
 				<el-table-column prop="bankName" label="开户行" align="center"> </el-table-column>
 				<el-table-column prop="orderStatus" label="状态" align="center"> </el-table-column>
-				<el-table-column prop="orderTime" label="发起时间" align="center"> </el-table-column>
+				<el-table-column prop="orderTime" label="发起时间" width="220" align="center"> </el-table-column>
 			</el-table>
 			<div class="right">
 				<el-pagination
@@ -122,6 +122,21 @@ export default {
 			this.formInfo.pageSize = value;
 			this.init();
 		},
+		objectSpanMethod({ rowIndex, columnIndex }) {
+			if (columnIndex === 0) {
+				if (rowIndex % 2 === 0) {
+					return {
+						rowspan: 2,
+						colspan: 1
+					};
+				} else {
+					return {
+						rowspan: 0,
+						colspan: 0
+					};
+				}
+			}
+		}
 	},
 };
 </script>
