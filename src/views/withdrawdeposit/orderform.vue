@@ -93,7 +93,8 @@ export default {
 			let data = {
 				...this.formInfo,
 				startTime: time && time[0],
-				endTime: time && time[1]
+				endTime: time && time[1],
+				merchantId: sessionStorage.getItem("enterpriseId"),
 			}
 			const res = await getList(data);
 			this.loading = false;
