@@ -16,7 +16,7 @@
 					<template slot-scope="scope">
 						<span v-if="scope.row.stats == 1101">审核中</span>
 						<span v-else-if="scope.row.stats == 1102">审核失败</span>
-						<span v-else-if="scope.row.stats == 1103">已添加</span>
+						<span v-else-if="scope.row.stats == 1103">已审核</span>
 					</template>
 				</el-table-column>
 				<el-table-column prop="address" label="操作" align="center">

@@ -62,7 +62,7 @@
 	</div>
 </template>
 <script>
-import { getBalance, getmerList, query_bank_info, withdrawl } from "@/api/withdrawdeposit"
+import { getBalance, select_by_merchant_id, query_bank_info, withdrawl } from "@/api/withdrawdeposit"
 
 export default {
 	data() {
@@ -117,7 +117,7 @@ export default {
 			loading.close();
 		},
 		async handleClick() {
-			const res = await getmerList({merchantId: sessionStorage.getItem("enterpriseId")});
+			const res = await select_by_merchant_id({merchantId: sessionStorage.getItem("enterpriseId")});
 			if (res.code == 0 && res.data.length != 0) {
 				this.dialogFormVisible = true;
 				this.payeeList = res.data;
