@@ -119,10 +119,10 @@
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            const { enterpriseId, userId, userName } = JSON.parse(sessionStorage.getItem("loginUser"));
+            const { userId, userName } = JSON.parse(sessionStorage.getItem("loginUser"));
             const { supplierLicenceNo, supplierLicenceUrl, supplierName, supplierType, } = this.formInfo;
             let data = {
-              merchantId: 1111129709,         // 商户ID
+              merchantId: sessionStorage.getItem("enterpriseId"),         // 商户ID
               operatorId: userId,         // 操作人ID
               operatorName: userName,       // 操作人姓名
               supplierLicenceNo: supplierLicenceNo,  // 身份证号

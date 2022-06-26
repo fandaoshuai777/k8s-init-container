@@ -4,7 +4,7 @@ var pubUrl = 'https://merchant-server.cngotone.com';
 if (process.env.NODE_ENV === 'development') {
   pubUrl = 'https://internal.fat.op-api-gateway.wonder-link.net'
 } else if (window.location.hostname.indexOf('-test') !== -1) {
-  pubUrl = 'http://merchant-server-test.c29dd69ffd4404f389adfa283b540267b.cn-hangzhou.alicontainer.com'
+  pubUrl = 'https://internal.fat.op-api-gateway.wonder-link.net'
 } else {
   pubUrl = 'https://merchant-server.cngotone.com'
 }
