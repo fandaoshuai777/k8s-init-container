@@ -30,7 +30,7 @@ export function getList(params) {
   return request({
     url: `${pubUrl}/gotone-payment-api/mp/withdrawl/list`,
     method: 'post',
-    params,
+    data: params,
   })
 }
 // 提现账户列表
@@ -100,7 +100,7 @@ export function uploadPhoto(data) {
 // 可提现账户
 export function select_by_merchant_id(params) {
   return request({
-    url: `${pubUrl}/gotone-settlement-api/mp/supplier_apply/select_by_merchant_id`,
+    url: `${pubUrl}/gotone-settlement-api/mp/supplier_apply/select_withdrawal account_by_merchant_id`,
     method: 'get',
     params,
   })
