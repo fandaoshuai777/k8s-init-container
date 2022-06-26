@@ -102,19 +102,12 @@ export default {
 	},
 	methods: {
 		async init() {
-			const loading = this.$loading({
-				lock: true,
-				text: "loading",
-				spinner: "el-icon-loading",
-				background: "rgba(0, 0, 0, 0.7)",
-			});
 			const res = await getBalance({merchantId: sessionStorage.getItem("enterpriseId")});
 			if (res) {
 				this.frozenAmount = res.data.frozenAmount;
 				this.availableAmount = res.data.availableAmount;
 				this.totalAmount = res.data.totalAmount;
 			}
-			loading.close();
 		},
 		async handleClick() {
 			const res = await select_by_merchant_id({merchantId: sessionStorage.getItem("enterpriseId")});
