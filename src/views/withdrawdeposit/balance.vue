@@ -52,7 +52,7 @@
 				<el-form-item label="提现金额:" prop="amount">
 					<el-input v-model="formInfo.amount" autocomplete="off" type="number" style="width: 217px;"></el-input>
 				</el-form-item>
-				<span style="font-size: 12px; color: red;">备注：提现将会产生手续费</span>
+				<!-- <span style="font-size: 12px; color: red;">备注：提现将会产生手续费</span> -->
 			</el-form>
 			<span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm('formInfo')">确定</el-button>
@@ -139,6 +139,10 @@ export default {
 			this.dialogFormVisible = false;
 		},
 		submitForm(formName) {
+			if (this.formInfo.amount < 0) {
+				this.$message.error('提现金额不能小于0元');
+				return false;
+			}
 			if (this.formInfo.amount > this.availableAmount) {
 				this.$message.error('提现金额不足');
 				return false;
