@@ -22,10 +22,10 @@
 					</el-select>
 				</el-form-item>
 				<el-form-item label="交易流水号" >
-					<el-input v-model="formInfo.channelOrderNo" maxlength="30"></el-input>
+					<el-input v-model="formInfo.channelOrderNo"></el-input>
 				</el-form-item>
 				<el-form-item label="提现账号">
-					<el-input v-model="formInfo.payeeAccount" type="number" maxlength="30"></el-input>
+					<el-input v-model="formInfo.payeeAccount" type="number"></el-input>
 				</el-form-item>
 				<el-form-item label="开户行">
 					<el-input v-model="formInfo.bankName"></el-input>
@@ -128,7 +128,6 @@ export default {
 			this.init();
 		},
 		objectSpanMethod({ row, column, rowIndex, columnIndex }) {
-			console.log(row, column)
 			if (columnIndex === 0) {
 				let tt = 1;
         let i = rowIndex + 1;
