@@ -22,7 +22,7 @@
 					</el-select>
 				</el-form-item>
 				<el-form-item label="交易流水号" >
-					<el-input v-model="formInfo.channelOrderNo" type="number" maxlength="30"></el-input>
+					<el-input v-model="formInfo.channelOrderNo" maxlength="30"></el-input>
 				</el-form-item>
 				<el-form-item label="提现账号">
 					<el-input v-model="formInfo.payeeAccount" type="number" maxlength="30"></el-input>

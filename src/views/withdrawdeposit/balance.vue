@@ -27,7 +27,7 @@
 					</el-select>
 				</el-form-item>
 				<el-form-item label="提现账号:" prop="payeeAccount">
-					<el-input v-model="formInfo.payeeAccount" autocomplete="off" type="number" maxlength="30" style="width: 217px;"></el-input>
+					<el-input v-model="formInfo.payeeAccount" autocomplete="off" type="number" maxlength="20" style="width: 217px;"></el-input>
 				</el-form-item>
 				<el-form-item label="开户行:" prop="bankName">
 					<el-select v-model="formInfo.bankName" value-key="id" filterable placeholder="请选择开户行">
@@ -50,7 +50,7 @@
           </el-select>
         </el-form-item>
 				<el-form-item label="提现金额:" prop="amount">
-					<el-input v-model="formInfo.amount" autocomplete="off" type="number" style="width: 217px;"></el-input>
+					<el-input v-model="formInfo.amount" autocomplete="off" type="number" style="width: 217px;" @input="inputChange"></el-input>
 				</el-form-item>
 				<!-- <span style="font-size: 12px; color: red;">备注：提现将会产生手续费</span> -->
 			</el-form>
@@ -176,6 +176,13 @@ export default {
 			this.$refs[formName].resetFields();
 			this.dialogFormVisible = false;
 		},
+		inputChange(val) {
+			if (val > this.availableAmount) {
+				this.formInfo.amount = this.availableAmount;
+			} else {
+				this.formInfo.amount = val;
+			}
+		}
 	},
 };
 </script>

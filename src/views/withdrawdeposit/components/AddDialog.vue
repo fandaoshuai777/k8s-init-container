@@ -3,7 +3,7 @@
     <el-dialog title="添加提现账户" :visible.sync="dialogVisible" :before-close="onClose" :close-on-click-modal="false">
       <el-form ref="formInfo" :rules="rules" :model="formInfo" label-width="100px" size="small" :disabled="disabled">
         <el-form-item label="账户名" prop="supplierName">
-          <el-input v-model="formInfo.supplierName" clearable maxlength="30" style="width: 217px;" />
+          <el-input v-model="formInfo.supplierName" clearable maxlength="50" style="width: 217px;" />
         </el-form-item>
         <el-form-item label="账户类型" prop="supplierType">
           <el-select v-model="formInfo.supplierType" placeholder="请选择账户类型" @change="selectChange">
