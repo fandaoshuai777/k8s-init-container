@@ -18,7 +18,7 @@
 
 				<el-form-item label="提现账户" >
 					<el-select v-model="formInfo.payee">
-						<el-option v-for="(item, index) in selectList" :key="index" :label="item.supplierName" :value="item.id"></el-option>
+						<el-option v-for="(item, index) in selectList" :key="index" :label="item.supplierName" :value="item.supplierName"></el-option>
 					</el-select>
 				</el-form-item>
 				<el-form-item label="交易流水号" >
@@ -61,7 +61,7 @@
 	</div>
 </template>
 <script>
-import { getList, getmerList } from "@/api/withdrawdeposit";
+import { getList, select_by_merchant_id } from "@/api/withdrawdeposit";
 
 export default {
 	data() {
@@ -110,8 +110,8 @@ export default {
 		},
 		async getmerList() {
 			// const res = await getmerList({merchantId: 1111129709});
-			const res = await getmerList({merchantId: sessionStorage.getItem("merchantId")});
-			if (res.code == 0) {
+			const res = await select_by_merchant_id({merchantId: sessionStorage.getItem("merchantId")});
+			if (res.code == 0) { 
 				this.selectList = res.data;
 			}
 		},

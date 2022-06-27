@@ -6,7 +6,7 @@
           <el-input v-model="formInfo.supplierName" clearable maxlength="30" style="width: 217px;" />
         </el-form-item>
         <el-form-item label="账户类型" prop="supplierType">
-          <el-select v-model="formInfo.supplierType" placeholder="请选择账户类型">
+          <el-select v-model="formInfo.supplierType" placeholder="请选择账户类型" @change="selectChange">
             <el-option label="个人" value="PERSON"></el-option>
             <el-option label="企业" value="BUSINESS"></el-option>
           </el-select>
@@ -15,8 +15,8 @@
           <el-form-item v-if="formInfo.supplierType == 'PERSON'" label="身份证号" prop="supplierLicenceNo">
             <el-input v-model="formInfo.supplierLicenceNo" clearable maxlength="18" style="width: 217px;" />
           </el-form-item>
-          <el-form-item v-else label="营业执照号" prop="license">
-            <el-input v-model="formInfo.supplierLicenceNo" clearable maxlength="15" style="width: 217px;" />
+          <el-form-item v-if="formInfo.supplierType == 'BUSINESS'" label="营业执照号" prop="license">
+            <el-input v-model="formInfo.license" clearable maxlength="15" style="width: 217px;" />
           </el-form-item>
         </div>
         <el-form-item :label="formInfo.supplierType == 'PERSON' ? '身份证正面': '营业执照'" prop="supplierLicenceUrl">
@@ -73,6 +73,7 @@
           supplierLicenceNo: '',  // 身份证号
           supplierLicenceUrl: '', // 身份证图片地址
           type: [],
+          license: '',
         },
         rules: {
           supplierName: [
@@ -82,7 +83,7 @@
             { required: true, validator: checkSUP, trigger: 'blur' }
           ],
           license: [
-            { required: true, message: '请选择营业执照', trigger: 'blur' }
+            { required: true, message: '请选择营业执照', trigger: 'change' }
           ],
           supplierType: [
             { required: true, message: '请选择账户类型', trigger: 'change' }
@@ -116,6 +117,7 @@
               supplierLicenceNo: res.data.supplierLicenceNo,  // 身份证号
               supplierLicenceUrl: res.data.supplierLicenceUrl, // 身份证图片地址
               type: ['A'],
+              license: res.data.supplierLicenceNo, // 营业执照
             }
           }
         })
@@ -128,12 +130,12 @@
         this.$refs[formName].validate((valid) => {
           if (valid) {
             const { userId, userName } = JSON.parse(sessionStorage.getItem("loginUser"));
-            const { supplierLicenceNo, supplierLicenceUrl, supplierName, supplierType, } = this.formInfo;
+            const { supplierLicenceNo, supplierLicenceUrl, supplierName, supplierType, license } = this.formInfo;
             let data = {
               merchantId: sessionStorage.getItem("merchantId"),         // 商户ID
               operatorId: userId,         // 操作人ID
               operatorName: userName,       // 操作人姓名
-              supplierLicenceNo: supplierLicenceNo,  // 身份证号
+              supplierLicenceNo: supplierType == 'PERSON' ? supplierLicenceNo : license,  // 身份证号或者营业执照号
               supplierLicenceUrl: supplierLicenceUrl, //身份证地址
               supplierName: supplierName, // 账户名称
               supplierType: supplierType, // 账户类型 PERSON：个人, BUSINESS:企业
@@ -180,6 +182,10 @@
         }
         return isTypeTrue && isLt2M
       },
+      selectChange() {
+        this.formInfo.supplierLicenceNo = '';
+        this.formInfo.license = '';
+      }
     },
   }
 </script>

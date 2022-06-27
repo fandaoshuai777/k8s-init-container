@@ -7,7 +7,7 @@
 			</div>
 			<div class="card">
 				<div>可提现金额：</div>
-				<div>{{availableAmount}}元</div>
+				<div>{{availableAmount}}元（已扣除{{fee}}元手续费）</div>
 			</div>
 			<div class="card">
 				<div>冻结总额：</div>
@@ -19,7 +19,7 @@
 		<el-dialog title="提现申请" :visible.sync="dialogFormVisible" :before-close="onClose" :close-on-click-modal="false" width="30%">
 			<el-form ref="formInfo" :rules="rules" :model="formInfo" label-width="100px">
 				<el-form-item label="可提现金额:">
-					<span>{{availableAmount}}元</span>
+					<span>{{availableAmount}}元（已扣除{{fee}}元手续费）</span>
 				</el-form-item>
 				<el-form-item label="提现账户:" prop="payee">
 					<el-select v-model="formInfo.payee" value-key="id">
@@ -71,6 +71,7 @@ export default {
 			availableAmount: 0,
 			totalAmount: 0,
 			dialogFormVisible: false,
+			fee: 0,
 			formInfo: {
 				payee: '',
 				payeeAccount: '',
@@ -107,6 +108,7 @@ export default {
 				this.frozenAmount = res.data.frozenAmount;
 				this.availableAmount = res.data.availableAmount;
 				this.totalAmount = res.data.totalAmount;
+				this.fee = res.data.fee;
 			}
 		},
 		async handleClick() {
