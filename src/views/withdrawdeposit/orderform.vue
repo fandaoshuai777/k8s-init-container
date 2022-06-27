@@ -36,13 +36,13 @@
 			</el-form>
 
 			<el-table :data="tableData" border style="width: 100%" v-loading="loading" :span-method="objectSpanMethod">
-				<el-table-column prop="orderNo" label="提现编码" width="180" align="center"> </el-table-column>
-				<el-table-column prop="channelOrderNo" label="交易流水号" width="220" align="center"> </el-table-column>
-				<el-table-column prop="amount" label="提现金额（元）" align="center"> </el-table-column>
-				<el-table-column prop="payeeAccount" label="提现账户" width="220" align="center"> </el-table-column>
-				<el-table-column prop="bankName" label="开户行" align="center"> </el-table-column>
-				<el-table-column prop="orderStatus" label="状态" align="center"> </el-table-column>
-				<el-table-column prop="orderTime" label="发起时间" width="220" align="center"> </el-table-column>
+				<el-table-column prop="orderNo" label="提现编码" width="250" align="center"></el-table-column>
+				<el-table-column prop="channelOrderNo" label="交易流水号" width="250" align="center"></el-table-column>
+				<el-table-column prop="amount" label="提现金额（元）" align="center"></el-table-column>
+				<el-table-column prop="payeeAccount" label="提现账户" width="220" align="center"></el-table-column>
+				<el-table-column prop="bankName" label="开户行" align="center"></el-table-column>
+				<el-table-column prop="orderStatus" label="状态" align="center"></el-table-column>
+				<el-table-column prop="orderTime" label="发起时间" width="220" align="center"></el-table-column>
 			</el-table>
 			<div class="right">
 				<el-pagination
@@ -94,18 +94,23 @@ export default {
 				...this.formInfo,
 				startTime: time && time[0],
 				endTime: time && time[1],
-				merchantId: sessionStorage.getItem("enterpriseId"),
+				merchantId: sessionStorage.getItem("merchantId"),
 			}
+			
 			const res = await getList(data);
 			this.loading = false;
 			if (res.code == 0) {
-				this.tableData = res.data.list;
+				var arr = [];
+				res.data.list.map( item => {
+					arr = [...item.withdrawaInfoList, ...arr]
+				})
+				this.tableData = arr;
 				this.total = Number(res.data.total)
 			}
 		},
 		async getmerList() {
 			// const res = await getmerList({merchantId: 1111129709});
-			const res = await getmerList({merchantId: sessionStorage.getItem("enterpriseId")});
+			const res = await getmerList({merchantId: sessionStorage.getItem("merchantId")});
 			if (res.code == 0) {
 				this.selectList = res.data;
 			}
@@ -122,19 +127,31 @@ export default {
 			this.formInfo.pageSize = value;
 			this.init();
 		},
-		objectSpanMethod({ rowIndex, columnIndex }) {
+		objectSpanMethod({ row, column, rowIndex, columnIndex }) {
+			console.log(row, column)
 			if (columnIndex === 0) {
-				if (rowIndex % 2 === 0) {
-					return {
-						rowspan: 2,
-						colspan: 1
-					};
-				} else {
-					return {
-						rowspan: 0,
-						colspan: 0
-					};
-				}
+				let tt = 1;
+        let i = rowIndex + 1;
+        let strCmp = this.tableData[rowIndex].orderNo;
+        if (rowIndex != 0) {
+          if (this.tableData[rowIndex - 1].orderNo == strCmp) {
+            return {
+              rowspan: 0,
+              colspan: 0,
+            };
+          }
+        }
+        while (i < this.tableData.length) {
+          if (this.tableData[i++].orderNo == strCmp) {
+            tt++;
+          } else {
+            break;
+          }
+        }
+        return {
+          rowspan: tt,
+          colspan: 1,
+        };
 			}
 		}
 	},

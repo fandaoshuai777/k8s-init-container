@@ -102,6 +102,7 @@ export default {
 			this.userPhoto = res.result.userPhoto;
 			window.sessionStorage.setItem('enterpriseId',res.result.enterpriseId)
 			window.sessionStorage.setItem('loginUser', JSON.stringify(res.result))
+			window.sessionStorage.setItem('merchantId',res.result.merchantId)
 		});
 	},
 	mounted() {

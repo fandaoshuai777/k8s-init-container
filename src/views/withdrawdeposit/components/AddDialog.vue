@@ -11,10 +11,15 @@
             <el-option label="企业" value="BUSINESS"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="身份证号" prop="supplierLicenceNo">
-          <el-input v-model="formInfo.supplierLicenceNo" clearable maxlength="18" style="width: 217px;" />
-        </el-form-item>
-        <el-form-item label="身份证正面" prop="supplierLicenceUrl">
+        <div>
+          <el-form-item v-if="formInfo.supplierType == 'PERSON'" label="身份证号" prop="supplierLicenceNo">
+            <el-input v-model="formInfo.supplierLicenceNo" clearable maxlength="18" style="width: 217px;" />
+          </el-form-item>
+          <el-form-item v-else label="营业执照号" prop="license">
+            <el-input v-model="formInfo.supplierLicenceNo" clearable maxlength="15" style="width: 217px;" />
+          </el-form-item>
+        </div>
+        <el-form-item :label="formInfo.supplierType == 'PERSON' ? '身份证正面': '营业执照'" prop="supplierLicenceUrl">
           <el-upload
             class="avatar-uploader"
             :show-file-list="false"
@@ -76,6 +81,9 @@
           supplierLicenceNo: [
             { required: true, validator: checkSUP, trigger: 'blur' }
           ],
+          license: [
+            { required: true, message: '请选择营业执照', trigger: 'blur' }
+          ],
           supplierType: [
             { required: true, message: '请选择账户类型', trigger: 'change' }
           ],
@@ -122,7 +130,7 @@
             const { userId, userName } = JSON.parse(sessionStorage.getItem("loginUser"));
             const { supplierLicenceNo, supplierLicenceUrl, supplierName, supplierType, } = this.formInfo;
             let data = {
-              merchantId: sessionStorage.getItem("enterpriseId"),         // 商户ID
+              merchantId: sessionStorage.getItem("merchantId"),         // 商户ID
               operatorId: userId,         // 操作人ID
               operatorName: userName,       // 操作人姓名
               supplierLicenceNo: supplierLicenceNo,  // 身份证号

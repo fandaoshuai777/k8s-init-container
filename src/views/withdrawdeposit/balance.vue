@@ -102,7 +102,7 @@ export default {
 	},
 	methods: {
 		async init() {
-			const res = await getBalance({merchantId: sessionStorage.getItem("enterpriseId")});
+			const res = await getBalance({merchantId: sessionStorage.getItem("merchantId")});
 			if (res) {
 				this.frozenAmount = res.data.frozenAmount;
 				this.availableAmount = res.data.availableAmount;
@@ -110,7 +110,7 @@ export default {
 			}
 		},
 		async handleClick() {
-			const res = await select_by_merchant_id({merchantId: sessionStorage.getItem("enterpriseId")});
+			const res = await select_by_merchant_id({merchantId: sessionStorage.getItem("merchantId")});
 			if (res.code == 0 && res.data.length != 0) {
 				this.dialogFormVisible = true;
 				this.payeeList = res.data;
@@ -144,7 +144,7 @@ export default {
 				if (valid) {
 					const { payee, payeeAccount, bankName, amount, cardType } = this.formInfo;
 					let data = {
-						merchantId: sessionStorage.getItem("enterpriseId"),         // 商户ID
+						merchantId: sessionStorage.getItem("merchantId"),         // 商户ID
 						payee: payee.supplierName,
 						supplierId: payee.supplierId,
 						payeeAccount,

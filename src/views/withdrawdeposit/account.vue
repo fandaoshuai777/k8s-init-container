@@ -53,14 +53,14 @@ export default {
 	methods: {
 		async init() {
 			this.loading = true;
-			const res = await getmerList({merchantId: sessionStorage.getItem("enterpriseId")});
+			const res = await getmerList({merchantId: sessionStorage.getItem("merchantId")});
 			this.loading = false;
 			if (res.code == 0) {
 				this.tableData = res.data;
 			}
 		},
 		handleAdd() {
-			allow_or_not({merchantId: sessionStorage.getItem("enterpriseId")}).then( res => {
+			allow_or_not({merchantId: sessionStorage.getItem("merchantId")}).then( res => {
 				if (res.code == 0) {
 					if (res.data) {
 						this.show = true;
