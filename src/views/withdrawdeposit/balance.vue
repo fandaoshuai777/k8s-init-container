@@ -55,7 +55,7 @@
 				<!-- <span style="font-size: 12px; color: red;">备注：提现将会产生手续费</span> -->
 			</el-form>
 			<span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm('formInfo')">确定</el-button>
+        <el-button type="primary" @click="submitForm('formInfo')" :loading="loading">确定</el-button>
         <el-button @click="resetForm('formInfo')">取消</el-button>
       </span>
 		</el-dialog>
@@ -80,6 +80,7 @@ export default {
 				amount: '',
 				cardType: 1,
 			},
+			loading: false,
 			rules: {
 				payee: [
 					{ required: true, message: '请输入提现账户', trigger: 'blur' }
@@ -144,6 +145,7 @@ export default {
 			}
 			this.$refs[formName].validate((valid) => {
 				if (valid) {
+					this.loading = true;
 					const { payee, payeeAccount, bankName, amount, cardType } = this.formInfo;
 					let data = {
 						merchantId: sessionStorage.getItem("merchantId"),         // 商户ID
@@ -164,8 +166,12 @@ export default {
 							this.init();
 							this.$refs[formName].resetFields();
 							this.dialogFormVisible = false;
+							this.loading = false;
 						}
 					})
+					setTimeout( () => {
+              this.loading = false;
+            }, 4000)
 				} else {
 					console.log('error submit!!');
 					return false;

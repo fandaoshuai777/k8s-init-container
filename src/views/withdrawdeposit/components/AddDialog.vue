@@ -40,7 +40,7 @@
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button v-if="!disabled" type="primary" @click="submitForm('formInfo')">确定</el-button>
+        <el-button v-if="!disabled" type="primary" :loading="loading" @click="submitForm('formInfo')">确定</el-button>
         <el-button @click="resetForm('formInfo')">取消</el-button>
       </span>
     </el-dialog>
@@ -75,6 +75,7 @@
           type: [],
           license: '',
         },
+        loading: false,
         rules: {
           supplierName: [
             { required: true, message: '请输入账户名', trigger: 'blur' }
@@ -129,6 +130,7 @@
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
+            this.loading = true;
             const { userId, userName } = JSON.parse(sessionStorage.getItem("loginUser"));
             const { supplierLicenceNo, supplierLicenceUrl, supplierName, supplierType, license } = this.formInfo;
             let data = {
@@ -147,8 +149,12 @@
                 this.$emit('update:show', false);
                 this.$emit('change');
                 this.$refs[formName].resetFields();
+                this.loading = false;
               }
             })
+            setTimeout( () => {
+              this.loading = false;
+            }, 4000)
           } else {
             console.log('error submit!!');
             return false;
