@@ -56,7 +56,7 @@ export default {
 			const res = await getmerList({merchantId: sessionStorage.getItem("merchantId")});
 			this.loading = false;
 			if (res.code == 0) {
-				this.tableData = res.data;
+				this.tableData = res.data.sort( (a, b) => {return b.stats - a.stats });
 			}
 		},
 		handleAdd() {
