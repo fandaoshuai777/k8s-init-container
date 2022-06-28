@@ -22,15 +22,15 @@
 					<span>{{availableAmount}}元（已扣除{{fee}}元手续费）</span>
 				</el-form-item>
 				<el-form-item label="提现账户:" prop="payee">
-					<el-select v-model="formInfo.payee" value-key="id">
+					<el-select v-model="formInfo.payee" value-key="id" style="width: 400px;">
 						<el-option v-for="(item, index) in payeeList" :key="index" :label="item.supplierName" :value="item"></el-option>
 					</el-select>
 				</el-form-item>
 				<el-form-item label="提现账号:" prop="payeeAccount">
-					<el-input v-model="formInfo.payeeAccount" autocomplete="off" type="number" maxlength="20" style="width: 217px;"></el-input>
+					<el-input v-model="formInfo.payeeAccount" autocomplete="off" type="number" maxlength="20" style="width: 400px;"></el-input>
 				</el-form-item>
 				<el-form-item label="开户行:" prop="bankName">
-					<el-select v-model="formInfo.bankName" value-key="id" filterable placeholder="请选择开户行">
+					<el-select v-model="formInfo.bankName" value-key="id" filterable placeholder="请选择开户行"  style="width: 400px;">
 						<el-option
 							v-for="item in selectList"
 							:key="item.value"
@@ -40,7 +40,7 @@
 					</el-select>
 				</el-form-item>
 				<el-form-item label="卡类型" prop="cardType">
-          <el-select v-model="formInfo.cardType" placeholder="请选择卡类型">
+          <el-select v-model="formInfo.cardType" placeholder="请选择卡类型"  style="width: 400px;">
             <el-option label="借记卡" :value="1"></el-option>
 						<el-option label="贷记卡" :value="2"></el-option>
 						<!-- <el-option label="准贷卡" :value="3"></el-option>
@@ -50,7 +50,7 @@
           </el-select>
         </el-form-item>
 				<el-form-item label="提现金额:" prop="amount">
-					<el-input v-model="formInfo.amount" autocomplete="off" type="number" style="width: 217px;" @input="inputChange"></el-input>
+					<el-input v-model="formInfo.amount" autocomplete="off" type="number" style="width: 400px;" @input="inputChange"></el-input>
 				</el-form-item>
 				<!-- <span style="font-size: 12px; color: red;">备注：提现将会产生手续费</span> -->
 			</el-form>
