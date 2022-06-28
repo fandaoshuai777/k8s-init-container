@@ -35,7 +35,7 @@
         </el-form-item>
         <el-form-item label="描述" prop="type">
           <el-checkbox-group v-model="formInfo.type">
-            <el-checkbox label="A" name="type">最多添加3个对公、5个对私账户（添加成功后，暂不支持修改与删除，请谨慎操作！）</el-checkbox>
+            <el-checkbox label="A" name="type"><span style="color: red;">最多添加3个对公、5个对私账户（添加成功后，暂不支持修改与删除，请谨慎操作！）</span></el-checkbox>
           </el-checkbox-group>
         </el-form-item>
       </el-form>

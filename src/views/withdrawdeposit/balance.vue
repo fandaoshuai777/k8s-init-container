@@ -2,15 +2,15 @@
 	<div>
 		<el-card class="box-card" shadow="hover">
 			<div class="card">
-				<div>账户总额：</div>
+				<div style="width: 90px;">账户总额：</div>
 				<div>{{totalAmount}}元</div>
 			</div>
 			<div class="card">
-				<div>可提现金额：</div>
+				<div style="width: 90px;">可提现金额：</div>
 				<div>{{availableAmount}}元（已扣除{{fee}}元手续费）</div>
 			</div>
 			<div class="card">
-				<div>冻结总额：</div>
+				<div style="width: 90px;">冻结总额：</div>
 				<div>{{frozenAmount}}元</div>
 			</div>
 			<el-button @click="handleClick">提现</el-button>
