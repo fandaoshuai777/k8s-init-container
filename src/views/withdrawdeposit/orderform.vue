@@ -102,7 +102,7 @@ export default {
 			if (res.code == 0) {
 				var arr = [];
 				res.data.list.map( item => {
-					arr = [...item.withdrawaInfoList, ...arr]
+					arr = [...arr, ...item.withdrawaInfoList]
 				})
 				this.tableData = arr;
 				this.total = Number(res.data.total)

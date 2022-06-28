@@ -43,9 +43,9 @@
           <el-select v-model="formInfo.cardType" placeholder="请选择卡类型">
             <el-option label="借记卡" :value="1"></el-option>
 						<el-option label="贷记卡" :value="2"></el-option>
-						<el-option label="准贷卡" :value="3"></el-option>
+						<!-- <el-option label="准贷卡" :value="3"></el-option>
 						<el-option label="存折" :value="4"></el-option>
-						<el-option label="单位结算卡" :value="5"></el-option>
+						<el-option label="单位结算卡" :value="5"></el-option> -->
 						<el-option label="对公卡" :value="6"></el-option>
           </el-select>
         </el-form-item>
