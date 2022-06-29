@@ -135,8 +135,8 @@ export default {
 			this.dialogFormVisible = false;
 		},
 		submitForm(formName) {
-			if (this.formInfo.amount < 0) {
-				this.$message.error('提现金额不能小于0元');
+			if (this.formInfo.amount <= 0) {
+				this.$message.error('提现金额应大于0元');
 				return false;
 			}
 			if (this.formInfo.amount > this.availableAmount) {
