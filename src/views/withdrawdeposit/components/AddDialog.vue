@@ -1,6 +1,6 @@
 <template>
   <div class="diolog" v-if="show">
-    <el-dialog title="添加提现账户" :visible.sync="dialogVisible" :before-close="onClose" :close-on-click-modal="false">
+    <el-dialog title="添加提现账户" :visible.sync="dialogVisible" :before-close="onClose" :close-on-click-modal="false" width="30%">
       <el-form ref="formInfo" :rules="rules" :model="formInfo" label-width="100px" size="small" :disabled="disabled">
         <el-form-item label="账户名" prop="supplierName">
           <el-input v-model="formInfo.supplierName" clearable maxlength="50" style="width: 217px;" />
@@ -31,13 +31,15 @@
             <img v-if="formInfo.supplierLicenceUrl" :src="formInfo.supplierLicenceUrl" class="avatar">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
-          <div style="color: red">请上传JPG、PNG格式文件，文件不超过2M</div>
+          <div style="color: red; font-size: 12px;">请上传JPG、PNG格式文件不超过2M</div>
         </el-form-item>
-        <el-form-item label="描述" prop="type">
+        <div style="margin-left: 15px;">
           <el-checkbox-group v-model="formInfo.type">
-            <el-checkbox label="A" name="type"><span style="color: red;">最多添加3个对公、5个对私账户（添加成功后，暂不支持修改与删除，请谨慎操作！）</span></el-checkbox>
+            <el-checkbox label="A" name="type" style="display: flex; align-items: center;">
+              <span style="color: red; width: 217px;font-size: 13px;">最多添加3个对公、5个对私账户(添加成功后,暂<br>不支持修改与删除，请谨慎操作！)</span>
+            </el-checkbox>
           </el-checkbox-group>
-        </el-form-item>
+        </div>
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button v-if="!disabled" type="primary" :loading="loading" @click="submitForm('formInfo')">确定</el-button>

@@ -19,6 +19,7 @@
 
 				<el-form-item label="提现账户" >
 					<el-select v-model="formInfo.payee" clearable>
+						<el-option label="全部" value="" />
 						<el-option v-for="(item, index) in selectList" :key="index" :label="item.supplierName" :value="item.supplierName"></el-option>
 					</el-select>
 				</el-form-item>
