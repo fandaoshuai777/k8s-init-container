@@ -3,7 +3,7 @@
 		<el-card shadow="hover">
 			<el-form  :model="formInfo"  :inline="true" size="small" >
 				<el-form-item label="提现编码" >
-					<el-input v-model="formInfo.orderNo" type="number" maxlength="30"></el-input>
+					<el-input v-model="formInfo.orderNo" type="number" maxlength="30" clearable></el-input>
 				</el-form-item>
 				<el-form-item label="发起时间" >
 					<el-date-picker
@@ -18,18 +18,18 @@
 				</el-form-item>
 
 				<el-form-item label="提现账户" >
-					<el-select v-model="formInfo.payee">
+					<el-select v-model="formInfo.payee" clearable>
 						<el-option v-for="(item, index) in selectList" :key="index" :label="item.supplierName" :value="item.supplierName"></el-option>
 					</el-select>
 				</el-form-item>
 				<el-form-item label="交易流水号" >
-					<el-input v-model="formInfo.channelOrderNo"></el-input>
+					<el-input v-model="formInfo.channelOrderNo" clearable></el-input>
 				</el-form-item>
 				<el-form-item label="提现账号">
-					<el-input v-model="formInfo.payeeAccount" type="number"></el-input>
+					<el-input v-model="formInfo.payeeAccount" type="number" clearable></el-input>
 				</el-form-item>
 				<el-form-item label="开户行">
-					<el-input v-model="formInfo.bankName"></el-input>
+					<el-input v-model="formInfo.bankName" clearable></el-input>
 				</el-form-item>
 				<el-form-item >
 					<el-button type="primary" size="small" @click="onSubmit">查询</el-button>
@@ -40,7 +40,8 @@
 				<el-table-column prop="orderNo" label="提现编码" width="250" align="center"></el-table-column>
 				<el-table-column prop="channelOrderNo" label="交易流水号" width="250" align="center"></el-table-column>
 				<el-table-column prop="amount" label="提现金额（元）" align="center"></el-table-column>
-				<el-table-column prop="payeeAccount" label="提现账户" width="220" align="center"></el-table-column>
+				<el-table-column prop="payee" label="提现账户" width="220" align="center"></el-table-column>
+				<el-table-column prop="payeeAccount" label="提现账号" width="220" align="center"></el-table-column>
 				<el-table-column prop="bankName" label="开户行" align="center"></el-table-column>
 				<el-table-column prop="orderStatus" label="状态" align="center"></el-table-column>
 				<el-table-column prop="orderTime" label="发起时间" width="220" align="center"></el-table-column>
