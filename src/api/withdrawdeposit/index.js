@@ -6,7 +6,7 @@ if (process.env.NODE_ENV === 'development') {
 } else if (window.location.hostname.indexOf('-test') !== -1) {
   pubUrl = 'https://internal.fat.op-api-gateway.wonder-link.net'
 } else {
-  pubUrl = 'https://merchant-server.cngotone.com'
+  pubUrl = 'https://op-api-gateway.wonder-link.net/gotone-payment-api'
 }
 
 // 提现余额
