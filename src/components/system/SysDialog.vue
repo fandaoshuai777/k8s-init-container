@@ -3,7 +3,7 @@
     top="5vh"
     :title="title"
     :visible.sync="visible"
-    :width="width+'vw'"
+    :width="width+'px'"
     :before-close="onClose"
     :close-on-click-modal="false"
   >

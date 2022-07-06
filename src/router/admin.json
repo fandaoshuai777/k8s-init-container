@@ -159,6 +159,109 @@
 					}
 				}
 			]
+		},
+		{
+			"path": "/orderManagement",
+			"name": "OrderManagement",
+			"component": "layout/routerView/parent",
+			"redirect": "orderManagement",
+			"meta": {
+				"title": "订单管理",
+				"isLink": "",
+				"isKeepAlive": true,
+				"isAffix": false,
+				"isIframe": false,
+				"icon": "el-icon-document"
+			},
+			"children": [
+				{
+					"path": "/orderManagement/refueling",
+					"name": "refueling",
+					"component": "orderManagement/refueling",
+					"meta": {
+						"title": "一键加油订单",
+						"isLink": "",
+						"isKeepAlive": true,
+						"isAffix": false,
+						"isIframe": false,
+						"roles": [
+							"admin",
+							"common"
+						],
+						"icon": "el-icon-thumb"
+					}
+				},
+				{
+					"path": "/orderManagement/quickPass",
+					"name": "quickPass",
+					"component": "orderManagement/quickPass",
+					"meta": {
+						"title": "闪付订单",
+						"isLink": "",
+						"isKeepAlive": true,
+						"isAffix": false,
+						"isIframe": false,
+						"roles": [
+							"admin",
+							"common"
+						],
+						"icon": "el-icon-edit"
+					}
+				},
+				{
+					"path": "/orderManagement/stored",
+					"name": "stored",
+					"component": "orderManagement/stored",
+					"meta": {
+						"title": "储值管理",
+						"isLink": "",
+						"isKeepAlive": true,
+						"isAffix": false,
+						"isIframe": false,
+						"roles": [
+							"admin",
+							"common"
+						],
+						"icon": "el-icon-s-tools"
+					}
+				}
+			]
+		},
+		{
+			"path": "/settlementManagement",
+			"name": "SettlementManagement",
+			"component": "layout/routerView/parent",
+			"redirect": "settlementManagement",
+			"meta": {
+				"title": "结算管理",
+				"isLink": "",
+				"isKeepAlive": true,
+				"isAffix": false,
+				"isIframe": false,
+				"isHide": true,
+				"hidden": true,
+				"icon": "iconfont icon-crew_feature"
+			},
+			"children": [
+				{
+					"path": "/settlementManagement/settlementDay",
+					"name": "balance",
+					"component": "settlementManagement/settlementDay",
+					"meta": {
+						"title": "结算日账单",
+						"isLink": "",
+						"isKeepAlive": true,
+						"isAffix": false,
+						"isIframe": false,
+						"roles": [
+							"admin",
+							"common"
+						],
+						"icon": "el-icon-thumb"
+					}
+				}
+
+			]
 		}
 	]
 }

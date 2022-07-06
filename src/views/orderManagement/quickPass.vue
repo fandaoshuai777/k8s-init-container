@@ -1,0 +1,436 @@
+<template>
+	<div class="system-role-container">
+		<el-card shadow="hover">
+			<div>
+				<el-form :model="formInline" label-width="95px" :inline="true" label-position="right">
+					<el-form-item label="订单号">
+						<el-input v-model="formInline.thirdOrderId" placeholder="请输入订单号" clearable></el-input>
+					</el-form-item>
+					<el-form-item label="油品类型">
+						<el-select v-model="formInline.oilType" placeholder="请选择">
+							<el-option label="全部" value />
+							<el-option label="未确认" :value="1" />
+							<el-option label="已确认" :value="2" />
+							<el-option label="已结算" :value="3" />
+						</el-select>
+					</el-form-item>
+					<el-form-item label="手机号">
+						<el-input v-model="formInline.userPhone" placeholder="请输入订单号" clearable></el-input>
+					</el-form-item>
+					<el-form-item label="支付方式">
+						<el-select v-model="formInline.payType" placeholder="请选择">
+							<el-option label="全部" value />
+							<el-option label="微信" :value="1" />
+							<el-option label="支付宝" :value="2" />
+							<el-option label="余额" :value="3" />
+							<el-option label="银行卡（刷卡）" :value="4" />
+							<el-option label="现金" :value="5" />
+						</el-select>
+					</el-form-item>
+					<el-form-item label="订单渠道" prop="channelId">
+						<el-select v-model="formInline.channelId" placeholder="请选择">
+							<el-option label="全部" value />
+							<el-option label="喂车车" :value="'wcc'" />
+							<el-option label="小鹰加油" :value="'xy'" />
+							<el-option label="开放平台" :value="'kfpt'" />
+						</el-select>
+					</el-form-item>
+					<el-form-item label="订单状态">
+						<el-select v-model="formInline.orderStatus" placeholder="请选择">
+							<el-option label="全部" value />
+							<el-option label="待支付" :value="1" />
+							<el-option label="支付中" :value="2" />
+							<el-option label="已支付" :value="3" />
+							<el-option label="已取消" :value="3" />
+							<el-option label="已退款" :value="3" />
+						</el-select>
+					</el-form-item>
+					<el-form-item label="退款状态">
+						<el-select v-model="formInline.refundStatus" placeholder="请选择">
+							<el-option label="全部" value />
+							<el-option label="退款待审核" :value="1" />
+							<el-option label="退款中" :value="2" />
+							<el-option label="退款成功" :value="3" />
+							<el-option label="退款失败" :value="4" />
+						</el-select>
+					</el-form-item>
+					<el-form-item label="创建时间">
+						<el-date-picker
+							v-model="time"
+							type="datetimerange"
+							start-placeholder="开始日期"
+							end-placeholder="结束日期"
+							:default-time="['00:00:00', '23:59:59']"
+							value-format="yyyy-MM-dd HH:mm:ss"
+						>
+						</el-date-picker>
+					</el-form-item>
+
+					<el-form-item>
+						<el-button @click="reset">重置</el-button>
+						<el-button type="primary" @click="inquire">查询</el-button>
+					</el-form-item>
+				</el-form>
+			</div>
+			<div style="margin-left: 15px">
+				<el-button type="primary" @click="today(1)">今日</el-button>
+				<el-button type="primary" @click="today(2)">昨日</el-button>
+				<el-button type="primary" @click="today(7)">近7日</el-button>
+			</div>
+			<el-row class="card" :gutter="12" style="margin: 20px 0">
+				<el-col :span="4" style="width: 180px">
+					<el-card shadow="always">
+						<div>{{ statistics.rmbTotalAmount }}</div>
+						<div>订单金额（元）</div>
+					</el-card>
+				</el-col>
+				<el-col :span="4" style="width: 180px">
+					<el-card shadow="always">
+						<div>{{ statistics.rmbPayactualAmount }}</div>
+						<div>实付金额（元）</div>
+					</el-card>
+				</el-col>
+				<el-col :span="4" style="width: 180px">
+					<el-card shadow="always">
+						<div>{{ statistics.orderQuantity }}</div>
+						<div>订单数量（单）</div>
+					</el-card>
+				</el-col>
+			</el-row>
+			<Table
+				:loading="loading"
+				:colums="colums"
+				:data="tableData"
+				:pagination-option="paginationOption"
+				@currentChange="paginationChange"
+				@sizeChange="pageSizeChange"
+			>
+				<template v-slot:done="{ row }">
+					<el-button type="text" @click="particulars(row)">订单详情</el-button>
+					<el-button type="text" @click="reprint(row)">补打小票</el-button>
+				</template>
+			</Table>
+		</el-card>
+		<Dialog
+			:title="assignDialog.title"
+			:width="assignDialog.width"
+			:visible="assignDialog.visible"
+			:display="assignDialog.display"
+			@onClone="assignClose"
+		>
+			<div slot="content" style="width: 98%">
+				<el-descriptions class="margin-top" title="油站信息" :column="2" size="medium" border>
+					<el-descriptions-item>
+						<template slot="label"> 油站名称 </template>
+						{{ payData.merchantName }}
+					</el-descriptions-item>
+					<el-descriptions-item>
+						<template slot="label"> 枪号 </template>
+						{{ payData.gunNo }}
+					</el-descriptions-item>
+					<el-descriptions-item>
+						<template slot="label"> 油品类型 </template>
+						{{ payData.oilType }}
+					</el-descriptions-item>
+					<el-descriptions-item>
+						<template slot="label"> 油品型号 </template>
+						{{ payData.oilLevel }}
+					</el-descriptions-item>
+				</el-descriptions>
+				<el-descriptions class="margin-top" title="渠道信息" :column="1" size="medium" border :contentStyle="{ 'min-width': '290px' }">
+					<el-descriptions-item>
+						<template slot="label"> 订单渠道 </template>
+						{{ payData.o }}
+					</el-descriptions-item>
+				</el-descriptions>
+				<el-descriptions class="margin-top" title="用户信息" :column="1" size="medium" border :contentStyle="{ 'min-width': '230px' }">
+					<el-descriptions-item>
+						<template slot="label"> 手机号 </template>
+						{{ payData.userPhone }}
+					</el-descriptions-item>
+				</el-descriptions>
+				<el-descriptions class="margin-top" title="订单信息" :column="2" size="medium" border>
+					<el-descriptions-item>
+						<template slot="label"> 订单号 </template>
+						{{ payData.thirdOrderId }}
+					</el-descriptions-item>
+					<el-descriptions-item>
+						<template slot="label"> 订单金额 </template>
+						{{ payData.rmbTotalAmount }}
+					</el-descriptions-item>
+					<el-descriptions-item>
+						<template slot="label"> 优惠金额 </template>
+						{{ payData.rmbDiscountAmount }}
+					</el-descriptions-item>
+					<el-descriptions-item>
+						<template slot="label"> 实付金额 </template>
+						{{ payData.rmbPayactualAmount }}
+					</el-descriptions-item>
+					<el-descriptions-item>
+						<template slot="label"> 加油量 </template>
+						{{ payData.fuel }}
+					</el-descriptions-item>
+					<el-descriptions-item>
+						<template slot="label"> 订单状态 </template>
+						{{ payData.orderStatus }}
+					</el-descriptions-item>
+					<el-descriptions-item>
+						<template slot="label"> 支付方式 </template>
+						{{ payData.payType }}
+					</el-descriptions-item>
+					<el-descriptions-item>
+						<template slot="label"> 创建时间 </template>
+						{{ payData.createOrderTime }}
+					</el-descriptions-item>
+					<el-descriptions-item>
+						<template slot="label"> 支付时间 </template>
+						{{ payData.paySuccessTime }}
+					</el-descriptions-item>
+				</el-descriptions>
+				<el-descriptions class="margin-top" title="退款信息" :column="2" size="medium" border>
+					<el-descriptions-item>
+						<template slot="label"> 退款金额 </template>
+						{{ payData.rmbRefundAmount }}
+					</el-descriptions-item>
+					<el-descriptions-item>
+						<template slot="label"> 退款状态 </template>
+						{{ payData.refundStatus }}
+					</el-descriptions-item>
+					<el-descriptions-item>
+						<template slot="label"> 退款申请时间 </template>
+						{{ payData.createRefundTime }}
+					</el-descriptions-item>
+					<el-descriptions-item>
+						<template slot="label"> 退款完成时间 </template>
+						{{ payData.refundSuccessTime }}
+					</el-descriptions-item>
+				</el-descriptions>
+				<el-descriptions class="margin-top" title="开票信息" :column="1" size="medium" border :contentStyle="{ 'min-width': '270px' }">
+					<el-descriptions-item>
+						<template slot="label"> 开票情况 </template>
+						{{ payData.isInvoiced }}
+					</el-descriptions-item>
+				</el-descriptions>
+			</div>
+		</Dialog>
+	</div>
+</template>
+<script>
+import Table from '@/components/table/index_detail';
+import Dialog from '@/components/system/SysDialog';
+import { quickPassOrderList, quickPassOrderCount, oneClickOrderDetails } from '@/api/oil/quickPass';
+export default {
+	components: {
+		Table,
+		Dialog,
+	},
+	data() {
+		return {
+			// table
+			loading: false,
+			tableData: [],
+			colums: [
+				{
+					label: '油站名称',
+					prop: 'merchantName',
+					width: 150,
+				},
+				{
+					label: '订单号',
+					prop: 'thirdOrderId',
+					width: 100,
+				},
+				{
+					label: '订单金额',
+					prop: 'rmbTotalAmount',
+					width: 100,
+				},
+				{
+					label: '优惠金额',
+					prop: 'rmbDiscountAmount',
+				},
+				{
+					label: '实付金额',
+					prop: 'rmbPayactualAmount',
+					width: 140,
+				},
+				{
+					label: '订单渠道',
+					prop: 'channelName',
+					width: 120,
+				},
+				{
+					label: '订单状态',
+					prop: 'orderStatus',
+					width: 90,
+				},
+				{
+					label: '退款状态',
+					prop: 'refundStatus',
+					width: 170,
+				},
+				{
+					label: '支付时间',
+					prop: 'paySuccessTime',
+					width: 130,
+				},
+				{
+					label: '操作',
+					prop: 'done',
+					width: 300,
+					fixed: 'right',
+				},
+			],
+			pagination: {
+				pageSize: 10,
+				currPage: 1,
+			},
+			total: 0,
+			// form
+			formInline: {
+				channelId: null,
+				endTime: null,
+				oilType: null,
+				orderStatus: null,
+				payType: null,
+				refundStatus: null,
+				startTime: null,
+				thirdOrderId: null,
+				userPhone: null,
+			},
+			time: [],
+			// dialog
+			// 设置弹窗组件所需数据
+			assignDialog: {
+				title: '订单详情',
+				width: 900,
+				height: 750,
+				visible: false,
+				display: false,
+			},
+
+			payData: [],
+			statistics: [],
+		};
+	},
+	computed: {
+		paginationOption: function () {
+			return { ...this.pagination, total: this.total };
+		},
+	},
+	created() {
+		const t = new Date();
+		t.setDate(t.getDate() - 1);
+		this.time = [t.toISOString().split('T')[0] + ' 00:00:00', t.toISOString().split('T')[0] + ' 23:59:59'];
+	},
+	mounted() {
+		this.orderList();
+		this.orderStatistics();
+	},
+	methods: {
+		// 闪付订单列表
+		orderList() {
+			if (this.time) {
+				this.formInline.endTime = this.time[1];
+				this.formInline.startTime = this.time[0];
+			} else {
+				this.formInline.endTime = null;
+				this.formInline.startTime = null;
+			}
+			const data = {
+				...this.formInline,
+				pageNo: this.pagination.currPage,
+				pageSize: this.pagination.pageSize,
+			};
+			quickPassOrderList(data).then((res) => {
+				this.total = Number(res.data.total);
+				this.tableData = res.data.list;
+				console.log(res);
+			});
+		},
+		// 统计
+		orderStatistics() {
+			const data = {
+				...this.formInline,
+			};
+			quickPassOrderCount(data).then((res) => {
+				this.statistics = res.data;
+			});
+		},
+		// 页码变化
+		paginationChange(value) {
+			this.pagination.currPage = value.current;
+			this.loading = false;
+		},
+		// 页数变化
+		pageSizeChange(value) {
+			this.pagination.pageSize = value.size;
+			this.pagination.currPage = 1;
+			this.loading = false;
+		},
+		// 查询
+		inquire() {
+			this.orderList();
+		},
+		// 详情
+		particulars(row) {
+			this.assignDialog.visible = true;
+			const data = {
+				orderId: row.id,
+			};
+			oneClickOrderDetails(data).then((res) => {
+				this.payData = res.data;
+			});
+		},
+		// 补打
+		reprint() {},
+		// 重置
+		reset() {
+			this.formInline = {
+				channelId: null,
+				endTime: null,
+				oilType: null,
+				orderStatus: null,
+				payType: null,
+				refundStatus: null,
+				startTime: null,
+				thirdOrderId: null,
+				userPhone: null,
+			};
+			this.time = [];
+		},
+		// 弹窗关闭
+		assignClose() {
+			this.assignDialog.visible = false;
+		},
+		today(day) {
+			if (day === 1) {
+				this.day(0);
+			} else if (day === 2) {
+				this.day(1);
+			} else if (day === 7) {
+				this.day(7);
+			}
+		},
+		day(day) {
+			const t = new Date();
+			t.setDate(t.getDate() - day);
+			this.time = [t.toISOString().split('T')[0] + ' 00:00:00', t.toISOString().split('T')[0] + ' 23:59:59'];
+			this.orderList();
+			this.orderStatistics();
+		},
+	},
+};
+</script>
+<style scoped lang="scss">
+.card {
+	.el-card {
+		margin: 10px;
+		border-radius: 8px;
+		border-color: #e2e5ec;
+	}
+}
+.margin-top {
+	margin-top: 25px;
+}
+</style>
