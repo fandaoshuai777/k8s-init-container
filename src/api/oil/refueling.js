@@ -24,3 +24,10 @@ export function oneClickOrderCount(data) {
     data
   })
 }
+//补打小票
+export function printReceipt(thirdOrderId) {
+  return request({
+    url: `/gotone-merchant-api/order/printReceipt/${thirdOrderId}`,
+    method: 'GET',
+  })
+}

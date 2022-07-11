@@ -30,9 +30,8 @@
 					<el-form-item label="订单渠道" prop="channelId">
 						<el-select v-model="formInline.channelId" placeholder="请选择">
 							<el-option label="全部" value />
-							<el-option label="喂车车" :value="'wcc'" />
-							<el-option label="小鹰加油" :value="'xy'" />
-							<el-option label="开放平台" :value="'kfpt'" />
+							<el-option label="喂车车" :value="'1'" />
+							<el-option label="小鹰加油" :value="'2'" />
 						</el-select>
 					</el-form-item>
 					<el-form-item label="订单状态">
@@ -139,27 +138,52 @@
 				<el-descriptions class="margin-top" title="订单信息" :column="2" size="medium" border>
 					<el-descriptions-item>
 						<template slot="label"> 订单号 </template>
+						{{ payData.id }}
+					</el-descriptions-item>
+					<el-descriptions-item>
+						<template slot="label"> 渠道订单号 </template>
 						{{ payData.thirdOrderId }}
 					</el-descriptions-item>
 					<el-descriptions-item>
-						<template slot="label"> 订单金额 </template>
-						{{ payData.rmbTotalAmount }}
-					</el-descriptions-item>
-					<el-descriptions-item>
 						<template slot="label"> 返利/赠送金额 </template>
-						{{}}
 					</el-descriptions-item>
 					<el-descriptions-item>
 						<template slot="label"> 实付金额 </template>
-						{{ payData.rmbPayactualAmount }}
+						{{ payData.rmbTotalAmount }}
 					</el-descriptions-item>
 					<el-descriptions-item>
 						<template slot="label"> 订单状态 </template>
-						{{ payData.orderStatus }}
+						{{
+							payData.orderStatus == 1
+								? '待支付'
+								: payData.orderStatus == 2
+								? '支付中'
+								: payData.orderStatus == 3
+								? '支付取消'
+								: payData.orderStatus == 4
+								? '支付成功'
+								: payData.orderStatus == 5
+								? '支付失败'
+								: payData.orderStatus == 6
+								? '已退款'
+								: payData.orderStatus
+						}}
 					</el-descriptions-item>
 					<el-descriptions-item>
 						<template slot="label"> 支付方式 </template>
-						{{ payData.payType }}
+						{{
+							payData.payType == 1
+								? '微信'
+								: payData.payType == 2
+								? '支付宝'
+								: payData.payType == 3
+								? '余额'
+								: payData.payType == 4
+								? '银行卡（刷卡）'
+								: payData.payType == 5
+								? '现金'
+								: payData.payType
+						}}
 					</el-descriptions-item>
 					<el-descriptions-item>
 						<template slot="label"> 创建时间 </template>
@@ -177,7 +201,17 @@
 					</el-descriptions-item>
 					<el-descriptions-item>
 						<template slot="label"> 退款状态 </template>
-						{{ payData.refundStatus }}
+						{{
+							payData.refundStatus == 1
+								? '待退款'
+								: payData.refundStatus == 2
+								? '退款中'
+								: payData.refundStatus == 3
+								? '退款成功'
+								: payData.refundStatus == 4
+								? '退款失败'
+								: payData.refundStatus
+						}}
 					</el-descriptions-item>
 					<el-descriptions-item>
 						<template slot="label"> 退款申请时间 </template>
@@ -191,7 +225,7 @@
 				<el-descriptions class="margin-top" title="开票信息" :column="1" size="medium" border :contentStyle="{ 'min-width': '270px' }">
 					<el-descriptions-item>
 						<template slot="label"> 开票情况 </template>
-						{{ payData.isInvoiced }}
+						{{ payData.isInvoiced == 1 ? '已开票' : '未开票' }}
 					</el-descriptions-item>
 				</el-descriptions>
 			</div>
@@ -280,6 +314,7 @@ export default {
 				startTime: null,
 				thirdOrderId: null,
 				userPhone: null,
+				merchantId: sessionStorage.getItem('merchantId'),
 			},
 			time: [],
 			// dialog
@@ -327,7 +362,35 @@ export default {
 			};
 			storedOrderList(data).then((res) => {
 				this.total = Number(res.data.total);
-				this.tableData = res.data.list;
+				this.tableData = res.data.list.map((n) => {
+					return {
+						...n,
+						orderStatus:
+							n.orderStatus === 1
+								? '待支付'
+								: n.orderStatus === 2
+								? '待支付'
+								: n.orderStatus === 3
+								? '支付取消'
+								: n.orderStatus === 4
+								? '支付成功'
+								: n.orderStatus === 5
+								? '支付失败'
+								: n.orderStatus === 6
+								? '已退款'
+								: n.orderStatus,
+						refundStatus:
+							n.refundStatus === 1
+								? '待退款'
+								: n.refundStatus === 2
+								? '退款中'
+								: n.refundStatus === 3
+								? '退款成功'
+								: n.refundStatus === 4
+								? '退款失败'
+								: n.orderStatus,
+					};
+				});
 				console.log(res);
 			});
 		},
@@ -359,7 +422,7 @@ export default {
 		particulars(row) {
 			this.assignDialog.visible = true;
 			const data = {
-				orderId: row.id,
+				id: row.id,
 			};
 			oneClickOrderDetails(data).then((res) => {
 				this.payData = res.data;
@@ -369,7 +432,7 @@ export default {
 		reprint() {},
 		// 重置
 		reset() {
-			this.formInline={
+			this.formInline = {
 				channelId: null,
 				endTime: null,
 				oilType: null,
@@ -379,8 +442,8 @@ export default {
 				startTime: null,
 				thirdOrderId: null,
 				userPhone: null,
-			}
-			this.time = []
+			};
+			this.time = [];
 		},
 		// 弹窗关闭
 		assignClose() {
