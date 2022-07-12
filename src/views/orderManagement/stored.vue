@@ -187,7 +187,7 @@
 					</el-descriptions-item>
 					<el-descriptions-item>
 						<template slot="label"> 创建时间 </template>
-						{{ payData.startTime }}
+						{{ payData.createTime }}
 					</el-descriptions-item>
 					<el-descriptions-item>
 						<template slot="label"> 支付时间 </template>
@@ -288,7 +288,7 @@ export default {
 				},
 				{
 					label: '创建时间',
-					prop: 'startTime',
+					prop: 'createTime',
 				},
 				{
 					label: '支付时间',
@@ -421,6 +421,7 @@ export default {
 		// 查询
 		inquire() {
 			this.orderList();
+			this.orderStatistics();
 		},
 		// 详情
 		particulars(row) {

@@ -131,7 +131,7 @@
 				</el-descriptions>
 				<el-descriptions class="margin-top" title="用户信息" :column="1" size="medium" border :contentStyle="{ 'min-width': '230px' }">
 					<el-descriptions-item>
-						<template slot="label"> 手机号 </template>
+						<template slot="label"> 用户ID </template>
 						{{ payData.userPhone }}
 					</el-descriptions-item>
 				</el-descriptions>
@@ -192,7 +192,7 @@
 					</el-descriptions-item>
 					<el-descriptions-item>
 						<template slot="label"> 创建时间 </template>
-						{{ payData.createOrderTime }}
+						{{ payData.createTime }}
 					</el-descriptions-item>
 					<el-descriptions-item>
 						<template slot="label"> 支付时间 </template>
@@ -293,7 +293,7 @@ export default {
 				},
 				{
 					label: '创建时间',
-					prop: 'startTime',
+					prop: 'createTime',
 				},
 				{
 					label: '支付时间',
@@ -426,6 +426,7 @@ export default {
 		// 查询
 		inquire() {
 			this.orderList();
+			this.orderStatistics();
 		},
 		// 详情
 		particulars(row) {
