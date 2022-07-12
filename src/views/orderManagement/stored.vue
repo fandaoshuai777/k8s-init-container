@@ -459,11 +459,35 @@ export default {
 			}
 		},
 		day(day) {
-			const t = new Date();
-			t.setDate(t.getDate() - day);
-			this.time = [t.toISOString().split('T')[0] + ' 00:00:00', t.toISOString().split('T')[0] + ' 23:59:59'];
+			if (day === 7) {
+				const end = new Date();
+				end.setTime(end.getTime() - 3600 * 1000 * 24 * 1);
+				const t = new Date();
+				t.setDate(t.getDate() - day);
+				this.time = [t.toISOString().split('T')[0] + ' 00:00:00', this.formatDate(end) + ' 23:59:59'];
+			} else {
+				const t = new Date();
+				t.setDate(t.getDate() - day);
+				this.time = [t.toISOString().split('T')[0] + ' 00:00:00', t.toISOString().split('T')[0] + ' 23:59:59'];
+			}
 			this.orderList();
 			this.orderStatistics();
+		},
+		/**
+		 * 格式化时间
+		 */
+		formatDate(date) {
+			var myyear = date.getFullYear();
+			var mymonth = date.getMonth() + 1;
+			var myweekday = date.getDate();
+
+			if (mymonth < 10) {
+				mymonth = '0' + mymonth;
+			}
+			if (myweekday < 10) {
+				myweekday = '0' + myweekday;
+			}
+			return myyear + '-' + mymonth + '-' + myweekday;
 		},
 	},
 };
