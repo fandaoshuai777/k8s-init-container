@@ -8,11 +8,11 @@ function baseURLEnv() {
 	if (process.env.NODE_ENV === 'development') {
 	  return 'https://internal.dev.op-api-gateway.wonder-link.net'
 	} else if (window.location.hostname.indexOf('ciecdev') !== -1) { // 居家办公dev环境连测试环境
-	  return 'https://internal.dev.op-api-gateway.wonder-link.net'
+	  return 'https://internal.fat.op-api-gateway.wonder-link.net'
 	} else if (window.location.hostname.indexOf('test') !== -1) {
-	  return 'https://internal.dev.op-api-gateway.wonder-link.net'
+	  return 'https://internal.fat.op-api-gateway.wonder-link.net'
 	} else if (window.location.hostname.indexOf('test') !== -1) {
-	  return 'https://internal.dev.op-api-gateway.wonder-link.net'
+	  return 'https://internal.fat.op-api-gateway.wonder-link.net'
 	} else {
 	  return 'https://operation-server.ciecinfo.com'
 	}

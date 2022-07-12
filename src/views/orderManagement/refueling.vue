@@ -30,8 +30,8 @@
 					<el-form-item label="订单渠道" prop="channelId">
 						<el-select v-model="formInline.channelId" placeholder="请选择">
 							<el-option label="全部" value />
-							<el-option label="喂车车" :value="'1'" />
-							<el-option label="小鹰加油" :value="'2'" />
+							<el-option label="喂车车" :value="'2'" />
+							<el-option label="小鹰加油" :value="'1'" />
 						</el-select>
 					</el-form-item>
 					<el-form-item label="订单状态">
@@ -416,7 +416,7 @@ export default {
 							n.orderStatus === 1
 								? '待支付'
 								: n.orderStatus === 2
-								? '待支付'
+								? '支付中'
 								: n.orderStatus === 3
 								? '支付取消'
 								: n.orderStatus === 4
@@ -426,7 +426,7 @@ export default {
 								: n.orderStatus === 6
 								? '已退款'
 								: n.orderStatus,
-						channelId: n.channelId === 1 ? '小鹰' : n.channelId === 2 ? '喂车车' : n.channelId,
+						channelId: n.channelId === 1 ? '小鹰加油' : n.channelId === 2 ? '喂车车' : n.channelId,
 					};
 				});
 				console.log(res);
