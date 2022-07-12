@@ -3,10 +3,10 @@
 		<el-card shadow="hover">
 			<div>
 				<el-form :model="formInline" label-width="95px" :inline="true" label-position="right">
-					<el-form-item label="订单号">
+					<el-form-item label="订单号" prop="thirdOrderId">
 						<el-input v-model="formInline.thirdOrderId" placeholder="请输入订单号" clearable></el-input>
 					</el-form-item>
-					<el-form-item label="油品类型">
+					<el-form-item label="油品类型" prop="oilType">
 						<el-select v-model="formInline.oilType" placeholder="请选择">
 							<el-option label="全部" value />
 							<el-option label="未确认" :value="1" />
@@ -14,10 +14,10 @@
 							<el-option label="已结算" :value="3" />
 						</el-select>
 					</el-form-item>
-					<el-form-item label="手机号">
+					<el-form-item label="手机号" prop="userPhone">
 						<el-input v-model="formInline.userPhone" placeholder="请输入订单号" clearable></el-input>
 					</el-form-item>
-					<el-form-item label="支付方式">
+					<el-form-item label="支付方式" prop="payType">
 						<el-select v-model="formInline.payType" placeholder="请选择">
 							<el-option label="全部" value />
 							<el-option label="微信" :value="1" />
@@ -325,9 +325,14 @@ export default {
 					width: 140,
 				},
 				{
-					label: '支付时间',
+					label: '创建时间',
 					prop: 'startTime',
 				},
+				{
+					label: '支付时间',
+					prop: 'paySuccessTime',
+				},
+
 				{
 					label: '操作',
 					prop: 'done',
@@ -344,7 +349,6 @@ export default {
 			formInline: {
 				channelId: '',
 				channelName: '',
-				endTime: '',
 				fuel: '',
 				gunNo: '',
 				id: '',
@@ -353,14 +357,13 @@ export default {
 				orderStatus: '',
 				pageNo: '',
 				pageSize: '',
-				payEndTime: '',
-				payStartTime: '',
+				startTime: '',
+				endTime: '',
 				paySuccessTime: '',
 				payType: '',
 				refundStatus: '',
 				rmbPayactualAmount: '',
 				rmbTotalAmount: '',
-				startTime: '',
 				thirdOrderId: '',
 				timeStatus: 1,
 				userPhone: '',
@@ -388,7 +391,7 @@ export default {
 	},
 	created() {
 		const t = new Date();
-		t.setDate(t.getDate() - 1);
+		t.setDate(t.getDate() - 0);
 		this.time = [t.toISOString().split('T')[0] + ' 00:00:00', t.toISOString().split('T')[0] + ' 23:59:59'];
 	},
 	mounted() {
@@ -399,9 +402,13 @@ export default {
 		// 一键加油列表
 		orderList() {
 			if (this.time) {
-				this.formInline.payEndTime = this.time[1];
-				this.formInline.payStartTime = this.time[0];
+				this.formInline.endTime = this.time[1];
+				this.formInline.startTime = this.time[0];
+			} else {
+				this.formInline.endTime = '';
+				this.formInline.startTime = '';
 			}
+			console.log(this.time, this.formInline.endTime);
 			const data = {
 				...this.formInline,
 				pageNo: this.pagination.currPage,
@@ -475,10 +482,11 @@ export default {
 		},
 		// 重置
 		reset() {
+			this.time = [];
+
 			this.formInline = {
 				channelId: '',
 				channelName: '',
-				endTime: '',
 				fuel: '',
 				gunNo: '',
 				id: '',
@@ -487,8 +495,7 @@ export default {
 				orderStatus: '',
 				pageNo: '',
 				pageSize: '',
-				payEndTime: '',
-				payStartTime: '',
+				endTime: '',
 				paySuccessTime: '',
 				payType: '',
 				refundStatus: '',
@@ -498,8 +505,8 @@ export default {
 				thirdOrderId: '',
 				timeStatus: 1,
 				userPhone: '',
+				merchantId: sessionStorage.getItem('merchantId'),
 			};
-			this.time = [];
 		},
 		// 弹窗关闭
 		assignClose() {

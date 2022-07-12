@@ -292,6 +292,10 @@ export default {
 					width: 170,
 				},
 				{
+					label: '创建时间',
+					prop: 'startTime',
+				},
+				{
 					label: '支付时间',
 					prop: 'paySuccessTime',
 					width: 130,
@@ -343,7 +347,7 @@ export default {
 	},
 	created() {
 		const t = new Date();
-		t.setDate(t.getDate() - 1);
+		t.setDate(t.getDate() - 0);
 		this.time = [t.toISOString().split('T')[0] + ' 00:00:00', t.toISOString().split('T')[0] + ' 23:59:59'];
 	},
 	mounted() {
@@ -447,6 +451,8 @@ export default {
 				startTime: null,
 				thirdOrderId: null,
 				userPhone: null,
+				merchantId: sessionStorage.getItem('merchantId'),
+
 			};
 			this.time = [];
 		},
