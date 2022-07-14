@@ -9,9 +9,14 @@
 					<el-form-item label="油品类型">
 						<el-select v-model="formInline.oilType" placeholder="请选择">
 							<el-option label="全部" value />
-							<el-option label="未确认" :value="1" />
-							<el-option label="已确认" :value="2" />
-							<el-option label="已结算" :value="3" />
+							<el-option label="0#" value="0#" />
+							<el-option label="-10#" value="-10#" />
+							<el-option label="92#" value="92#" />
+							<el-option label="95#" value="95#" />
+							<el-option label="98#" value="98#" />
+							<el-option label="101#" value="101#" />
+							<el-option label="CNG" value="CNG" />
+							<el-option label="LNG" value="LNG" />
 						</el-select>
 					</el-form-item>
 					<el-form-item label="手机号">
@@ -20,11 +25,13 @@
 					<el-form-item label="支付方式">
 						<el-select v-model="formInline.payType" placeholder="请选择">
 							<el-option label="全部" value />
-							<el-option label="微信" :value="1" />
-							<el-option label="支付宝" :value="2" />
-							<el-option label="余额" :value="3" />
-							<el-option label="银行卡（刷卡）" :value="4" />
-							<el-option label="现金" :value="5" />
+							<el-option label="微信支付" :value="1" />
+							<el-option label="支付宝支付" :value="2" />
+							<el-option label="油卡支付" :value="3" />
+							<el-option label="余额支付" :value="4" />
+							<el-option label="现金支付" :value="5" />
+							<el-option label="银行卡支付" :value="6" />
+							<el-option label="其他支付" :value="7" />
 						</el-select>
 					</el-form-item>
 					<el-form-item label="订单渠道" prop="channelId">
@@ -39,18 +46,22 @@
 							<el-option label="全部" value />
 							<el-option label="待支付" :value="1" />
 							<el-option label="支付中" :value="2" />
-							<el-option label="已支付" :value="3" />
-							<el-option label="已取消" :value="3" />
-							<el-option label="已退款" :value="3" />
+							<el-option label="支付取消" :value="3" />
+							<el-option label="支付成功" :value="4" />
+							<el-option label="支付失败" :value="5" />
+							<el-option label="已退款" :value="6" />
 						</el-select>
 					</el-form-item>
 					<el-form-item label="退款状态">
 						<el-select v-model="formInline.refundStatus" placeholder="请选择">
 							<el-option label="全部" value />
-							<el-option label="退款待审核" :value="1" />
-							<el-option label="退款中" :value="2" />
-							<el-option label="退款成功" :value="3" />
-							<el-option label="退款失败" :value="4" />
+							<el-option label="未退款" :value="0" />
+							<el-option label="退款中" :value="1" />
+							<el-option label="退款待审核" :value="2" />
+							<el-option label="退款审核成功" :value="3" />
+							<el-option label="退款审核失败" :value="4" />
+							<el-option label="退款成功" :value="5" />
+							<el-option label="退款失败" :value="6" />
 						</el-select>
 					</el-form-item>
 					<el-form-item label="创建时间">
@@ -178,15 +189,19 @@
 						<template slot="label"> 支付方式 </template>
 						{{
 							payData.payType == 1
-								? '微信'
+								? '微信支付'
 								: payData.payType == 2
-								? '支付宝'
+								? '支付宝支付'
 								: payData.payType == 3
-								? '余额'
+								? '油卡支付'
 								: payData.payType == 4
-								? '银行卡（刷卡）'
+								? '余额支付'
 								: payData.payType == 5
-								? '现金'
+								? '现金支付'
+								: payData.payType == 6
+								? '银行卡支付'
+								: payData.payType == 7
+								? '其他支付'
 								: payData.payType
 						}}
 					</el-descriptions-item>
@@ -208,12 +223,16 @@
 						<template slot="label"> 退款状态 </template>
 						{{
 							payData.refundStatus == 1
-								? '待退款'
-								: payData.refundStatus == 2
 								? '退款中'
+								: payData.refundStatus == 2
+								? '退款待审核'
 								: payData.refundStatus == 3
-								? '退款成功'
+								? '退款审核成功'
 								: payData.refundStatus == 4
+								? '退款审核失败'
+								: payData.refundStatus == 5
+								? '退款成功'
+								: payData.refundStatus == 6
 								? '退款失败'
 								: payData.refundStatus
 						}}
@@ -389,13 +408,19 @@ export default {
 								? '已退款'
 								: n.orderStatus,
 						refundStatus:
-							n.refundStatus === 1
-								? '待退款'
-								: n.refundStatus === 2
+								n.refundStatus === 0
+								? '未退款'
+								: n.refundStatus === 1
 								? '退款中'
+								: n.refundStatus === 2
+								? '退款待审核'
 								: n.refundStatus === 3
-								? '退款成功'
+								? '退款审核成功'
 								: n.refundStatus === 4
+								? '退款审核失败'
+								: n.refundStatus === 5
+								? '退款成功'
+								: n.refundStatus === 6
 								? '退款失败'
 								: n.refundStatus,
 					};
