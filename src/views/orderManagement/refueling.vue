@@ -230,7 +230,7 @@
 					</el-descriptions-item>
 					<el-descriptions-item>
 						<template slot="label"> 创建时间 </template>
-						{{ payData.createTime }}
+						{{ payData.createOrderTime }}
 					</el-descriptions-item>
 					<el-descriptions-item>
 						<template slot="label"> 支付时间 </template>
@@ -345,7 +345,7 @@ export default {
 				},
 				{
 					label: '创建时间',
-					prop: 'createTime',
+					prop: 'createOrderTime',
 				},
 				{
 					label: '支付时间',
@@ -471,12 +471,15 @@ export default {
 		paginationChange(value) {
 			this.pagination.currPage = value.current;
 			this.loading = false;
+			this.orderList()
 		},
 		// 页数变化
 		pageSizeChange(value) {
 			this.pagination.pageSize = value.size;
 			this.pagination.currPage = 1;
 			this.loading = false;
+			this.orderList()
+
 		},
 		// 查询
 		inquire() {

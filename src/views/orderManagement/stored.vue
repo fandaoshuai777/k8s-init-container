@@ -183,7 +183,7 @@
 					<el-descriptions-item>
 						<template slot="label"> 支付方式 </template>
 						{{
-						payData.payType == 1
+							payData.payType == 1
 								? '微信支付'
 								: payData.payType == 2
 								? '支付宝支付'
@@ -202,7 +202,7 @@
 					</el-descriptions-item>
 					<el-descriptions-item>
 						<template slot="label"> 创建时间 </template>
-						{{ payData.createTime }}
+						{{ payData.createOrderTime    }}
 					</el-descriptions-item>
 					<el-descriptions-item>
 						<template slot="label"> 支付时间 </template>
@@ -307,7 +307,7 @@ export default {
 				},
 				{
 					label: '创建时间',
-					prop: 'createTime',
+					prop: 'createOrderTime',
 				},
 				{
 					label: '支付时间',
@@ -436,12 +436,14 @@ export default {
 		paginationChange(value) {
 			this.pagination.currPage = value.current;
 			this.loading = false;
+			this.orderList();
 		},
 		// 页数变化
 		pageSizeChange(value) {
 			this.pagination.pageSize = value.size;
 			this.pagination.currPage = 1;
 			this.loading = false;
+			this.orderList();
 		},
 		// 查询
 		inquire() {
