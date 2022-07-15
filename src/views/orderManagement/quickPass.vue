@@ -6,19 +6,6 @@
 					<el-form-item label="订单号">
 						<el-input v-model="formInline.thirdOrderId" placeholder="请输入订单号" clearable></el-input>
 					</el-form-item>
-					<el-form-item label="油品类型">
-						<el-select v-model="formInline.oilType" placeholder="请选择">
-							<el-option label="全部" value />
-							<el-option label="0#" value="0#" />
-							<el-option label="-10#" value="-10#" />
-							<el-option label="92#" value="92#" />
-							<el-option label="95#" value="95#" />
-							<el-option label="98#" value="98#" />
-							<el-option label="101#" value="101#" />
-							<el-option label="CNG" value="CNG" />
-							<el-option label="LNG" value="LNG" />
-						</el-select>
-					</el-form-item>
 					<el-form-item label="手机号">
 						<el-input v-model="formInline.userPhone" placeholder="请输入订单号" clearable></el-input>
 					</el-form-item>
@@ -137,7 +124,7 @@
 				<el-descriptions class="margin-top" title="渠道信息" :column="1" size="medium" border :contentStyle="{ 'min-width': '290px' }">
 					<el-descriptions-item>
 						<template slot="label"> 订单渠道 </template>
-						{{ payData.channelId }}
+						{{ payData.channelId === 1 ? '小鹰加油' : payData.channelId === 2 ? '喂车车' : payData.channelId }}
 					</el-descriptions-item>
 				</el-descriptions>
 				<el-descriptions class="margin-top" title="用户信息" :column="1" size="medium" border :contentStyle="{ 'min-width': '230px' }">
@@ -335,7 +322,6 @@ export default {
 			formInline: {
 				channelId: null,
 				endTime: null,
-				oilType: null,
 				orderStatus: null,
 				payType: null,
 				refundStatus: null,
@@ -472,7 +458,6 @@ export default {
 			this.formInline = {
 				channelId: null,
 				endTime: null,
-				oilType: null,
 				orderStatus: null,
 				payType: null,
 				refundStatus: null,

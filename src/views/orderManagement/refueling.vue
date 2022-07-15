@@ -6,7 +6,7 @@
 					<el-form-item label="订单号" prop="thirdOrderId">
 						<el-input v-model="formInline.thirdOrderId" placeholder="请输入订单号" clearable></el-input>
 					</el-form-item>
-					<el-form-item label="油品类型" prop="oilType">
+					<el-form-item label="油品型号" prop="oilType">
 						<el-select v-model="formInline.oilType" placeholder="请选择">
 							<el-option label="全部" value />
 							<el-option label="0#" value="0#" />
@@ -156,7 +156,7 @@
 				<el-descriptions class="margin-top" title="渠道信息" :column="1" size="medium" border :contentStyle="{ 'min-width': '290px' }">
 					<el-descriptions-item>
 						<template slot="label"> 订单渠道 </template>
-						{{ payData.channelId }}
+						{{ payData.channelId === 1 ? '小鹰加油' : payData.channelId === 2 ? '喂车车' : payData.channelId}}
 					</el-descriptions-item>
 				</el-descriptions>
 				<el-descriptions class="margin-top" title="用户信息" :column="1" size="medium" border :contentStyle="{ 'min-width': '230px' }">
@@ -314,7 +314,7 @@ export default {
 					prop: 'gunNo',
 				},
 				{
-					label: '油品类型',
+					label: '油品型号',
 					prop: 'oilType',
 					width: 140,
 				},
