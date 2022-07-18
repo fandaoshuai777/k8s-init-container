@@ -302,26 +302,28 @@ export default {
 				{
 					label: '订单号',
 					prop: 'thirdOrderId',
-					width: 100,
+					width: 130,
 				},
 				{
 					label: '手机号',
 					prop: 'userPhone',
-					width: 100,
+					width: 110,
 				},
 				{
 					label: '枪号',
 					prop: 'gunNo',
+					width: 50,
+
 				},
 				{
 					label: '油品型号',
 					prop: 'oilType',
-					width: 140,
+					width: 90,
 				},
 				{
 					label: '订单金额',
 					prop: 'rmbTotalAmount',
-					width: 120,
+					width: 100,
 				},
 				{
 					label: '实付金额',
@@ -331,31 +333,35 @@ export default {
 				{
 					label: '加油量',
 					prop: 'fuel',
-					width: 170,
+					width: 100,
 				},
 				{
 					label: '订单渠道',
 					prop: 'channelId',
-					width: 130,
+					width: 100,
 				},
 				{
 					label: '订单状态',
 					prop: 'orderStatus',
-					width: 140,
+					width: 100,
 				},
 				{
 					label: '创建时间',
 					prop: 'createOrderTime',
+					width: 180,
+
 				},
 				{
 					label: '支付时间',
 					prop: 'paySuccessTime',
+					width: 180,
+
 				},
 
 				{
 					label: '操作',
 					prop: 'done',
-					width: 300,
+					width: 200,
 					fixed: 'right',
 				},
 			],

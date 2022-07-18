@@ -6,7 +6,7 @@
 					<el-form-item label="订单号">
 						<el-input v-model="formInline.thirdOrderId" placeholder="请输入订单号" clearable></el-input>
 					</el-form-item>
-				
+
 					<el-form-item label="手机号">
 						<el-input v-model="formInline.userPhone" placeholder="请输入订单号" clearable></el-input>
 					</el-form-item>
@@ -190,7 +190,7 @@
 					</el-descriptions-item>
 					<el-descriptions-item>
 						<template slot="label"> 创建时间 </template>
-						{{ payData.createOrderTime    }}
+						{{ payData.createOrderTime }}
 					</el-descriptions-item>
 					<el-descriptions-item>
 						<template slot="label"> 支付时间 </template>
@@ -262,50 +262,52 @@ export default {
 				{
 					label: '订单号',
 					prop: 'thirdOrderId',
-					width: 100,
+					width: 130,
 				},
 				{
 					label: '手机号',
 					prop: 'userPhone',
-					width: 100,
+					width: 110,
 				},
 				{
 					label: '充值金额',
 					prop: 'rmbRechargeAmount',
+					width: 100,
 				},
 				{
 					label: '实付金额',
 					prop: 'rmbPayactualAmount',
-					width: 120,
+					width: 100,
 				},
 				{
 					label: '订单渠道',
 					prop: 'channelName',
-					width: 90,
+					width: 100,
 				},
 				{
 					label: '订单状态',
 					prop: 'orderStatus',
-					width: 170,
+					width: 100,
 				},
 				{
 					label: '退款状态',
 					prop: 'refundStatus',
-					width: 130,
+					width: 100,
 				},
 				{
 					label: '创建时间',
 					prop: 'createOrderTime',
+					width: 180,
 				},
 				{
 					label: '支付时间',
 					prop: 'paySuccessTime',
-					width: 140,
+					width: 180,
 				},
 				{
 					label: '操作',
 					prop: 'done',
-					width: 300,
+					width: 180,
 					fixed: 'right',
 				},
 			],

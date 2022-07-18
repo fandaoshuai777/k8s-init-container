@@ -194,7 +194,7 @@
 					</el-descriptions-item>
 					<el-descriptions-item>
 						<template slot="label"> 创建时间 </template>
-						{{ payData.createOrderTime    }}
+						{{ payData.createOrderTime }}
 					</el-descriptions-item>
 					<el-descriptions-item>
 						<template slot="label"> 支付时间 </template>
@@ -276,40 +276,42 @@ export default {
 				{
 					label: '优惠金额',
 					prop: 'rmbDiscountAmount',
+					width: 100,
 				},
 				{
 					label: '实付金额',
 					prop: 'rmbPayactualAmount',
-					width: 140,
+					width: 90,
 				},
 				{
 					label: '订单渠道',
 					prop: 'channelName',
-					width: 120,
+					width: 100,
 				},
 				{
 					label: '订单状态',
 					prop: 'orderStatus',
-					width: 90,
+					width: 100,
 				},
 				{
 					label: '退款状态',
 					prop: 'refundStatus',
-					width: 170,
+					width: 100,
 				},
 				{
 					label: '创建时间',
 					prop: 'createOrderTime',
+					width: 180,
 				},
 				{
 					label: '支付时间',
 					prop: 'paySuccessTime',
-					width: 130,
+					width: 180,
 				},
 				{
 					label: '操作',
 					prop: 'done',
-					width: 300,
+					width: 200,
 					fixed: 'right',
 				},
 			],
