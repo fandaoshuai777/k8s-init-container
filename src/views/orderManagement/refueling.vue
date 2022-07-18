@@ -146,11 +146,11 @@
 					</el-descriptions-item>
 					<el-descriptions-item>
 						<template slot="label"> 油品类型 </template>
-						{{ payData.oilType }}
+						{{ payData.goodsSkuLevel }}
 					</el-descriptions-item>
 					<el-descriptions-item>
 						<template slot="label"> 油品型号 </template>
-						{{ payData.oilLevel }}
+						{{ payData.oilType }}
 					</el-descriptions-item>
 				</el-descriptions>
 				<el-descriptions class="margin-top" title="渠道信息" :column="1" size="medium" border :contentStyle="{ 'min-width': '290px' }">
@@ -237,7 +237,7 @@
 						{{ payData.paySuccessTime }}
 					</el-descriptions-item>
 				</el-descriptions>
-				<el-descriptions class="margin-top" title="退款信息" :column="2" size="medium" border>
+				<el-descriptions class="margin-top" title="退款信息" :column="2" size="medium" border v-if='payData.refundStatus === 0 '>
 					<el-descriptions-item>
 						<template slot="label"> 退款金额 </template>
 						{{ payData.rmbRefundAmount }}

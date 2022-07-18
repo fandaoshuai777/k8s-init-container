@@ -197,7 +197,7 @@
 						{{ payData.paySuccessTime }}
 					</el-descriptions-item>
 				</el-descriptions>
-				<el-descriptions class="margin-top" title="退款信息" :column="2" size="medium" border>
+				<el-descriptions class="margin-top" title="退款信息" :column="2" size="medium" border v-if='payData.refundStatus === 0 '>
 					<el-descriptions-item>
 						<template slot="label"> 退款金额 </template>
 						{{ payData.rmbRefundAmount }}
@@ -257,12 +257,11 @@ export default {
 				{
 					label: '油站名称',
 					prop: 'merchantName',
-					width: 150,
+					width: 200,
 				},
 				{
 					label: '订单号',
 					prop: 'thirdOrderId',
-					width: 130,
 				},
 				{
 					label: '手机号',
