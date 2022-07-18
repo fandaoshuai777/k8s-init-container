@@ -9,18 +9,6 @@
 					<el-form-item label="手机号">
 						<el-input v-model="formInline.userPhone" placeholder="请输入订单号" clearable></el-input>
 					</el-form-item>
-					<el-form-item label="支付方式">
-						<el-select v-model="formInline.payType" placeholder="请选择">
-							<el-option label="全部" value />
-							<el-option label="微信支付" :value="1" />
-							<el-option label="支付宝支付" :value="2" />
-							<el-option label="油卡支付" :value="3" />
-							<el-option label="余额支付" :value="4" />
-							<el-option label="现金支付" :value="5" />
-							<el-option label="银行卡支付" :value="6" />
-							<el-option label="其他支付" :value="7" />
-						</el-select>
-					</el-form-item>
 					<el-form-item label="订单渠道" prop="channelId">
 						<el-select v-model="formInline.channelId" placeholder="请选择">
 							<el-option label="全部" value />
@@ -321,14 +309,14 @@ export default {
 			total: 0,
 			// form
 			formInline: {
-				channelId: null,
-				endTime: null,
-				orderStatus: null,
-				payType: null,
-				refundStatus: null,
-				startTime: null,
-				thirdOrderId: null,
-				userPhone: null,
+				channelId: '',
+				endTime: '',
+				orderStatus: '',
+				payType: '',
+				refundStatus: '',
+				startTime: '',
+				thirdOrderId: '',
+				userPhone: '',
 				merchantId: sessionStorage.getItem('merchantId'),
 			},
 			time: [],
@@ -393,6 +381,8 @@ export default {
 								? '支付失败'
 								: n.orderStatus === 6
 								? '已退款'
+								: n.orderStatus === 0
+								? '支付失败'
 								: n.orderStatus,
 						refundStatus:
 							n.refundStatus === 0
@@ -457,14 +447,14 @@ export default {
 		// 重置
 		reset() {
 			this.formInline = {
-				channelId: null,
-				endTime: null,
-				orderStatus: null,
-				payType: null,
-				refundStatus: null,
-				startTime: null,
-				thirdOrderId: null,
-				userPhone: null,
+				channelId: '',
+				endTime: '',
+				orderStatus: '',
+				payType: '',
+				refundStatus: '',
+				startTime: '',
+				thirdOrderId: '',
+				userPhone: '',
 				merchantId: sessionStorage.getItem('merchantId'),
 			};
 			this.time = [];

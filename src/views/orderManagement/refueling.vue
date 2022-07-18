@@ -445,6 +445,8 @@ export default {
 					return {
 						...n,
 						orderStatus:
+							n.orderStatus === 0
+							? '支付失败':
 							n.orderStatus === 1
 								? '待支付'
 								: n.orderStatus === 2
