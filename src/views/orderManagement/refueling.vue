@@ -469,7 +469,9 @@ export default {
 								? '已退款'
 								: n.orderStatus,
 						payType:
-							n.payType === 1
+							n.payType === -1
+								? ''
+								: n.payType === 1
 								? '微信支付'
 								: n.payType === 2
 								? '支付宝支付'
