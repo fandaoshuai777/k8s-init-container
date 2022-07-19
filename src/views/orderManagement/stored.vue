@@ -149,7 +149,7 @@
 					</el-descriptions-item>
 					<el-descriptions-item>
 						<template slot="label"> 实付金额 </template>
-						{{ payData.rmbTotalAmount }}
+						{{ payData.rmbPayactualAmount }}
 					</el-descriptions-item>
 					<el-descriptions-item>
 						<template slot="label"> 订单状态 </template>

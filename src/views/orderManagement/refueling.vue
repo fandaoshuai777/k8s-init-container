@@ -123,7 +123,7 @@
 			>
 				<template v-slot:done="{ row }">
 					<el-button type="text" @click="particulars(row)">订单详情</el-button>
-					<el-button type="text" v-if="row.orderStatus === '支付成功'" @click="reprint(row)">补打小票</el-button>
+					<el-button type="text" v-if="row.orderStatus === '支付成功' && row.channelId != '喂车车'" @click="reprint(row)">补打小票</el-button>
 				</template>
 			</Table>
 		</el-card>
@@ -511,7 +511,7 @@ export default {
 		},
 		// 查询
 		inquire() {
-			this.pagination.currPage = 1
+			this.pagination.currPage = 1;
 			this.orderList();
 			this.orderStatistics();
 		},
