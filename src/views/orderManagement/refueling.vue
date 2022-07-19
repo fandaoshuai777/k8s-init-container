@@ -301,6 +301,11 @@ export default {
 				},
 				{
 					label: '订单号',
+					prop: 'id',
+					width: 200,
+				},
+				{
+					label: '渠道订单号',
 					prop: 'thirdOrderId',
 					width: 130,
 				},
