@@ -16,6 +16,18 @@
 							<el-option label="小鹰加油" :value="'1'" />
 						</el-select>
 					</el-form-item>
+					<el-form-item label="支付方式" prop="payType">
+						<el-select v-model="formInline.payType" placeholder="请选择">
+							<el-option label="全部" value />
+							<el-option label="微信支付" :value="1" />
+							<el-option label="支付宝支付" :value="2" />
+							<el-option label="油卡支付" :value="3" />
+							<el-option label="余额支付" :value="4" />
+							<el-option label="现金支付" :value="5" />
+							<el-option label="银行卡支付" :value="6" />
+							<el-option label="其他支付" :value="7" />
+						</el-select>
+					</el-form-item>
 					<el-form-item label="订单状态">
 						<el-select v-model="formInline.orderStatus" placeholder="请选择">
 							<el-option label="全部" value />
@@ -281,6 +293,11 @@ export default {
 					width: 100,
 				},
 				{
+					label: '支付方式',
+					prop: 'payType',
+					width: 100,
+				},
+				{
 					label: '退款状态',
 					prop: 'refundStatus',
 					width: 100,
@@ -398,6 +415,22 @@ export default {
 								: n.refundStatus === 6
 								? '退款失败'
 								: n.refundStatus,
+						payType:
+							n.payType === 1
+								? '微信支付'
+								: n.payType === 2
+								? '支付宝支付'
+								: n.payType === 3
+								? '油卡支付'
+								: n.payType === 4
+								? '余额支付'
+								: n.payType === 5
+								? '现金支付'
+								: n.payType === 6
+								? '银行卡支付'
+								: n.payType === 7
+								? '其他支付'
+								: n.payType,
 					};
 				});
 				console.log(res);
@@ -427,6 +460,7 @@ export default {
 		},
 		// 查询
 		inquire() {
+			this.pagination.currPage = 1;
 			this.orderList();
 			this.orderStatistics();
 		},

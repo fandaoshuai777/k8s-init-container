@@ -123,7 +123,7 @@
 			>
 				<template v-slot:done="{ row }">
 					<el-button type="text" @click="particulars(row)">订单详情</el-button>
-					<el-button type="text" v-if="row.orderStatus==='支付成功'" @click="reprint(row)">补打小票</el-button>
+					<el-button type="text" v-if="row.orderStatus === '支付成功'" @click="reprint(row)">补打小票</el-button>
 				</template>
 			</Table>
 		</el-card>
@@ -156,7 +156,7 @@
 				<el-descriptions class="margin-top" title="渠道信息" :column="1" size="medium" border :contentStyle="{ 'min-width': '290px' }">
 					<el-descriptions-item>
 						<template slot="label"> 订单渠道 </template>
-						{{ payData.channelId === 1 ? '小鹰加油' : payData.channelId === 2 ? '喂车车' : payData.channelId}}
+						{{ payData.channelId === 1 ? '小鹰加油' : payData.channelId === 2 ? '喂车车' : payData.channelId }}
 					</el-descriptions-item>
 				</el-descriptions>
 				<el-descriptions class="margin-top" title="用户信息" :column="1" size="medium" border :contentStyle="{ 'min-width': '230px' }">
@@ -211,7 +211,7 @@
 					<el-descriptions-item>
 						<template slot="label"> 支付方式 </template>
 						{{
-				payData.payType == 1
+							payData.payType == 1
 								? '微信支付'
 								: payData.payType == 2
 								? '支付宝支付'
@@ -237,7 +237,7 @@
 						{{ payData.paySuccessTime }}
 					</el-descriptions-item>
 				</el-descriptions>
-				<el-descriptions class="margin-top" title="退款信息" :column="2" size="medium" border v-if='payData.refundStatus != 0 '>
+				<el-descriptions class="margin-top" title="退款信息" :column="2" size="medium" border v-if="payData.refundStatus != 0">
 					<el-descriptions-item>
 						<template slot="label"> 退款金额 </template>
 						{{ payData.rmbRefundAmount }}
@@ -313,7 +313,6 @@ export default {
 					label: '枪号',
 					prop: 'gunNo',
 					width: 50,
-
 				},
 				{
 					label: '油品型号',
@@ -346,16 +345,19 @@ export default {
 					width: 100,
 				},
 				{
+					label: '支付方式',
+					prop: 'payType',
+					width: 100,
+				},
+				{
 					label: '创建时间',
 					prop: 'createOrderTime',
 					width: 180,
-
 				},
 				{
 					label: '支付时间',
 					prop: 'paySuccessTime',
 					width: 180,
-
 				},
 
 				{
@@ -458,6 +460,22 @@ export default {
 								: n.orderStatus === 6
 								? '已退款'
 								: n.orderStatus,
+						payType:
+							n.payType === 1
+								? '微信支付'
+								: n.payType === 2
+								? '支付宝支付'
+								: n.payType === 3
+								? '油卡支付'
+								: n.payType === 4
+								? '余额支付'
+								: n.payType === 5
+								? '现金支付'
+								: n.payType === 6
+								? '银行卡支付'
+								: n.payType === 7
+								? '其他支付'
+								: n.payType,
 						channelId: n.channelId === 1 ? '小鹰加油' : n.channelId === 2 ? '喂车车' : n.channelId,
 					};
 				});
@@ -477,18 +495,18 @@ export default {
 		paginationChange(value) {
 			this.pagination.currPage = value.current;
 			this.loading = false;
-			this.orderList()
+			this.orderList();
 		},
 		// 页数变化
 		pageSizeChange(value) {
 			this.pagination.pageSize = value.size;
 			this.pagination.currPage = 1;
 			this.loading = false;
-			this.orderList()
-
+			this.orderList();
 		},
 		// 查询
 		inquire() {
+			this.pagination.currPage = 1
 			this.orderList();
 			this.orderStatistics();
 		},
