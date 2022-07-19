@@ -123,7 +123,7 @@
 			>
 				<template v-slot:done="{ row }">
 					<el-button type="text" @click="particulars(row)">订单详情</el-button>
-					<el-button type="text" @click="reprint(row)">补打小票</el-button>
+					<el-button type="text" v-if="row.orderStatus==='支付成功'" @click="reprint(row)">补打小票</el-button>
 				</template>
 			</Table>
 		</el-card>
@@ -445,8 +445,6 @@ export default {
 					return {
 						...n,
 						orderStatus:
-							n.orderStatus === 0
-							? '支付失败':
 							n.orderStatus === 1
 								? '待支付'
 								: n.orderStatus === 2

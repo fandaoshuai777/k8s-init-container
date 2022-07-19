@@ -381,8 +381,6 @@ export default {
 								? '支付失败'
 								: n.orderStatus === 6
 								? '已退款'
-								: n.orderStatus === 0
-								? '支付失败'
 								: n.orderStatus,
 						refundStatus:
 							n.refundStatus === 0
