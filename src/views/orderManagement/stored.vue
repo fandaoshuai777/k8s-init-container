@@ -126,7 +126,7 @@
 				<el-descriptions class="margin-top" title="渠道信息" :column="1" size="medium" border :contentStyle="{ 'min-width': '290px' }">
 					<el-descriptions-item>
 						<template slot="label"> 订单渠道 </template>
-						{{ payData.channelId }}
+							{{ payData.channelId === 1 ? '小鹰加油' : payData.channelId === 2 ? '喂车车' : payData.channelId }}
 					</el-descriptions-item>
 				</el-descriptions>
 				<el-descriptions class="margin-top" title="用户信息" :column="1" size="medium" border :contentStyle="{ 'min-width': '230px' }">
