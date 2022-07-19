@@ -4,7 +4,10 @@
 			<div>
 				<el-form :model="formInline" label-width="95px" :inline="true" label-position="right" ref="reset">
 					<el-form-item label="订单号">
-						<el-input v-model="formInline.thirdOrderId" placeholder="请输入订单号" clearable></el-input>
+						<el-input v-model="formInline.id" placeholder="请输入订单号" clearable></el-input>
+					</el-form-item>
+					<el-form-item label="渠道订单号">
+						<el-input v-model="formInline.thirdOrderId" placeholder="请输入渠道订单号" clearable></el-input>
 					</el-form-item>
 
 					<el-form-item label="手机号">
@@ -337,6 +340,7 @@ export default {
 				startTime: '',
 				thirdOrderId: '',
 				userPhone: '',
+				id:'',
 				merchantId: sessionStorage.getItem('merchantId'),
 			},
 			time: [],
@@ -490,6 +494,7 @@ export default {
 				thirdOrderId: '',
 				userPhone: '',
 				payType: '',
+				id:'',
 				merchantId: sessionStorage.getItem('merchantId'),
 			}),
 				(this.time = []);

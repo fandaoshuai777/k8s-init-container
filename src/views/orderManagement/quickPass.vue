@@ -4,7 +4,10 @@
 			<div>
 				<el-form :model="formInline" label-width="95px" :inline="true" label-position="right">
 					<el-form-item label="订单号">
-						<el-input v-model="formInline.thirdOrderId" placeholder="请输入订单号" clearable></el-input>
+						<el-input v-model="formInline.id" placeholder="请输入订单号" clearable></el-input>
+					</el-form-item>
+					<el-form-item label="渠道订单号">
+						<el-input v-model="formInline.thirdOrderId" placeholder="请输入渠道订单号" clearable></el-input>
 					</el-form-item>
 					<el-form-item label="手机号">
 						<el-input v-model="formInline.userPhone" placeholder="请输入订单号" clearable></el-input>
@@ -130,7 +133,7 @@
 				<el-descriptions class="margin-top" title="用户信息" :column="1" size="medium" border :contentStyle="{ 'min-width': '230px' }">
 					<el-descriptions-item>
 						<template slot="label"> 用户ID </template>
-						{{ payData.userPhone }}
+						{{ payData.userId}}
 					</el-descriptions-item>
 				</el-descriptions>
 				<el-descriptions class="margin-top" title="订单信息" :column="2" size="medium" border>
@@ -339,6 +342,7 @@ export default {
 				refundStatus: '',
 				startTime: '',
 				thirdOrderId: '',
+				id: '',
 				userPhone: '',
 				merchantId: sessionStorage.getItem('merchantId'),
 			},
@@ -493,6 +497,7 @@ export default {
 				startTime: '',
 				thirdOrderId: '',
 				userPhone: '',
+				id:'',
 				merchantId: sessionStorage.getItem('merchantId'),
 			};
 			this.time = [];
