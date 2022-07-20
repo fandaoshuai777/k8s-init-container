@@ -10,7 +10,7 @@
 						<el-input v-model="formInline.thirdOrderId" placeholder="请输入渠道订单号" clearable></el-input>
 					</el-form-item>
 					<el-form-item label="手机号">
-						<el-input v-model="formInline.userPhone" placeholder="请输入订单号" clearable></el-input>
+						<el-input v-model="formInline.userPhone" placeholder="请输入手机号" maxlength="11" clearable></el-input>
 					</el-form-item>
 					<el-form-item label="订单渠道" prop="channelId">
 						<el-select v-model="formInline.channelId" placeholder="请选择">

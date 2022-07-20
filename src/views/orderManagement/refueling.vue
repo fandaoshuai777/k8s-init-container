@@ -23,7 +23,7 @@
 						</el-select>
 					</el-form-item>
 					<el-form-item label="手机号" prop="userPhone">
-						<el-input v-model="formInline.userPhone" placeholder="请输入订单号" clearable></el-input>
+						<el-input v-model="formInline.userPhone" placeholder="请输入手机号" maxlength="11" clearable></el-input>
 					</el-form-item>
 					<el-form-item label="支付方式" prop="payType">
 						<el-select v-model="formInline.payType" placeholder="请选择">

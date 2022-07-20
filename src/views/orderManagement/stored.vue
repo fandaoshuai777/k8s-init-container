@@ -11,7 +11,7 @@
 					</el-form-item>
 
 					<el-form-item label="手机号">
-						<el-input v-model="formInline.userPhone" placeholder="请输入订单号" clearable></el-input>
+						<el-input v-model="formInline.userPhone" placeholder="请输入手机号" clearable maxlength="11"></el-input>
 					</el-form-item>
 
 					<el-form-item label="订单渠道" prop="channelId">
@@ -129,7 +129,7 @@
 				<el-descriptions class="margin-top" title="渠道信息" :column="1" size="medium" border :contentStyle="{ 'min-width': '290px' }">
 					<el-descriptions-item>
 						<template slot="label"> 订单渠道 </template>
-							{{ payData.channelId === 1 ? '小鹰加油' : payData.channelId === 2 ? '喂车车' : payData.channelId }}
+						{{ payData.channelId === 1 ? '小鹰加油' : payData.channelId === 2 ? '喂车车' : payData.channelId }}
 					</el-descriptions-item>
 				</el-descriptions>
 				<el-descriptions class="margin-top" title="用户信息" :column="1" size="medium" border :contentStyle="{ 'min-width': '230px' }">
@@ -149,6 +149,7 @@
 					</el-descriptions-item>
 					<el-descriptions-item>
 						<template slot="label"> 返利/赠送金额 </template>
+						{{ payData.giftAmount }}
 					</el-descriptions-item>
 					<el-descriptions-item>
 						<template slot="label"> 实付金额 </template>
@@ -340,7 +341,7 @@ export default {
 				startTime: '',
 				thirdOrderId: '',
 				userPhone: '',
-				id:'',
+				id: '',
 				merchantId: sessionStorage.getItem('merchantId'),
 			},
 			time: [],
@@ -356,6 +357,7 @@ export default {
 
 			payData: [],
 			statistics: [],
+
 		};
 	},
 	computed: {
@@ -494,7 +496,7 @@ export default {
 				thirdOrderId: '',
 				userPhone: '',
 				payType: '',
-				id:'',
+				id: '',
 				merchantId: sessionStorage.getItem('merchantId'),
 			}),
 				(this.time = []);
