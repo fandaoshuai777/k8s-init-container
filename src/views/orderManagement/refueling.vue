@@ -208,6 +208,8 @@
 								? '支付失败'
 								: payData.orderStatus == 6
 								? '已退款'
+								: payData.orderStatus == -1
+								? ''
 								: payData.orderStatus
 						}}
 					</el-descriptions-item>
@@ -228,6 +230,8 @@
 								? '银行卡支付'
 								: payData.payType == 7
 								? '其他支付'
+								: payData.payType == -1
+								? ''
 								: payData.payType
 						}}
 					</el-descriptions-item>
@@ -260,6 +264,8 @@
 								? '退款成功'
 								: payData.refundStatus == 6
 								? '退款失败'
+								: payData.refundStatus == -1
+								? ''
 								: payData.refundStatus
 						}}
 					</el-descriptions-item>
