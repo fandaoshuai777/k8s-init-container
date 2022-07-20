@@ -4,7 +4,7 @@
 			<div>
 				<el-form :model="formInline" label-width="95px" :inline="true" label-position="right">
 					<el-form-item label="订单号" prop="id">
-						<el-input v-model="formInline.id" type=number placeholder="请输入订单号" clearable></el-input>
+						<el-input v-model="formInline.id" type="number" placeholder="请输入订单号" clearable></el-input>
 					</el-form-item>
 					<el-form-item label="渠道订单号" prop="thirdOrderId">
 						<el-input v-model="formInline.thirdOrderId" placeholder="请输入渠道订单号" clearable></el-input>
@@ -244,7 +244,7 @@
 						{{ payData.paySuccessTime }}
 					</el-descriptions-item>
 				</el-descriptions>
-				<el-descriptions class="margin-top" title="退款信息" :column="2" size="medium" border v-if="payData.refundStatus != 0">
+				<el-descriptions class="margin-top" title="退款信息" :column="2" size="medium" border v-if="payData.refundStatus == 0">
 					<el-descriptions-item>
 						<template slot="label"> 退款金额 </template>
 						{{ payData.rmbRefundAmount }}
@@ -466,7 +466,9 @@ export default {
 					return {
 						...n,
 						orderStatus:
-							n.orderStatus === 1
+							n.orderStatus === -1
+								? ''
+								: n.orderStatus === 1
 								? '待支付'
 								: n.orderStatus === 2
 								? '支付中'
@@ -498,7 +500,9 @@ export default {
 								? '其他支付'
 								: n.payType,
 						refundStatus:
-							n.refundStatus === 0
+							n.refundStatus === -1
+								? ''
+								: n.refundStatus === 0
 								? '未退款'
 								: n.refundStatus === 1
 								? '退款中'
@@ -651,10 +655,9 @@ export default {
 	margin-top: 25px;
 }
 ::v-deep input::-webkit-inner-spin-button {
-  -webkit-appearance: none !important;
+	-webkit-appearance: none !important;
 }
 ::v-deep input[type='number'] {
-  -moz-appearance: textfield !important;
+	-moz-appearance: textfield !important;
 }
-
 </style>
