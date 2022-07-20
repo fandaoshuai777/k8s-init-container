@@ -353,6 +353,11 @@ export default {
 					width: 100,
 				},
 				{
+					label: '退款状态',
+					prop: 'refundStatus',
+					width: 100,
+				},
+				{
 					label: '支付方式',
 					prop: 'payType',
 					width: 100,
@@ -486,6 +491,22 @@ export default {
 								: n.payType === 7
 								? '其他支付'
 								: n.payType,
+						refundStatus:
+							n.refundStatus === 0
+								? '未退款'
+								: n.refundStatus === 1
+								? '退款中'
+								: n.refundStatus === 2
+								? '退款待审核'
+								: n.refundStatus === 3
+								? '退款审核成功'
+								: n.refundStatus === 4
+								? '退款审核失败'
+								: n.refundStatus === 5
+								? '退款成功'
+								: n.refundStatus === 6
+								? '退款失败'
+								: n.refundStatus,
 						channelId: n.channelId === 1 ? '小鹰加油' : n.channelId === 2 ? '喂车车' : n.channelId,
 					};
 				});
