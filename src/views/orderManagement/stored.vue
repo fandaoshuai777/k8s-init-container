@@ -357,7 +357,6 @@ export default {
 
 			payData: [],
 			statistics: [],
-
 		};
 	},
 	computed: {
@@ -395,7 +394,9 @@ export default {
 					return {
 						...n,
 						orderStatus:
-							n.orderStatus === 1
+							n.orderStatus === -1
+								? ''
+								: n.orderStatus === 1
 								? '待支付'
 								: n.orderStatus === 2
 								? '支付中'
@@ -409,7 +410,9 @@ export default {
 								? '已退款'
 								: n.orderStatus,
 						refundStatus:
-							n.refundStatus === 0
+							n.refundStatus === -1
+								? ''
+								: n.refundStatus === 0
 								? '未退款'
 								: n.refundStatus === 1
 								? '退款中'
@@ -425,7 +428,9 @@ export default {
 								? '退款失败'
 								: n.refundStatus,
 						payType:
-							n.payType === 1
+							n.payType === -1
+								? ''
+								: n.payType === 1
 								? '微信支付'
 								: n.payType === 2
 								? '支付宝支付'
