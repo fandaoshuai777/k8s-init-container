@@ -3,11 +3,11 @@
 		<el-card shadow="hover">
 			<div>
 				<el-form :model="formInline" label-width="95px" :inline="true" label-position="right">
-					<el-form-item label="订单号" prop="thirdOrderId">
-						<el-input v-model.number="formInline.thirdOrderId" type=number placeholder="请输入订单号" clearable></el-input>
+					<el-form-item label="订单号" prop="id">
+						<el-input v-model="formInline.id" type=number placeholder="请输入订单号" clearable></el-input>
 					</el-form-item>
-					<el-form-item label="渠道订单号" prop="id">
-						<el-input v-model="formInline.id" placeholder="请输入渠道订单号" clearable></el-input>
+					<el-form-item label="渠道订单号" prop="thirdOrderId">
+						<el-input v-model="formInline.thirdOrderId" placeholder="请输入渠道订单号" clearable></el-input>
 					</el-form-item>
 					<el-form-item label="油品型号" prop="oilType">
 						<el-select v-model="formInline.oilType" placeholder="请选择">
