@@ -210,7 +210,7 @@
 						{{ payData.paySuccessTime }}
 					</el-descriptions-item>
 				</el-descriptions>
-				<el-descriptions class="margin-top" title="退款信息" :column="2" size="medium" border v-if="payData.refundStatus === 0">
+				<el-descriptions class="margin-top" title="退款信息" :column="2" size="medium" border v-if="payData.refundStatus != 0">
 					<el-descriptions-item>
 						<template slot="label"> 退款金额 </template>
 						{{ payData.rmbRefundAmount }}
@@ -367,12 +367,29 @@ export default {
 
 			payData: [],
 			statistics: [],
+			maxDate: null,
+			minDate: null,
 			pickerOptions: {
-				disabledDate(time) {
-					let curDate = new Date().getTime();
-					let three = 62 * 24 * 3600 * 1000;
-					let threeMonths = curDate - three;
-					return time.getTime() > Date.now() || time.getTime() < threeMonths;
+				// 当我们选择日期时的回调方法。返回两个日期的最大值和最小值，第一次返回一个值，第二次返回两个值
+				onPick: ({ maxDate, minDate }) => {
+					//当我们选择两个值的时候，就认为用户已经选择完毕
+					if (maxDate != null && minDate != null) {
+						this.maxDate = maxDate;
+						this.minDate = minDate;
+					}
+				},
+				disabledDate: (time) => {
+					let maxDate = this.maxDate;
+					let minDate = this.minDate;
+					if (maxDate != null && minDate != null) {
+						let days = maxDate.getTime() - minDate.getTime(); //计算完之后必须清除，否则选择器一直处于禁止选择的状态
+						this.maxDate = null;
+						this.minDate = null;
+						return parseInt(days / (1000 * 60 * 60 * 24)) > 62;
+					} else {
+						//设置当前时间后的时间不可选
+						return time.getTime() > Date.now();
+					}
 				},
 			},
 		};
@@ -413,7 +430,7 @@ export default {
 						...n,
 						orderStatus:
 							n.orderStatus === -1
-								? ''
+								? '--'
 								: n.orderStatus === 1
 								? '待支付'
 								: n.orderStatus === 2
@@ -429,7 +446,7 @@ export default {
 								: n.orderStatus,
 						refundStatus:
 							n.refundStatus === -1
-								? ''
+								? '--'
 								: n.refundStatus === 0
 								? '未退款'
 								: n.refundStatus === 1
@@ -447,7 +464,7 @@ export default {
 								: n.refundStatus,
 						payType:
 							n.payType === -1
-								? ''
+								? '--'
 								: n.payType === 1
 								? '微信支付'
 								: n.payType === 2
