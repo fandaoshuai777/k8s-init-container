@@ -8,7 +8,7 @@
 			"meta": {
 				"title": "订单管理",
 				"isLink": "",
-				"isHide": true,
+				"isHide": false,
 				"isKeepAlive": true,
 				"isAffix": false,
 				"isIframe": false,

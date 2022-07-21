@@ -252,10 +252,8 @@
 					<el-descriptions-item>
 						<template slot="label"> 退款状态 </template>
 						{{
-							payData.refundStatus == 1
+                                 payData.refundStatus == 2
 								? '退款中'
-								: payData.refundStatus == 2
-								? '退款待审核'
 								: payData.refundStatus == 3
 								? '退款审核成功'
 								: payData.refundStatus == 4
