@@ -4,7 +4,7 @@
 			<div>
 				<el-form :model="formInline" label-width="95px" :inline="true" label-position="right">
 					<el-form-item label="订单号">
-						<el-input type=number v-model="formInline.id" placeholder="请输入订单号" clearable></el-input>
+						<el-input type="number" v-model="formInline.id" placeholder="请输入订单号" clearable></el-input>
 					</el-form-item>
 					<el-form-item label="渠道订单号">
 						<el-input v-model="formInline.thirdOrderId" placeholder="请输入渠道订单号" clearable></el-input>
@@ -62,6 +62,8 @@
 							end-placeholder="结束日期"
 							:default-time="['00:00:00', '23:59:59']"
 							value-format="yyyy-MM-dd HH:mm:ss"
+							:picker-options="pickerOptions"
+
 						>
 						</el-date-picker>
 					</el-form-item>
@@ -365,6 +367,14 @@ export default {
 
 			payData: [],
 			statistics: [],
+			pickerOptions: {
+				disabledDate(time) {
+					let curDate = new Date().getTime();
+					let three = 62 * 24 * 3600 * 1000;
+					let threeMonths = curDate - three;
+					return time.getTime() > Date.now() || time.getTime() < threeMonths;
+				},
+			},
 		};
 	},
 	computed: {
@@ -418,9 +428,9 @@ export default {
 								? '已退款'
 								: n.orderStatus,
 						refundStatus:
-						n.refundStatus === -1
+							n.refundStatus === -1
 								? ''
-								:n.refundStatus === 0
+								: n.refundStatus === 0
 								? '未退款'
 								: n.refundStatus === 1
 								? '退款中'
@@ -438,8 +448,7 @@ export default {
 						payType:
 							n.payType === -1
 								? ''
-							:
-							n.payType === 1
+								: n.payType === 1
 								? '微信支付'
 								: n.payType === 2
 								? '支付宝支付'
@@ -574,9 +583,9 @@ export default {
 	margin-top: 25px;
 }
 ::v-deep input::-webkit-inner-spin-button {
-  -webkit-appearance: none !important;
+	-webkit-appearance: none !important;
 }
 ::v-deep input[type='number'] {
-  -moz-appearance: textfield !important;
+	-moz-appearance: textfield !important;
 }
 </style>

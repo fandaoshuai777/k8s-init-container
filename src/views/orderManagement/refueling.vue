@@ -75,6 +75,7 @@
 							end-placeholder="结束日期"
 							:default-time="['00:00:00', '23:59:59']"
 							value-format="yyyy-MM-dd HH:mm:ss"
+							:picker-options="pickerOptions"
 						>
 						</el-date-picker>
 					</el-form-item>
@@ -428,6 +429,14 @@ export default {
 
 			payData: [],
 			statistics: [],
+			pickerOptions: {
+				disabledDate(time) {
+					let curDate = new Date().getTime();
+					let three = 62 * 24 * 3600 * 1000;
+					let threeMonths = curDate - three;
+					return time.getTime() > Date.now() || time.getTime() < threeMonths;
+				},
+			},
 		};
 	},
 	computed: {
