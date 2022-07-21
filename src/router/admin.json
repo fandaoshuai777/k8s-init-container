@@ -213,7 +213,7 @@
 					"name": "stored",
 					"component": "orderManagement/stored",
 					"meta": {
-						"title": "储值管理",
+						"title": "储值订单",
 						"isLink": "",
 						"isKeepAlive": true,
 						"isAffix": false,
