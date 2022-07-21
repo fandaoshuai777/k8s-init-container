@@ -4,7 +4,14 @@
 			<div>
 				<el-form :model="formInline" label-width="95px" :inline="true" label-position="right" ref="reset">
 					<el-form-item label="订单号">
-						<el-input type="number" v-model="formInline.id" placeholder="请输入订单号" clearable></el-input>
+						<el-input
+							type="number"
+							v-model="formInline.id"
+							@input.native="changeNum"
+							onKeypress="return(/[\d]/.test(String.fromCharCode(event.keyCode)))"
+							placeholder="请输入订单号"
+							clearable
+						></el-input>
 					</el-form-item>
 					<el-form-item label="渠道订单号">
 						<el-input v-model="formInline.thirdOrderId" placeholder="请输入渠道订单号" clearable></el-input>
@@ -211,7 +218,7 @@
 						{{ payData.paySuccessTime }}
 					</el-descriptions-item>
 				</el-descriptions>
-				<el-descriptions class="margin-top" title="退款信息" :column="2" size="medium" border v-if="payData.refundStatus!= 0">
+				<el-descriptions class="margin-top" title="退款信息" :column="2" size="medium" border v-if="payData.refundStatus != 0">
 					<el-descriptions-item>
 						<template slot="label"> 退款金额 </template>
 						{{ payData.rmbRefundAmount }}
@@ -415,6 +422,11 @@ export default {
 		this.orderStatistics();
 	},
 	methods: {
+		changeNum() {
+			if (this.formInline.id.length > 19) {
+				this.formInline.id = this.formInline.id.slice(0, 19);
+			}
+		},
 		// 闪付订单列表
 		orderList() {
 			if (this.time) {

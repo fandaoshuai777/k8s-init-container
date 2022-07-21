@@ -4,7 +4,14 @@
 			<div>
 				<el-form :model="formInline" label-width="95px" :inline="true" label-position="right">
 					<el-form-item label="订单号">
-						<el-input type="number" v-model="formInline.id" placeholder="请输入订单号" clearable></el-input>
+						<el-input
+							type="number"
+							v-model="formInline.id"
+							placeholder="请输入订单号"
+							clearable
+							@input.native="changeNum"
+							onKeypress="return(/[\d]/.test(String.fromCharCode(event.keyCode)))"
+						></el-input>
 					</el-form-item>
 					<el-form-item label="渠道订单号">
 						<el-input v-model="formInline.thirdOrderId" placeholder="请输入渠道订单号" clearable></el-input>
@@ -63,7 +70,6 @@
 							:default-time="['00:00:00', '23:59:59']"
 							value-format="yyyy-MM-dd HH:mm:ss"
 							:picker-options="pickerOptions"
-
 						>
 						</el-date-picker>
 					</el-form-item>
@@ -409,6 +415,11 @@ export default {
 		this.orderStatistics();
 	},
 	methods: {
+		changeNum() {
+			if (this.formInline.id.length > 19) {
+				this.formInline.id = this.formInline.id.slice(0, 19);
+			}
+		},
 		// 闪付订单列表
 		orderList() {
 			if (this.time) {

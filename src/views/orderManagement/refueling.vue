@@ -4,10 +4,18 @@
 			<div>
 				<el-form :model="formInline" label-width="95px" :inline="true" label-position="right">
 					<el-form-item label="订单号" prop="id">
-						<el-input v-model="formInline.id" type="number" placeholder="请输入订单号" clearable></el-input>
+						<el-input
+							v-model="formInline.id"
+							type="number"
+							placeholder="请输入订单号"
+							maxlength="19"
+							clearable
+							@input.native="changeNum"
+							onKeypress="return(/[\d]/.test(String.fromCharCode(event.keyCode)))"
+						></el-input>
 					</el-form-item>
 					<el-form-item label="渠道订单号" prop="thirdOrderId">
-						<el-input v-model="formInline.thirdOrderId" placeholder="请输入渠道订单号" clearable></el-input>
+						<el-input  v-model="formInline.thirdOrderId" placeholder="请输入渠道订单号" clearable></el-input>
 					</el-form-item>
 					<el-form-item label="油品型号" prop="oilType">
 						<el-select v-model="formInline.oilType" placeholder="请选择">
@@ -252,7 +260,7 @@
 					<el-descriptions-item>
 						<template slot="label"> 退款状态 </template>
 						{{
-                                 payData.refundStatus == 2
+							payData.refundStatus == 2
 								? '退款中'
 								: payData.refundStatus == 3
 								? '退款审核成功'
@@ -468,6 +476,11 @@ export default {
 		this.orderStatistics();
 	},
 	methods: {
+		changeNum() {
+			if (this.formInline.id.length > 19) {
+				this.formInline.id = this.formInline.id.slice(0, 19);
+			}
+		},
 		// 一键加油列表
 		orderList() {
 			if (this.time) {
@@ -529,11 +542,11 @@ export default {
 								? '--'
 								: n.refundStatus === 2
 								? '退款中'
-								// : n.refundStatus === 3
+								: // : n.refundStatus === 3
 								// ? '退款审核成功'
 								// : n.refundStatus === 4
 								// ? '退款审核失败'
-								: n.refundStatus === 5
+								n.refundStatus === 5
 								? '退款成功'
 								: n.refundStatus === 6
 								? '退款失败'
