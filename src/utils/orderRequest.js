@@ -2,21 +2,32 @@ import store from '@/store';
 import router, { resetRouter } from '@/router/index';
 import axios from 'axios';
 import { Message, MessageBox } from 'element-ui';
-import { Local,Session } from '@/utils/storage';
+import { Local, Session } from '@/utils/storage';
 
+// function baseURLEnv() {
+// 	if (process.env.NODE_ENV === 'development') {
+// 	  return 'https://internal.fat.op-api-gateway.wonder-link.net'
+// 	} else if (window.location.hostname.indexOf('ciecdev') !== -1) { // 居家办公dev环境连测试环境
+// 	  return 'https://internal.fat.op-api-gateway.wonder-link.net'
+// 	} else if (window.location.hostname.indexOf('test') !== -1) {
+// 	  return 'https://internal.fat.op-api-gateway.wonder-link.net'
+// 	} else if (window.location.hostname.indexOf('test') !== -1) {
+// 	  return 'https://internal.fat.op-api-gateway.wonder-link.net'
+// 	} else {
+// 	  return 'https://operation-server.ciecinfo.com'
+// 	}
+//   }
 function baseURLEnv() {
 	if (process.env.NODE_ENV === 'development') {
-	  return 'https://internal.dev.op-api-gateway.wonder-link.net'
-	} else if (window.location.hostname.indexOf('ciecdev') !== -1) { // 居家办公dev环境连测试环境
-	  return 'https://internal.fat.op-api-gateway.wonder-link.net'
+		return 'https://internal.fat.op-api-gateway.wonder-link.net'
+	} else if (window.location.hostname.indexOf('ciecdev') !== -1) {
+		return 'https://internal.dev.op-api-gateway.wonder-link.net'
 	} else if (window.location.hostname.indexOf('test') !== -1) {
-	  return 'https://internal.fat.op-api-gateway.wonder-link.net'
-	} else if (window.location.hostname.indexOf('test') !== -1) {
-	  return 'https://internal.fat.op-api-gateway.wonder-link.net'
+		return 'https://internal.fat.op-api-gateway.wonder-link.net'
 	} else {
-	  return 'https://operation-server.ciecinfo.com'
+		return 'https://op-api-gateway.wonder-link.net'
 	}
-  }
+}
 // 创建 axios 实例
 const service = axios.create({
 	baseURL: baseURLEnv(),
