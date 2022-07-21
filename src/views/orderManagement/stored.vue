@@ -4,7 +4,7 @@
 			<div>
 				<el-form :model="formInline" label-width="95px" :inline="true" label-position="right" ref="reset">
 					<el-form-item label="订单号">
-						<el-input type=number v-model="formInline.id" placeholder="请输入订单号" clearable></el-input>
+						<el-input type="number" v-model="formInline.id" placeholder="请输入订单号" clearable></el-input>
 					</el-form-item>
 					<el-form-item label="渠道订单号">
 						<el-input v-model="formInline.thirdOrderId" placeholder="请输入渠道订单号" clearable></el-input>
@@ -146,6 +146,10 @@
 					<el-descriptions-item>
 						<template slot="label"> 渠道订单号 </template>
 						{{ payData.thirdOrderId }}
+					</el-descriptions-item>
+					<el-descriptions-item>
+						<template slot="label"> 订单金额 </template>
+						{{ payData.rmbTotalAmount }}
 					</el-descriptions-item>
 					<el-descriptions-item>
 						<template slot="label"> 返利/赠送金额 </template>
@@ -345,9 +349,9 @@ export default {
 				payType: '',
 				refundStatus: '',
 				startTime: '',
-				thirdOrderId:'',
+				thirdOrderId: '',
 				userPhone: '',
-				id:'',
+				id: '',
 				merchantId: sessionStorage.getItem('merchantId'),
 			},
 			time: [],
@@ -571,9 +575,9 @@ export default {
 	margin-top: 25px;
 }
 ::v-deep input::-webkit-inner-spin-button {
-  -webkit-appearance: none !important;
+	-webkit-appearance: none !important;
 }
 ::v-deep input[type='number'] {
-  -moz-appearance: textfield !important;
+	-moz-appearance: textfield !important;
 }
 </style>
