@@ -2,67 +2,71 @@
 	<div>
 		<el-card class="box-card" shadow="hover">
 			<div class="card">
-				<div style="width: 90px;">账户总额：</div>
-				<div>{{totalAmount}}元</div>
+				<div style="width: 90px">账户总额：</div>
+				<div>{{ totalAmount }}元</div>
 			</div>
 			<div class="card">
-				<div style="width: 90px;">可提现金额：</div>
-				<div>{{availableAmount}}元（已扣除{{fee}}元手续费）</div>
+				<div style="width: 90px">可提现金额：</div>
+				<div>{{ availableAmount }}元（已扣除{{ fee }}元手续费）</div>
 			</div>
 			<div class="card">
-				<div style="width: 90px;">冻结总额：</div>
-				<div>{{frozenAmount}}元</div>
+				<div style="width: 90px">冻结总额：</div>
+				<div>{{ frozenAmount }}元</div>
 			</div>
 			<el-button @click="handleClick">提现</el-button>
 		</el-card>
 
-		<el-dialog title="提现申请" :visible.sync="dialogFormVisible" :before-close="onClose" :close-on-click-modal="false" width="30%">
+		<el-dialog title="提现申请" :visible.sync="dialogFormVisible" :before-close="onClose" :close-on-click-modal="false" class="dialog">
 			<el-form ref="formInfo" :rules="rules" :model="formInfo" label-width="100px">
 				<el-form-item label="可提现金额:">
-					<span>{{availableAmount}}元（已扣除{{fee}}元手续费）</span>
+					<span>{{ availableAmount }}元（已扣除{{ fee }}元手续费）</span>
 				</el-form-item>
-				<el-form-item label="提现账户:" prop="payee">
-					<el-select v-model="formInfo.payee" value-key="id" style="width: 400px;">
+				<el-form-item label="提现金额:" prop="amount">
+					<el-input v-model="formInfo.amount" autocomplete="off" type="number" style="width: 400px" @input="inputChange"></el-input>
+				</el-form-item>
+				<el-form-item label="提现账户名:" prop="payee">
+					<el-select v-model="formInfo.payee" value-key="id" style="width: 400px">
 						<el-option v-for="(item, index) in payeeList" :key="index" :label="item.supplierName" :value="item"></el-option>
 					</el-select>
 				</el-form-item>
-				<el-form-item label="提现账号:" prop="payeeAccount">
-					<el-input v-model="formInfo.payeeAccount" autocomplete="off" type="number" maxlength="20" style="width: 400px;"></el-input>
+				<el-form-item label="选择提现卡:" prop="payee">
+					<el-radio-group v-model="formInfo.radio4">
+						<el-radio  border v-for="item in options" :key="item.value" :value="item.label" :label="item.value">
+							<div>开户行：招商银行</div>
+							<div style="margin-top: 12px">银行账号:XXXXXXXXXXXXXXXXXX</div>
+						</el-radio>
+					</el-radio-group>
+				</el-form-item>
+				<!-- <el-form-item label="提现账号:" prop="payeeAccount">
+					<el-input v-model="formInfo.payeeAccount" autocomplete="off" type="number" maxlength="20" style="width: 400px"></el-input>
 				</el-form-item>
 				<el-form-item label="开户行:" prop="bankName">
-					<el-select v-model="formInfo.bankName" value-key="id" filterable placeholder="请选择开户行"  style="width: 400px;">
-						<el-option
-							v-for="item in selectList"
-							:key="item.value"
-							:label="item.bankName"
-							:value="item">
-						</el-option>
+					<el-select v-model="formInfo.bankName" value-key="id" filterable placeholder="请选择开户行" style="width: 400px">
+						<el-option v-for="item in selectList" :key="item.value" :label="item.bankName" :value="item"> </el-option>
 					</el-select>
-				</el-form-item>
-				<el-form-item label="卡类型" prop="cardType">
-          <el-select v-model="formInfo.cardType" placeholder="请选择卡类型"  style="width: 400px;">
-            <el-option label="借记卡" :value="1"></el-option>
-						<el-option label="贷记卡" :value="2"></el-option>
-						<!-- <el-option label="准贷卡" :value="3"></el-option>
+				</el-form-item> -->
+				<!-- <el-form-item label="卡类型" prop="cardType">
+					<el-select v-model="formInfo.cardType" placeholder="请选择卡类型" style="width: 400px">
+						<el-option label="借记卡" :value="1"></el-option>
+						<el-option label="贷记卡" :value="2"></el-option> -->
+				<!-- <el-option label="准贷卡" :value="3"></el-option>
 						<el-option label="存折" :value="4"></el-option>
 						<el-option label="单位结算卡" :value="5"></el-option> -->
-						<el-option label="对公卡" :value="6"></el-option>
-          </el-select>
-        </el-form-item>
-				<el-form-item label="提现金额:" prop="amount">
-					<el-input v-model="formInfo.amount" autocomplete="off" type="number" style="width: 400px;" @input="inputChange"></el-input>
-				</el-form-item>
+				<!-- <el-option label="对公卡" :value="6"></el-option>
+					</el-select>
+				</el-form-item> -->
+
 				<!-- <span style="font-size: 12px; color: red;">备注：提现将会产生手续费</span> -->
 			</el-form>
 			<span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm('formInfo')" :loading="loading">确定</el-button>
-        <el-button @click="resetForm('formInfo')">取消</el-button>
-      </span>
+				<el-button type="primary" @click="submitForm('formInfo')" :loading="loading">确定</el-button>
+				<el-button @click="resetForm('formInfo')">取消</el-button>
+			</span>
 		</el-dialog>
 	</div>
 </template>
 <script>
-import { getBalance, select_by_merchant_id, query_bank_info, withdrawl } from "@/api/withdrawdeposit"
+import { getBalance, select_by_merchant_id, query_bank_info, withdrawl } from '@/api/withdrawdeposit';
 
 export default {
 	data() {
@@ -79,24 +83,52 @@ export default {
 				receiverBankCode: '',
 				amount: '',
 				cardType: 1,
+			radio4: '',
+
 			},
 			loading: false,
 			rules: {
-				payee: [
-					{ required: true, message: '请输入提现账户', trigger: 'blur' }
-				],
-				payeeAccount: [
-					{ required: true, message: '请输入提现账号', trigger: 'blur' }
-				],
-				bankName: [
-					{ required: true, message: '请输入开户行', trigger: 'blur' }
-				],
-				amount: [
-					{ required: true, message: '请输入提现金额', trigger: 'blur' }
-				],
+				payee: [{ required: true, message: '请输入提现账户', trigger: 'blur' }],
+				payeeAccount: [{ required: true, message: '请输入提现账号', trigger: 'blur' }],
+				bankName: [{ required: true, message: '请输入开户行', trigger: 'blur' }],
+				amount: [{ required: true, message: '请输入提现金额', trigger: 'blur' }],
 			},
 			selectList: [],
 			payeeList: [],
+			options: [
+				{
+					value: 0,
+					label: '全部',
+				},
+				{
+					value: 1,
+					label: '存在欺诈骗钱行为',
+				},
+				{
+					value: 2,
+					label: '存在色情内容',
+				},
+				{
+					value: 3,
+					label: '存在赌博等违法内容',
+				},
+				{
+					value: 4,
+					label: '存在侵权行为',
+				},
+				{
+					value: 5,
+					label: '传播邪教内容',
+				},
+				{
+					value: 6,
+					label: '传播反共反华内容',
+				},
+				{
+					value: 7,
+					label: '其他',
+				},
+			],
 		};
 	},
 	created() {
@@ -104,7 +136,7 @@ export default {
 	},
 	methods: {
 		async init() {
-			const res = await getBalance({merchantId: sessionStorage.getItem("merchantId")});
+			const res = await getBalance({ merchantId: sessionStorage.getItem('merchantId') });
 			if (res) {
 				this.frozenAmount = res.data.frozenAmount;
 				this.availableAmount = res.data.availableAmount;
@@ -113,21 +145,21 @@ export default {
 			}
 		},
 		async handleClick() {
-			const res = await select_by_merchant_id({merchantId: sessionStorage.getItem("merchantId")});
+			const res = await select_by_merchant_id({ merchantId: sessionStorage.getItem('merchantId') });
 			if (res.code == 0 && res.data.length != 0) {
 				this.dialogFormVisible = true;
 				this.payeeList = res.data;
-				query_bank_info().then( r => {
+				query_bank_info().then((r) => {
 					this.selectList = r.data.list;
-				})
+				});
 			} else {
 				this.$confirm('尊敬的客户，您尚未添加提现账户，请添加后再试', '提示', {
 					confirmButtonText: '添加提现账户',
 					cancelButtonText: '取消',
 					type: 'warning',
 				}).then(() => {
-					this.$router.push({ path: '/withdrawdeposit/account' })
-				})
+					this.$router.push({ path: '/withdrawdeposit/account' });
+				});
 			}
 		},
 		onClose() {
@@ -148,7 +180,7 @@ export default {
 					this.loading = true;
 					const { payee, payeeAccount, bankName, amount, cardType } = this.formInfo;
 					let data = {
-						merchantId: sessionStorage.getItem("merchantId"),         // 商户ID
+						merchantId: sessionStorage.getItem('merchantId'), // 商户ID
 						payee: payee.supplierName,
 						supplierId: payee.supplierId,
 						payeeAccount,
@@ -157,9 +189,9 @@ export default {
 						amount,
 						customerType: payee.supplierType == 'PERSON' ? 1 : 0,
 						cardType,
-					}
-					console.log(data, 'aaaaaaaa')
-					withdrawl(data).then( res => {
+					};
+					console.log(data, 'aaaaaaaa');
+					withdrawl(data).then((res) => {
 						console.log(res, 'resresres');
 						if (res.code == 0) {
 							this.$message.success('提现成功');
@@ -168,10 +200,10 @@ export default {
 							this.dialogFormVisible = false;
 							this.loading = false;
 						}
-					})
-					setTimeout( () => {
-              this.loading = false;
-            }, 4000)
+					});
+					setTimeout(() => {
+						this.loading = false;
+					}, 4000);
 				} else {
 					console.log('error submit!!');
 					return false;
@@ -188,7 +220,7 @@ export default {
 			} else {
 				this.formInfo.amount = val;
 			}
-		}
+		},
 	},
 };
 </script>
@@ -196,5 +228,26 @@ export default {
 .card {
 	display: flex;
 	height: 30px;
+}
+::v-deep .el-dialog {
+	width: 600px !important;
+}
+::v-deep .el-radio.is-bordered {
+	display: flex;
+	align-items: center;
+
+	height: 80px !important;
+	margin-top: 20px;
+}
+::v-deep .el-radio.is-bordered + .el-radio.is-bordered {
+	margin-left: 0;
+	width: 400px;
+}
+::v-deep .el-radio-group {
+	height: 400px;
+	overflow-y: auto;
+}
+::v-deep .el-radio.is-bordered {
+	padding: 0 0 0 10px;
 }
 </style>

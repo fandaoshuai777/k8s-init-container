@@ -1,0 +1,267 @@
+{
+	"code": 0,
+	"data": [
+		{
+			"path": "/indentmanagement/index.vue",
+			"name": "indentmanagement",
+			"component": "indentmanagement",
+			"meta": {
+				"title": "订单管理",
+				"isLink": "",
+				"isHide": false,
+				"isKeepAlive": true,
+				"isAffix": false,
+				"isIframe": false,
+				"roles": [
+					"admin",
+					"common"
+				],
+				"icon": "iconfont icon-gongju"
+			}
+		},
+		{
+			"path": "/billmanagement",
+			"name": "billmanagemenDetail",
+			"component": "layout/routerView/parent",
+			"redirect": "/billmanagement/detail",
+			"meta": {
+				"title": "账单管理",
+				"isLink": "",
+				"isHide": true,
+				"hidden": true,
+				"isKeepAlive": true,
+				"isAffix": false,
+				"isIframe": false,
+				"icon": "iconfont icon-crew_feature"
+			},
+			"children": [
+				{
+					"path": "/billmanagement/detail",
+					"name": "billmanagemenDetail",
+					"component": "billmanagement/detail/index",
+					"meta": {
+						"title": "结算账单明细",
+						"isLink": "",
+						"hidden": true,
+						"isHide": false,
+						"isKeepAlive": true,
+						"isAffix": false,
+						"isIframe": false,
+						"roles": [
+							"admin",
+							"common"
+						],
+						"icon": "el-icon-thumb"
+					}
+				},
+				{
+					"path": "/billmanagement/daybill",
+					"name": "billmanagementDaybill",
+					"component": "billmanagement/daybill/index",
+					"meta": {
+						"title": "结算日账单",
+						"isLink": "",
+						"isHide": false,
+						"isKeepAlive": true,
+						"isAffix": false,
+						"isIframe": false,
+						"hidden": true,
+						"roles": [
+							"admin",
+							"common"
+						],
+						"icon": "el-icon-edit"
+					}
+				}
+			]
+		},
+		{
+			"path": "/bill/index.vue",
+			"name": "bill",
+			"component": "bill",
+			"meta": {
+				"title": "东疆日账单列表",
+				"isLink": "",
+				"isHide": false,
+				"isKeepAlive": true,
+				"isAffix": false,
+				"isIframe": false,
+				"roles": [
+					"admin",
+					"common"
+				],
+				"icon": "iconfont icon-gongju"
+			}
+		},
+		{
+			"path": "/withdrawdeposit",
+			"name": "Withdrawdeposit",
+			"component": "layout/routerView/parent",
+			"redirect": "withdrawdeposit",
+			"meta": {
+				"title": "提现管理",
+				"isLink": "",
+				"isKeepAlive": true,
+				"isAffix": false,
+				"isIframe": false,
+				"icon": "iconfont icon-crew_feature"
+			},
+			"children": [
+				{
+					"path": "/withdrawdeposit/balance",
+					"name": "balance",
+					"component": "withdrawdeposit/balance",
+					"meta": {
+						"title": "账户余额",
+						"isLink": "",
+						"isKeepAlive": true,
+						"isAffix": false,
+						"isIframe": false,
+						"roles": [
+							"admin",
+							"common"
+						],
+						"icon": "el-icon-thumb"
+					}
+				},
+				{
+					"path": "/withdrawdeposit/orderform",
+					"name": "orderform",
+					"component": "withdrawdeposit/orderform",
+					"meta": {
+						"title": "提现订单",
+						"isLink": "",
+						"isKeepAlive": true,
+						"isAffix": false,
+						"isIframe": false,
+						"roles": [
+							"admin",
+							"common"
+						],
+						"icon": "el-icon-edit"
+					}
+				},
+				{
+					"path": "/withdrawdeposit/account",
+					"name": "account",
+					"component": "withdrawdeposit/account",
+					"meta": {
+						"title": "提现账户管理",
+						"isLink": "",
+						"isKeepAlive": true,
+						"isAffix": false,
+						"isIframe": false,
+						"roles": [
+							"admin",
+							"common"
+						],
+						"icon": "el-icon-s-tools"
+					}
+				}
+			]
+		},
+		{
+			"path": "/orderManagement",
+			"name": "OrderManagement",
+			"component": "layout/routerView/parent",
+			"redirect": "orderManagement",
+			"meta": {
+				"title": "订单管理",
+				"isLink": "",
+				"isKeepAlive": true,
+				"isAffix": false,
+				"isIframe": false,
+				"icon": "el-icon-document"
+			},
+			"children": [
+				{
+					"path": "/orderManagement/refueling",
+					"name": "refueling",
+					"component": "orderManagement/refueling",
+					"meta": {
+						"title": "一键加油订单",
+						"isLink": "",
+						"isKeepAlive": true,
+						"isAffix": false,
+						"isIframe": false,
+						"roles": [
+							"admin",
+							"common"
+						],
+						"icon": "el-icon-thumb"
+					}
+				},
+				{
+					"path": "/orderManagement/quickPass",
+					"name": "quickPass",
+					"component": "orderManagement/quickPass",
+					"meta": {
+						"title": "闪付订单",
+						"isLink": "",
+						"isKeepAlive": true,
+						"isAffix": false,
+						"isIframe": false,
+						"roles": [
+							"admin",
+							"common"
+						],
+						"icon": "el-icon-edit"
+					}
+				},
+				{
+					"path": "/orderManagement/stored",
+					"name": "stored",
+					"component": "orderManagement/stored",
+					"meta": {
+						"title": "储值订单",
+						"isLink": "",
+						"isKeepAlive": true,
+						"isAffix": false,
+						"isIframe": false,
+						"roles": [
+							"admin",
+							"common"
+						],
+						"icon": "el-icon-s-tools"
+					}
+				}
+			]
+		},
+		{
+			"path": "/settlementManagement",
+			"name": "SettlementManagement",
+			"component": "layout/routerView/parent",
+			"redirect": "settlementManagement",
+			"meta": {
+				"title": "结算管理",
+				"isLink": "",
+				"isKeepAlive": true,
+				"isAffix": false,
+				"isIframe": false,
+				"isHide": true,
+				"hidden": true,
+				"icon": "iconfont icon-crew_feature"
+			},
+			"children": [
+				{
+					"path": "/settlementManagement/settlementDay",
+					"name": "balance",
+					"component": "settlementManagement/settlementDay",
+					"meta": {
+						"title": "结算日账单",
+						"isLink": "",
+						"isKeepAlive": true,
+						"isAffix": false,
+						"isIframe": false,
+						"roles": [
+							"admin",
+							"common"
+						],
+						"icon": "el-icon-thumb"
+					}
+				}
+
+			]
+		}
+	]
+}

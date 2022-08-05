@@ -6,8 +6,11 @@ import 'nprogress/nprogress.css';
 import { Session, Local } from '@/utils/storage';
 import { PrevLoading } from '@/utils/loading.js';
 import { getMenuAdmin, getMenuTest } from '@/api/menu';
-import menuList from './admin.json';
+import easternUserList from './easternUser.json';
+import oilUserList from './oilUser.json';
 import ElementUi from 'element-ui'
+import { user } from '@/api/login/index';
+
 // 解决 `element ui` 导航栏重复点菜单报错问题
 const originalPush = VueRouter.prototype.push;
 VueRouter.prototype.push = function push(location) {
@@ -185,18 +188,36 @@ export function dynamicRouter(routes) {
 // next({ ...to, replace: true }) 动态路由 addRoute 完毕后才放行，防止刷新时 NProgress 进度条加载2次
 // 文档地址：https://router.vuejs.org/zh/api/#router-addroutes
 export function adminUser(router, to, next) {
-	resetRouter();
-	
-				// 读取用户信息，获取对应权限进行判断
+	user().then((res) => {
+		if (res.result.source !== 8) {
+			resetRouter();
+			// 读取用户信息，获取对应权限进行判断
 			store.dispatch('userInfos/setUserInfos');
-			store.dispatch('routesList/setRoutesList', setFilterMenuFun(menuList.data, store.state.userInfos.userInfos.roles));
-			dynamicRoutes[0].children =menuList.data;
-			const awaitRoute =  dynamicRouter(dynamicRoutes);
+			store.dispatch('routesList/setRoutesList', setFilterMenuFun(easternUserList.data, store.state.userInfos.userInfos.roles));
+			dynamicRoutes[0].children = easternUserList.data;
+			const awaitRoute = dynamicRouter(dynamicRoutes);
 			[...awaitRoute, { path: '*', redirect: '/404' }].forEach((route) => {
 				router.addRoute({ ...route });
 			});
-			setCacheTagsViewRoutes(JSON.parse(JSON.stringify(menuList.data)));
+			setCacheTagsViewRoutes(JSON.parse(JSON.stringify(easternUserList.data)));
 			next({ ...to, replace: true });
+		} else {
+			resetRouter();
+			// 读取用户信息，获取对应权限进行判断
+			store.dispatch('userInfos/setUserInfos');
+			store.dispatch('routesList/setRoutesList', setFilterMenuFun(oilUserList.data, store.state.userInfos.userInfos.roles));
+			dynamicRoutes[0].children = oilUserList.data;
+			const awaitRoute = dynamicRouter(dynamicRoutes);
+			[...awaitRoute, { path: '*', redirect: '/404' }].forEach((route) => {
+				router.addRoute({ ...route });
+			});
+			setCacheTagsViewRoutes(JSON.parse(JSON.stringify(oilUserList.data)));
+			next({ ...to, replace: true });
+		}
+	});
+
+
+
 	// getMenuAdmin()
 	// 	.then(async (res) => {
 	// 		console.log(res)
@@ -250,7 +271,7 @@ export function delayNProgressDone(time = 300) {
 // 动态加载后端返回路由路由(模拟数据)
 export function getRouterList(router, to, next) {
 	if (Local.get('userInfo') == null) {
-  
+
 		if (Session.get('userInfo').userName === 'admin') adminUser(router, to, next);
 		else if (Session.get('userInfo').userName === 'test') testUser(router, to, next);
 	} else {

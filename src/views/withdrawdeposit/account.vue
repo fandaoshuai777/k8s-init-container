@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<el-card shadow="hover">
-			<div style="margin-bottom: 10px"><el-button type="primary" @click="handleAdd">添加提现账户</el-button></div>
+			<div style="margin-bottom: 10px"><el-button type="primary" @click="handleAdd" size="small">添加提现账户</el-button></div>
 
 			<el-table :data="tableData" border style="width: 100%" v-loading="loading">
 				<el-table-column prop="id" label="编号" width="220" align="center"></el-table-column>
@@ -28,7 +28,7 @@
 				</el-table-column>
 			</el-table>
 		</el-card>
-		<add-dialog :show.sync="show" @change="change" ref="child" :disabled="disabled"></add-dialog>
+		<add-dialog class="dialog" :show.sync="show" @change="change" ref="child" :disabled="disabled"></add-dialog>
 	</div>
 </template>
 <script>
@@ -114,9 +114,16 @@ export default {
 };
 </script>
 <style scoped>
-::v-deep .el-dialog .el-dialog__body {
+::v-deep .el-row {
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	flex-direction: column;
+	text-align: center;
+
 }
+::v-deep .el-dialog{
+	width: 700px !important;
+}
+
 </style>
