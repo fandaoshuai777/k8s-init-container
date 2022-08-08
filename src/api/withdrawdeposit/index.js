@@ -2,7 +2,7 @@ import request from '@/utils/request';
 
 var pubUrl = 'https://merchant-server.cngotone.com';
 if (process.env.NODE_ENV === 'development') {
-  pubUrl = 'https://internal.fat.op-api-gateway.wonder-link.net'
+  pubUrl = 'https://internal.dev.op-api-gateway.wonder-link.net'
 } else if (window.location.hostname.indexOf('-test') !== -1) {
   pubUrl = 'https://internal.fat.op-api-gateway.wonder-link.net'
 } else {
@@ -103,5 +103,20 @@ export function select_by_merchant_id(params) {
     url: `${pubUrl}/gotone-settlement-api/mp/supplier_apply/select_withdrawal_account_by_merchant_id`,
     method: 'get',
     params,
+  })
+}
+// 删除提现卡
+export function delete_by_merchant_id(id) {
+  return request({
+    url: `${pubUrl}/gotone-settlement-api/mp/supplier_apply/del/card/${id}`,
+    method: 'get',
+  })
+}
+// 修改提现卡
+export function editCard(data) {
+  return request({
+    url: `${pubUrl}/gotone-settlement-api/mp/supplier_apply/edit/card`,
+    method: 'post',
+    data
   })
 }

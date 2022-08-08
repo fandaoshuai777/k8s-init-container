@@ -405,11 +405,15 @@ export default {
 		},
 		// 页码变化
 		paginationChange(value) {
+			this.loading = true;
+
 			this.pagination.pageNum = value;
 			this.indentList();
 		},
 		// 页数变化
 		pageSizeChange(value) {
+			this.loading = true;
+
 			this.pagination.pageSize = value;
 			this.indentList();
 		},

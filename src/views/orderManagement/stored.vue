@@ -53,7 +53,7 @@
 					</el-form-item>
 					<el-form-item label="退款状态">
 						<el-select v-model="formInline.refundStatus" placeholder="请选择">
-													<el-option label="全部" value />
+							<el-option label="全部" value />
 							<!-- <el-option label="未退款" :value="0" /> -->
 							<el-option label="退款中" :value="2" />
 							<!-- <el-option label="退款审核成功" :value="3" />
@@ -439,6 +439,8 @@ export default {
 				pageSize: this.pagination.pageSize,
 			};
 			storedOrderList(data).then((res) => {
+				this.loading = false;
+
 				this.total = Number(res.data.total);
 				this.tableData = res.data.list.map((n) => {
 					return {
@@ -510,18 +512,22 @@ export default {
 		// 页码变化
 		paginationChange(value) {
 			this.pagination.currPage = value.current;
-			this.loading = false;
+			this.loading = true;
 			this.orderList();
 		},
 		// 页数变化
 		pageSizeChange(value) {
+			this.loading = true;
+
 			this.pagination.pageSize = value.size;
 			this.pagination.currPage = 1;
-			this.loading = false;
+
 			this.orderList();
 		},
 		// 查询
 		inquire() {
+			this.loading = true;
+
 			this.pagination.currPage = 1;
 			this.orderList();
 			this.orderStatistics();

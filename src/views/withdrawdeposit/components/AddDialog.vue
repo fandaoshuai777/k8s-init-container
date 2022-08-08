@@ -1,6 +1,12 @@
 <template>
 	<div class="diolog" v-if="show">
-		<el-dialog title="添加提现账户" :visible.sync="dialogVisible" :before-close="onClose" :close-on-click-modal="false" width="25%">
+		<el-dialog
+			:title="type === 'add' ? '添加提现账户' : type === 'compile' ? '编辑提现账户' : type === 'particulars' ? '详情' : type"
+			:visible.sync="dialogVisible"
+			:before-close="onClose"
+			:close-on-click-modal="false"
+			width="25%"
+		>
 			<el-form ref="formInfo" :rules="rules" :model="formInfo" label-width="100px" size="small" :disabled="disabled" :inline="true">
 				<el-row>
 					<el-col>
@@ -43,45 +49,61 @@
 						</el-form-item>
 					</el-col>
 				</el-row>
-
-				<!-- <el-form-item label="" prop="type" style="margin-left: -25px">
-					<el-checkbox-group v-model="formInfo.type">
-						<el-checkbox label="A" name="type" style="display: flex; align-items: center">
-							<span style="color: red; width: 217px; font-size: 12px"
-								>最多添加3个对公、5个对私账户(添加成<br />功后,暂不支持修改与删除，请谨慎操作！)</span
-							>
-						</el-checkbox>
-					</el-checkbox-group>
-				</el-form-item> -->
 			</el-form>
 			<el-form ref="listCard" :model="formList" label-width="90px" size="small" :inline="true" class="border" :rules="rulesCard">
 				<el-form-item>
 					<div style="color: red; width: 217px; font-size: 12px">每个账户名最多可添加10张提现卡。</div>
 				</el-form-item>
-				<el-card class="box-card" v-for="(item, index) in formList.list" :key="index" style="margin-top: 5px">
+				<el-card class="box-card" v-for="(item, index) in formList.bankInfos" :key="index" style="margin-top: 5px">
 					<div slot="header" class="clearfix">
 						<span>提现卡</span>
-						<el-button style="float: right; padding: 3px 0" type="text" icon="el-icon-minus" circle @click="delDept(index)"></el-button>
+						<el-button
+							style="float: right; padding: 3px 0"
+							type="text"
+							icon="el-icon-close"
+							circle
+							:disabled="disabled"
+							@click="delDept(index)"
+						></el-button>
 					</div>
 					<el-row class="row">
 						<el-col>
-							<el-form-item label="银行账号" :prop="'list.' + index + '.a'" :rules="[{ required: true, message: '银行账号不能为空' }]">
-								<el-input v-model="item.a" clearable maxlength="50" style="width: 217px" />
+							<el-form-item
+								label="银行账号"
+								:prop="'bankInfos.' + index + '.accountNumber'"
+								:rules="[{ required: true, message: '银行账号不能为空' }]"
+							>
+								<el-input
+									:disabled="forbidden"
+									v-model="item.accountNumber"
+									clearable
+									maxlength="50"
+									style="width: 217px"
+									placeholder="请输入银行账号"
+								/>
 							</el-form-item>
 						</el-col>
 						<el-col>
-							<el-form-item label="开户行" :prop="'list.' + index + '.b'" :rules="[{ required: true, message: '账户类型不能为空' }]">
-								<el-select v-model="item.b" placeholder="请选择账户类型" @change="selectChange">
-									<el-option label="个人" value="PERSON"></el-option>
-									<el-option label="企业" value="BUSINESS"></el-option>
+							<el-form-item
+								label="开户行"
+								:prop="'bankInfos.' + index + '.accountHolderName'"
+								:rules="[{ required: true, message: '开户行不能为空' }]"
+							>
+								<el-select :disabled="forbidden" v-model="item.accountHolderName" placeholder="请选择开户行">
+									<el-option v-for="item in selectList" :key="item.value" :label="item.bankName" :value="item.bankName"> </el-option>
 								</el-select>
 							</el-form-item>
 						</el-col>
 						<el-col>
-							<el-form-item label="卡类型" :prop="'list.' + index + '.c'" :rules="[{ required: true, message: '账户类型不能为空' }]">
-								<el-select v-model="item.c" placeholder="请选择账户类型" @change="selectChange">
-									<el-option label="个人" value="PERSON"></el-option>
-									<el-option label="企业" value="BUSINESS"></el-option>
+							<el-form-item label="卡类型" :prop="'bankInfos.' + index + '.cardType'" :rules="[{ required: true, message: '卡类型不能为空' }]">
+								<el-select
+									:disabled="type === 'particulars' ? (forbidden = true) : (forbidden = false)"
+									v-model="item.cardType"
+									placeholder="请选择卡类型"
+								>
+									<el-option label="借记卡" :value="1"></el-option>
+									<el-option label="贷记卡" :value="2"></el-option>
+									<el-option label="存折" :value="4"></el-option>
 								</el-select>
 							</el-form-item>
 						</el-col>
@@ -89,20 +111,20 @@
 				</el-card>
 				<el-form-item style="margin-top: 20px">
 					<div>
-						<el-button type="success" icon="el-icon-plus" circle @click="increase"></el-button>
+						<el-button type="success" icon="el-icon-plus" circle @click="increase" :disabled="disabled"></el-button>
 					</div>
 				</el-form-item>
 			</el-form>
 			<span slot="footer" class="dialog-footer">
 				<el-button v-if="!disabled" type="primary" :loading="loading" @click="submitForm('formInfo')">确定</el-button>
-				<el-button @click="resetForm('formInfo')">取消</el-button>
+				<el-button @click="resetForm()">取消</el-button>
 			</span>
 		</el-dialog>
 	</div>
 </template>
 <script>
 import { Local } from '@/utils/storage';
-import { createUser, detailUser, uploadPhoto } from '@/api/withdrawdeposit';
+import { createUser, detailUser, uploadPhoto, query_bank_info, delete_by_merchant_id, editCard } from '@/api/withdrawdeposit';
 
 export default {
 	data() {
@@ -130,13 +152,7 @@ export default {
 				license: '',
 			},
 			formList: {
-				list: [
-					{
-						a: '',
-						b: '',
-						c: '',
-					},
-				],
+				bankInfos: [],
 			},
 			loading: false,
 			rules: {
@@ -148,10 +164,13 @@ export default {
 				// type: [{ type: 'array', required: true, message: '请选择', trigger: 'change' }],
 			},
 			rulesCard: {
-				a: [{ required: true, message: '请输入账户名', trigger: 'blur' }],
-				b: [{ required: true, message: '请选择营业执照', trigger: 'blur' }],
-				c: [{ required: true, message: '请选择营业执照', trigger: 'change' }],
+				accountNumber: [{ required: true, message: '银行账号不能为空', trigger: 'blur' }],
+				accountHolderName: [{ required: true, message: '开户行不能为空', trigger: 'blur' }],
+				cardType: [{ required: true, message: '请选择卡类型', trigger: 'change' }],
 			},
+			selectList: [],
+			forbidden: false,
+			id: '',
 		};
 	},
 	props: {
@@ -163,6 +182,16 @@ export default {
 			type: Boolean,
 			default: false,
 		},
+		type: {
+			type: String,
+			default: false,
+		},
+	},
+	created() {},
+	mounted() {
+		query_bank_info().then((res) => {
+			this.selectList = res.data.list;
+		});
 	},
 	methods: {
 		getDetail(id) {
@@ -176,6 +205,8 @@ export default {
 						// type: ['A'],
 						license: res.data.supplierLicenceNo, // 营业执照
 					};
+					this.formList.bankInfos = res.data.bankInfos;
+					this.id = res.data.id;
 				}
 			});
 		},
@@ -184,56 +215,61 @@ export default {
 			this.$refs['formInfo'].resetFields();
 		},
 		submitForm(formName) {
-			this.$refs[formName].validate((valid) => {
-				if (valid) {
-					this.$refs['listCard'].validate((valid) => {
-						if (valid) {
-							const h = this.$createElement;
-							let text = '';
-							if (this.formList.lenght < 0) {
-								text = h('p', null, [
-									h('span', { style: 'font-size: 18px' }, '您尚未添加提现卡，确定保存吗? '),
-									h('p', { style: 'color: red' }, '最多添加3个对公、5个对私账户名'),
-									h('p', { style: 'color: red' }, '(添加成功后，暂不支持修改与删除，请谨慎操作!)'),
-								]);
-							} else {
-								text = h('p', null, [
-									h('span', { style: 'font-size: 18px' }, '确定保存吗? '),
-									h('p', { style: 'color: red' }, '最多添加3个对公、5个对私账户名'),
-									h('p', { style: 'color: red' }, '(添加成功后，暂不支持修改与删除，请谨慎操作!)'),
-								]);
-							}
-							this.$msgbox({
-								title: '系统提示',
-								message: text,
-								showCancelButton: true,
-								confirmButtonText: '确定',
-								cancelButtonText: '取消',
-								beforeClose: (action, instance, done) => {
-									if (action === 'confirm') {
-										instance.confirmButtonLoading = true;
-										instance.confirmButtonText = '执行中...';
-										setTimeout(() => {
-											done();
+			if (this.type === 'compile') {
+				this.edit();
+			} else {
+				this.$refs[formName].validate((valid) => {
+					if (valid) {
+						this.$refs['listCard'].validate((valid) => {
+							if (valid) {
+								const h = this.$createElement;
+								let text = '';
+								console.log(this.formList.bankInfos.length)
+								if (this.formList.bankInfos.length <= 0) {
+									text = h('p', null, [
+										h('span', { style: 'font-size: 18px' }, '您尚未添加提现卡，确定保存吗? '),
+										h('p', { style: 'color: red' }, '最多添加3个对公、5个对私账户名'),
+										h('p', { style: 'color: red' }, '(添加成功后，暂不支持修改与删除，请谨慎操作!)'),
+									]);
+								} else {
+									text = h('p', null, [
+										h('span', { style: 'font-size: 18px' }, '确定保存吗? '),
+										h('p', { style: 'color: red' }, '最多添加3个对公、5个对私账户名'),
+										h('p', { style: 'color: red' }, '(添加成功后，暂不支持修改与删除，请谨慎操作!)'),
+									]);
+								}
+								this.$msgbox({
+									title: '系统提示',
+									message: text,
+									showCancelButton: true,
+									confirmButtonText: '确定',
+									cancelButtonText: '取消',
+									beforeClose: (action, instance, done) => {
+										if (action === 'confirm') {
+											instance.confirmButtonLoading = true;
+											instance.confirmButtonText = '执行中...';
 											setTimeout(() => {
-												instance.confirmButtonLoading = false;
-											}, 300);
-										}, 3000);
-									} else {
-										done();
-										this.$message('取消操作');
-									}
-								},
-							})
-								.then(async (action) => {
-									console.log(action);
-									await this.craete();
+												done();
+												setTimeout(() => {
+													instance.confirmButtonLoading = false;
+												}, 300);
+											}, 2000);
+										} else {
+											done();
+											this.$message('取消操作');
+										}
+									},
 								})
-								.catch(() => {});
-						}
-					});
-				}
-			});
+									.then(async (action) => {
+										console.log(action);
+										await this.craete();
+									})
+									.catch(() => {});
+							}
+						});
+					}
+				});
+			}
 		},
 		craete() {
 			this.loading = true;
@@ -248,23 +284,50 @@ export default {
 				supplierName: supplierName, // 账户名称
 				supplierType: supplierType, // 账户类型 PERSON：个人, BUSINESS:企业
 			};
-			createUser(data).then((res) => {
+			const list = { ...data, ...this.formList };
+			createUser(list).then((res) => {
 				console.log(res, 'resresres');
 				if (res.code == 0) {
 					this.$message.success('添加成功');
 					this.$emit('update:show', false);
 					this.$emit('change');
-					this.$refs[formName].resetFields();
+					this.$refs['formInfo'].resetFields();
 					this.loading = false;
+					this.formList = {
+						bankInfos: [],
+					};
 				}
 			});
 			setTimeout(() => {
 				this.loading = false;
 			}, 4000);
 		},
-		resetForm(formName) {
-			this.$refs[formName].resetFields();
+		edit() {
+			this.loading = true;
+			const list = { id: this.id, ...this.formList };
+			editCard(list).then((res) => {
+				if (res.code == 0) {
+					this.$message.success('编辑成功');
+					this.$emit('update:show', false);
+					this.$emit('change');
+					this.$refs['formInfo'].resetFields();
+					this.loading = false;
+					this.formList = {
+						bankInfos: [],
+					};
+				}
+			});
+			setTimeout(() => {
+				this.loading = false;
+			}, 4000);
+		},
+		resetForm() {
+			this.$refs['formInfo'].resetFields();
+
 			this.$emit('update:show', false);
+			this.formList = {
+				bankInfos: [],
+			};
 		},
 		uploadAvatar(item) {
 			const formData = new FormData();
@@ -294,26 +357,45 @@ export default {
 		selectChange() {
 			this.formInfo.supplierLicenceNo = '';
 			this.formInfo.license = '';
+
+			if (this.formInfo.supplierType === 'BUSINESS') {
+				this.formList.bankInfos.map((n) => {
+					n.cardType = '6';
+					return {
+						...n,
+					};
+				});
+			} else {
+			}
 		},
 		increase() {
 			this.$refs['listCard'].validate((valid) => {
 				if (valid) {
-					if (this.formList.list.length > 9) {
+					if (this.formList.bankInfos.length > 9) {
 						this.$message.error('最多添加10张提现卡');
 						return false;
 					} else {
 						const data = {
-							a: 1,
-							b: 2,
-							c: 3,
+							accountNumber: '',
+							accountHolderName: '',
+							cardType: '',
 						};
-						this.formList.list.push(data);
+						this.formList.bankInfos.push(data);
 					}
 				}
 			});
 		},
 		delDept(index) {
-			this.formList.list.splice(index, 1);
+			if (this.formList.bankInfos[index].id) {
+				delete_by_merchant_id(this.formList.bankInfos[index].id).then((res) => {
+					if (res.code === '0') {
+						this.formList.bankInfos.splice(index, 1);
+						this.$message.success('删除成功');
+					}
+				});
+			} else {
+				this.formList.bankInfos.splice(index, 1);
+			}
 		},
 	},
 };

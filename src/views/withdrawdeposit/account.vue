@@ -22,17 +22,18 @@
 				<el-table-column prop="address" label="操作" align="center">
 					<template slot-scope="scope">
 						<el-button type="text" @click="handleDetail(scope.row)">详情</el-button>
+						<el-button type="text" @click="compile(scope.row)">编辑</el-button>
 						<el-button type="text" v-if="scope.row.stats == 1102" @click="handleClick(scope.row)">再次提交</el-button>
 						<el-button type="text" v-if="scope.row.stats == 1102" @click="handleDelete(scope.row)">删除</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
 		</el-card>
-		<add-dialog class="dialog" :show.sync="show" @change="change" ref="child" :disabled="disabled"></add-dialog>
+		<add-dialog class="dialog" :show.sync="show" @change="change" :type='type' ref="child" :disabled="disabled"></add-dialog>
 	</div>
 </template>
 <script>
-import { allow_or_not, getmerList, deleteUser, submit_again } from '@/api/withdrawdeposit';
+import { allow_or_not, getmerList, deleteUser, submit_again} from '@/api/withdrawdeposit';
 import AddDialog from './components/AddDialog';
 
 export default {
@@ -45,6 +46,7 @@ export default {
 			tableData: [],
 			disabled: false,
 			loading: false,
+			type:'add'
 		};
 	},
 	created() {
@@ -66,6 +68,7 @@ export default {
 						this.show = true;
 						this.disabled = false;
 					}
+					this.type = 'add'
 				} else {
 					this.$message({
 						type: 'error',
@@ -103,8 +106,15 @@ export default {
 			})
 		},
 		handleDetail(row) {
+			this.type = 'particulars'
 			this.show = true;
 			this.disabled = true;
+			this.$refs.child.getDetail(row.id);
+		},
+		compile(row) {
+			this.type = 'compile'
+			this.show = true;
+			this.disabled = false;
 			this.$refs.child.getDetail(row.id);
 		},
 		change() {

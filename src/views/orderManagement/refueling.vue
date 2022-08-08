@@ -497,6 +497,8 @@ export default {
 				pageSize: this.pagination.pageSize,
 			};
 			oneClickOrderList(data).then((res) => {
+			this.loading = false;
+
 				this.total = Number(res.data.total);
 				this.tableData = res.data.list.map((n) => {
 					return {
@@ -569,18 +571,20 @@ export default {
 		// 页码变化
 		paginationChange(value) {
 			this.pagination.currPage = value.current;
-			this.loading = false;
+			this.loading = true;
 			this.orderList();
 		},
 		// 页数变化
 		pageSizeChange(value) {
 			this.pagination.pageSize = value.size;
 			this.pagination.currPage = 1;
-			this.loading = false;
+			this.loading = true;
 			this.orderList();
 		},
 		// 查询
 		inquire() {
+			this.loading = true;
+
 			this.pagination.currPage = 1;
 			this.orderList();
 			this.orderStatistics();

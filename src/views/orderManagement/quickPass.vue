@@ -223,7 +223,7 @@
 					<el-descriptions-item>
 						<template slot="label"> 退款状态 </template>
 						{{
-								payData.refundStatus == 2
+							payData.refundStatus == 2
 								? '退款中'
 								: payData.refundStatus == 3
 								? '退款审核成功'
@@ -433,6 +433,8 @@ export default {
 			};
 			quickPassOrderList(data).then((res) => {
 				this.total = Number(res.data.total);
+				this.loading = false;
+
 				this.tableData = res.data.list.map((n) => {
 					return {
 						...n,
@@ -503,18 +505,20 @@ export default {
 		// 页码变化
 		paginationChange(value) {
 			this.pagination.currPage = value.current;
-			this.loading = false;
+			this.loading = true;
 			this.orderList();
 		},
 		// 页数变化
 		pageSizeChange(value) {
 			this.pagination.pageSize = value.size;
 			this.pagination.currPage = 1;
-			this.loading = false;
+			this.loading = true;
 			this.orderList();
 		},
 		// 查询
 		inquire() {
+			this.loading = true;
+
 			this.pagination.currPage = 1;
 			this.orderList();
 			this.orderStatistics();
