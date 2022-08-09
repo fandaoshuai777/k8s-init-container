@@ -97,13 +97,14 @@
 						<el-col>
 							<el-form-item label="卡类型" :prop="'bankInfos.' + index + '.cardType'" :rules="[{ required: true, message: '卡类型不能为空' }]">
 								<el-select
-									:disabled="type === 'particulars' ? (forbidden = true) : (forbidden = false)"
+									:disabled="formInfo.supplierType === 'BUSINESS' ? true : type === 'particulars' ? (forbidden = true) : (forbidden = false)"
 									v-model="item.cardType"
 									placeholder="请选择卡类型"
 								>
 									<el-option label="借记卡" :value="1"></el-option>
 									<el-option label="贷记卡" :value="2"></el-option>
 									<el-option label="存折" :value="4"></el-option>
+									<el-option label="对公卡" :value="6" :disabled="prohibited"></el-option>
 								</el-select>
 							</el-form-item>
 						</el-col>
@@ -170,6 +171,8 @@ export default {
 			},
 			selectList: [],
 			forbidden: false,
+			prohibited: true,
+
 			id: '',
 		};
 	},
@@ -213,6 +216,9 @@ export default {
 		onClose() {
 			this.$emit('update:show', false);
 			this.$refs['formInfo'].resetFields();
+			this.formList = {
+				bankInfos: [],
+			};
 		},
 		submitForm(formName) {
 			if (this.type === 'compile') {
@@ -224,7 +230,7 @@ export default {
 							if (valid) {
 								const h = this.$createElement;
 								let text = '';
-								console.log(this.formList.bankInfos.length)
+								console.log(this.formList.bankInfos.length);
 								if (this.formList.bankInfos.length <= 0) {
 									text = h('p', null, [
 										h('span', { style: 'font-size: 18px' }, '您尚未添加提现卡，确定保存吗? '),
@@ -360,12 +366,18 @@ export default {
 
 			if (this.formInfo.supplierType === 'BUSINESS') {
 				this.formList.bankInfos.map((n) => {
-					n.cardType = '6';
+					n.cardType = 6;
 					return {
 						...n,
 					};
 				});
 			} else {
+				this.formList.bankInfos.map((n) => {
+					n.cardType = null;
+					return {
+						...n,
+					};
+				});
 			}
 		},
 		increase() {
