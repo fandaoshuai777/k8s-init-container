@@ -12,7 +12,7 @@ export function getBalance(params) {
 // 提现申请
 export function withdrawl(params) {
   return request({
-    url: `/gotone-payment-api/mp/withdrawl`,
+    url: `/gotone-settlement-api/mp/withdrawl`,
     method: 'post',
     data: params,
   })

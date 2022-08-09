@@ -68,11 +68,7 @@
 					</div>
 					<el-row class="row">
 						<el-col>
-							<el-form-item
-								label="银行账号"
-								:prop="'bankInfos.' + index + '.accountNumber'"
-								:rules="[{ required: true, message: '银行账号不能为空' }]"
-							>
+							<el-form-item label="银行账号" :prop="'bankInfos.' + index + '.accountNumber'" :rules="rulesCard.accountNumber">
 								<el-input
 									:disabled="forbidden"
 									v-model="item.accountNumber"
@@ -89,22 +85,25 @@
 								:prop="'bankInfos.' + index + '.accountHolderName'"
 								:rules="[{ required: true, message: '开户行不能为空' }]"
 							>
-								<el-select :disabled="forbidden" v-model="item.accountHolderName" placeholder="请选择开户行">
-									<el-option v-for="item in selectList" :key="item.value" :label="item.bankName" :value="item.bankName"> </el-option>
+								<el-select :disabled="forbidden" v-model="item.accountHolderName" placeholder="请选择开户行" value-key="id" filterable>
+									<el-option v-for="item in selectList" :key="item.value" :label="item.bankName" :value="item"> </el-option>
 								</el-select>
 							</el-form-item>
 						</el-col>
 						<el-col>
 							<el-form-item label="卡类型" :prop="'bankInfos.' + index + '.cardType'" :rules="[{ required: true, message: '卡类型不能为空' }]">
 								<el-select
-									:disabled="formInfo.supplierType === 'BUSINESS' ? true : type === 'particulars' ? (forbidden = true) : (forbidden = false)"
+									v-if="prohibited === true"
+									:disabled="type === 'particulars' ? (forbidden = true) : (forbidden = false)"
 									v-model="item.cardType"
 									placeholder="请选择卡类型"
 								>
 									<el-option label="借记卡" :value="1"></el-option>
 									<el-option label="贷记卡" :value="2"></el-option>
 									<el-option label="存折" :value="4"></el-option>
-									<el-option label="对公卡" :value="6" :disabled="prohibited"></el-option>
+								</el-select>
+								<el-select v-else v-model="item.cardType" placeholder="请选择卡类型">
+									<el-option label="对公卡" :value="6"></el-option>
 								</el-select>
 							</el-form-item>
 						</el-col>
@@ -140,6 +139,17 @@ export default {
 				callback();
 			}
 		};
+		var checkYHK = (rule, value, callback) => {
+			var reg = /^([1-9]{1})(\d{15}|\d{16}|\d{18})$/;
+			if (!value) {
+				return callback(new Error('请填写银行卡号'));
+			}
+			if (!reg.test(value)) {
+				callback(new Error('请填写正确的银行卡号'));
+			} else {
+				callback();
+			}
+		};
 		return {
 			dialogVisible: true,
 			token: Local.get('token'),
@@ -165,7 +175,7 @@ export default {
 				// type: [{ type: 'array', required: true, message: '请选择', trigger: 'change' }],
 			},
 			rulesCard: {
-				accountNumber: [{ required: true, message: '银行账号不能为空', trigger: 'blur' }],
+				accountNumber: [{ required: true, validator: checkYHK, trigger: 'blur' }],
 				accountHolderName: [{ required: true, message: '开户行不能为空', trigger: 'blur' }],
 				cardType: [{ required: true, message: '请选择卡类型', trigger: 'change' }],
 			},
@@ -193,7 +203,7 @@ export default {
 	created() {},
 	mounted() {
 		query_bank_info().then((res) => {
-			this.selectList = res.data.list;
+			this.selectList = Object.freeze(res.data.list);
 		});
 	},
 	methods: {
@@ -290,7 +300,17 @@ export default {
 				supplierName: supplierName, // 账户名称
 				supplierType: supplierType, // 账户类型 PERSON：个人, BUSINESS:企业
 			};
-			const list = { ...data, ...this.formList };
+
+			let arr = this.formList.bankInfos.map((n, index) => {
+				return {
+					accountNumber: n.accountNumber,
+					cardType: n.cardType,
+					bankName: n.accountHolderName.bankName,
+					bankCode: n.accountHolderName.bankCode,
+					accountHolderName: supplierName,
+				};
+			});
+			const list = { ...data, bankInfos: arr };
 			createUser(list).then((res) => {
 				console.log(res, 'resresres');
 				if (res.code == 0) {
@@ -310,9 +330,21 @@ export default {
 		},
 		edit() {
 			this.loading = true;
-			const list = { id: this.id, ...this.formList };
+			const { supplierName } = this.formInfo;
+
+			let arr = this.formList.bankInfos.map((n, index) => {
+				return {
+					accountNumber: n.accountNumber,
+					cardType: n.cardType,
+					bankName: n.accountHolderName.bankName,
+					bankCode: n.accountHolderName.bankCode,
+					accountHolderName: supplierName,
+					id: n.id ? n.id : '',
+				};
+			});
+			const list = { id: this.id, bankInfos: arr };
 			editCard(list).then((res) => {
-				if (res.code == 0) {
+				if (res.code === '0') {
 					this.$message.success('编辑成功');
 					this.$emit('update:show', false);
 					this.$emit('change');
@@ -365,6 +397,7 @@ export default {
 			this.formInfo.license = '';
 
 			if (this.formInfo.supplierType === 'BUSINESS') {
+				this.prohibited = false;
 				this.formList.bankInfos.map((n) => {
 					n.cardType = 6;
 					return {
@@ -372,8 +405,9 @@ export default {
 					};
 				});
 			} else {
+				this.prohibited = true;
 				this.formList.bankInfos.map((n) => {
-					n.cardType = null;
+					n.cardType = 1;
 					return {
 						...n,
 					};
@@ -391,6 +425,8 @@ export default {
 							accountNumber: '',
 							accountHolderName: '',
 							cardType: '',
+							bankName: '',
+							bankCode: '',
 						};
 						this.formList.bankInfos.push(data);
 					}
@@ -399,12 +435,25 @@ export default {
 		},
 		delDept(index) {
 			if (this.formList.bankInfos[index].id) {
-				delete_by_merchant_id(this.formList.bankInfos[index].id).then((res) => {
-					if (res.code === '0') {
-						this.formList.bankInfos.splice(index, 1);
-						this.$message.success('删除成功');
-					}
-				});
+				this.$confirm('此操作将永久删除结算卡, 是否继续?', '提示', {
+					confirmButtonText: '确定',
+					cancelButtonText: '取消',
+					type: 'warning',
+				})
+					.then(async () => {
+						await delete_by_merchant_id(this.formList.bankInfos[index].id).then((res) => {
+							if (res.code === '0') {
+								this.formList.bankInfos.splice(index, 1);
+								this.$message.success('删除成功');
+							}
+						});
+					})
+					.catch(() => {
+						this.$message({
+							type: 'info',
+							message: '已取消删除',
+						});
+					});
 			} else {
 				this.formList.bankInfos.splice(index, 1);
 			}

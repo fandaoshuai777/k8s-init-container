@@ -29,9 +29,9 @@
 						<el-option v-for="(item, index) in payeeList" :key="index" :label="item.supplierName" :value="item"></el-option>
 					</el-select>
 				</el-form-item>
-				<el-form-item label="选择提现卡:" prop="payee">
+				<el-form-item label="选择提现卡:" prop="merchantBankInfoId">
 					<span style="color: red" v-if="JSON.stringify(options) === '[]'">尚未添加提现卡,请添加提现卡后再申请 !</span>
-					<el-radio-group v-model="radio" v-else>
+					<el-radio-group v-model="formInfo.merchantBankInfoId" v-else>
 						<el-radio border v-for="item in options" :key="item.id" :label="item.id" >
 							<div>开户行：{{ item.accountHolderName }}</div>
 							<div style="margin-top: 12px">银行账号:{{ item.accountNumber }}</div>
@@ -110,10 +110,13 @@ export default {
 				payeeAccount: [{ required: true, message: '请输入提现账号', trigger: 'blur' }],
 				bankName: [{ required: true, message: '请输入开户行', trigger: 'blur' }],
 				amount: [{ required: true, message: '请输入提现金额', trigger: 'blur' }],
+				merchantBankInfoId: [{ required: true, message: '请选择提现卡', trigger: 'blur' }],
 			},
 			selectList: [],
 			payeeList: [],
-			options: [],
+			options: [
+		
+			],
 		};
 	},
 	created() {
@@ -166,11 +169,10 @@ export default {
 				this.$message.error('提现金额不足');
 				return false;
 			}
-			console.log()
 			this.$refs[formName].validate((valid) => {
 				if (valid) {
 					this.loading = true;
-					const { payee, payeeAccount, bankName, amount, cardType } = this.formInfo;
+					const { payee, payeeAccount, bankName, amount, cardType,merchantBankInfoId } = this.formInfo;
 					let data = {
 						merchantId: sessionStorage.getItem('merchantId'), // 商户ID
 						payee: payee.supplierName,
@@ -181,8 +183,9 @@ export default {
 						amount,
 						customerType: payee.supplierType == 'PERSON' ? 1 : 0,
 						cardType,
-						merchantBankInfoId: this.radio,
+						merchantBankInfoId,
 					};
+					console.log(data)
 					withdrawl(data).then((res) => {
 						console.log(res, 'resresres');
 						if (res.code == 0) {
