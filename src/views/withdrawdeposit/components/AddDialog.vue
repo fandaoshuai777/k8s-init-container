@@ -82,10 +82,10 @@
 						<el-col>
 							<el-form-item
 								label="开户行"
-								:prop="'bankInfos.' + index + '.accountHolderName'"
+								:prop="'bankInfos.' + index + '.bankName'"
 								:rules="[{ required: true, message: '开户行不能为空' }]"
 							>
-								<el-select :disabled="forbidden" v-model="item.accountHolderName" placeholder="请选择开户行" value-key="id" filterable>
+								<el-select :disabled="forbidden" v-model="item.bankName" placeholder="请选择开户行" value-key="id" filterable>
 									<el-option v-for="item in selectList" :key="item.value" :label="item.bankName" :value="item"> </el-option>
 								</el-select>
 							</el-form-item>
@@ -305,8 +305,8 @@ export default {
 				return {
 					accountNumber: n.accountNumber,
 					cardType: n.cardType,
-					bankName: n.accountHolderName.bankName,
-					bankCode: n.accountHolderName.bankCode,
+					bankName: n.bankName.bankName,
+					bankCode: n.bankName.bankCode,
 					accountHolderName: supplierName,
 				};
 			});

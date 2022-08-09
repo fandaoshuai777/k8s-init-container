@@ -239,7 +239,7 @@ export default {
 	width: 400px;
 }
 ::v-deep .el-radio-group {
-	height: 400px;
+	max-height: 400px;
 	overflow-y: auto;
 }
 ::v-deep .el-radio.is-bordered {
