@@ -13,7 +13,7 @@ function baseURLEnv() {
 	} else if (window.location.hostname.indexOf('test') !== -1) {
 		return 'http://merchant-server-test.c29dd69ffd4404f389adfa283b540267b.cn-hangzhou.alicontainer.com'
 	} else if (window.location.hostname.indexOf('fat-1') !== -1) {
-		return 'http://internal.fat-1.merchant-admin.wonderlink.cc'
+		return 'http://internal.fat-1.merchant-server.wonderlink.cc'
 	} else {
 		return 'https://merchant-server.cngotone.com'
 	}
