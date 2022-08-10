@@ -12,9 +12,10 @@
 					<el-col>
 						<el-form-item label="账户名" prop="supplierName">
 							<el-input v-model="formInfo.supplierName" clearable maxlength="50" style="width: 217px" />
-							<div class="username" style="color: red; font-size: 12px">最多添加3个对公、5个对私账户名（添加成功后，暂不支持修改与删除，请谨慎操作！）</div>
+							<!-- <div class="username" style="color: red; font-size: 12px">最多添加3个对公、5个对私账户名(添加成功后，暂不支持修改与删除，请谨慎操作!)</div> -->
 						</el-form-item>
 					</el-col>
+
 					<el-col>
 						<el-form-item label="账户类型" prop="supplierType">
 							<el-select v-model="formInfo.supplierType" placeholder="请选择账户类型" @change="selectChange">
@@ -52,9 +53,6 @@
 				</el-row>
 			</el-form>
 			<el-form ref="listCard" :model="formList" label-width="90px" size="small" :inline="true" class="border" :rules="rulesCard">
-				<el-form-item>
-					<div style="color: red; width: 217px; font-size: 12px">每个账户名最多可添加10张提现卡。</div>
-				</el-form-item>
 				<el-card class="box-card" v-for="(item, index) in formList.bankInfos" :key="index" style="margin-top: 5px">
 					<div slot="header" class="clearfix">
 						<span>提现卡</span>
@@ -63,7 +61,7 @@
 							type="text"
 							icon="el-icon-close"
 							circle
-							:disabled="disabled"
+							:disabled="type == 'compile' ? false : disabled"
 							@click="delDept(index)"
 						></el-button>
 					</div>
@@ -82,8 +80,20 @@
 						</el-col>
 						<el-col>
 							<el-form-item label="开户行" :prop="'bankInfos.' + index + '.bankName'" :rules="[{ required: true, message: '开户行不能为空' }]">
-								<el-select :disabled="forbidden" v-model="item.bankName" placeholder="请选择开户行" value-key="id" filterable>
-									<el-option v-for="item in selectList" :key="item.value" :label="item.bankName" :value="item"> </el-option>
+								<el-select
+									:disabled="forbidden"
+									v-model="item.bankName"
+									placeholder="请选择开户行"
+									value-key="id"
+									:remote-method="remoteMethod"
+									filterable
+									remote
+									reserve-keyword
+									clearable
+									:loading="loadings"
+									@change="bankNameChange"
+								>
+									<el-option v-for="item in selectList" :key="item.value" :label="item.bankName" :value="item" style="width: 200px"> </el-option>
 								</el-select>
 							</el-form-item>
 						</el-col>
@@ -106,14 +116,16 @@
 						</el-col>
 					</el-row>
 				</el-card>
-				<el-form-item style="margin-top: 20px">
-					<div>
-						<el-button type="success" icon="el-icon-plus" circle @click="increase" :disabled="disabled"></el-button>
+				<el-form-item style="margin-top: 20px; text-align: right">
+					<div style="display: flex">
+						<div style="color: red; width: 217px; font-size: 12px">每个账户名最多可添加10张提现卡。</div>
+
+						<el-button type="success" icon="el-icon-plus" circle @click="increase" :disabled="type == 'compile' ? false : disabled"></el-button>
 					</div>
 				</el-form-item>
 			</el-form>
 			<span slot="footer" class="dialog-footer">
-				<el-button v-if="!disabled" type="primary" :loading="loading" @click="submitForm('formInfo')">确定</el-button>
+				<el-button v-if="type == 'compile' ? true : !disabled" type="primary" :loading="loading" @click="submitForm('formInfo')">确定</el-button>
 				<el-button @click="resetForm()">取消</el-button>
 			</span>
 		</el-dialog>
@@ -163,6 +175,7 @@ export default {
 				bankInfos: [],
 			},
 			loading: false,
+			loadings: false,
 			rules: {
 				supplierName: [{ required: true, message: '请输入账户名', trigger: 'blur' }],
 				supplierLicenceNo: [{ required: true, validator: checkSUP, trigger: 'blur' }],
@@ -198,11 +211,7 @@ export default {
 		},
 	},
 	created() {},
-	mounted() {
-		query_bank_info().then((res) => {
-			this.selectList = Object.freeze(res.data.list);
-		});
-	},
+	mounted() {},
 	methods: {
 		getDetail(id) {
 			detailUser({ id: id }).then((res) => {
@@ -324,6 +333,15 @@ export default {
 					this.formList = {
 						bankInfos: [],
 					};
+				} else if (res.code === '660073') {
+					this.$message.error(res.message);
+					this.$emit('update:show', false);
+					this.$emit('change');
+					this.$refs['formInfo'].resetFields();
+					this.loading = false;
+					this.formList = {
+						bankInfos: [],
+					};
 				}
 			});
 			setTimeout(() => {
@@ -356,6 +374,15 @@ export default {
 					this.formList = {
 						bankInfos: [],
 					};
+				} else if (res.code === '660073') {
+					this.$message.error(res.message);
+					this.$emit('update:show', false);
+					this.$emit('change');
+					this.$refs['formInfo'].resetFields();
+					this.loading = false;
+					this.formList = {
+						bankInfos: [],
+					};
 				}
 			});
 			setTimeout(() => {
@@ -371,7 +398,7 @@ export default {
 				supplierLicenceUrl: '', // 身份证图片地址
 				// type: [],
 				license: '',
-			}
+			};
 			this.$emit('update:show', false);
 			this.formList = {
 				bankInfos: [],
@@ -468,6 +495,22 @@ export default {
 				this.formList.bankInfos.splice(index, 1);
 			}
 		},
+		remoteMethod(query) {
+			if (query !== '') {
+				this.loadings = true;
+				setTimeout(() => {
+					this.loadings = false;
+					query_bank_info({ name: query }).then((res) => {
+						this.selectList = res.data.list;
+					});
+				}, 200);
+			} else {
+				this.selectList = [];
+			}
+		},
+		bankNameChange() {
+			this.selectList = [];
+		},
 	},
 };
 </script>
@@ -504,7 +547,7 @@ export default {
 .el-form--inline .el-form-item {
 	display: block;
 }
-.username{
-	width: 260px;
+.username {
+	width: 241px;
 }
 </style>

@@ -114,7 +114,7 @@ export default {
 		compile(row) {
 			this.type = 'compile'
 			this.show = true;
-			this.disabled = false;
+			this.disabled = true;
 			this.$refs.child.getDetail(row.id);
 		},
 		change() {
