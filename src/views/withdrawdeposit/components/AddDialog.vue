@@ -43,12 +43,9 @@
 					</el-form-item>
 				</div>
 			</el-form>
-			<div style="border-top: 0.5px solid"></div>
 			<el-form ref="listCard" :model="formList" label-width="100px" size="small" :inline="true" :rules="rulesCard">
 				<div style="margin-left: 120px">
-					<el-form-item label="添加提现卡">
-						<div style="color: red; width: 195px; font-size: 12px">每个账户名最多可添加10张提现卡。</div>
-					</el-form-item>
+					<el-form-item label="添加提现卡" style="margin: 0"> </el-form-item>
 					<el-card class="card" style="margin-top: 10px auto auto 20px" v-for="(item, index) in formList.bankInfos" :key="index">
 						<div slot="header" class="clearfix">
 							<el-button style="float: right; padding: 3px 0" type="text" :disabled="type == 'compile' ? false : disabled" @click="delDept(index)"
@@ -79,7 +76,6 @@
 										reserve-keyword
 										clearable
 										:loading="loadings"
-										@change="bankNameChange"
 									>
 										<el-option v-for="item in selectList" :key="item.value" :label="item.bankName" :value="item" style="width: 200px"> </el-option>
 									</el-select>
@@ -102,7 +98,7 @@
 							</div>
 						</div>
 					</el-card>
-					<div style="width: 362px; height: 40px; margin: 10px 0 0 100px">
+					<div style="width: 362px; height: 40px; margin: -20px 0 0 100px">
 						<el-button
 							type="primary"
 							style="width: 100%; height: 40px"
@@ -200,7 +196,11 @@ export default {
 		},
 	},
 	created() {},
-	mounted() {},
+	mounted() {
+		query_bank_info().then((res) => {
+			this.selectList = res.data.list;
+		});
+	},
 	methods: {
 		getDetail(id) {
 			detailUser({ id: id }).then((res) => {
@@ -550,9 +550,9 @@ export default {
 				this.selectList = [];
 			}
 		},
-		bankNameChange() {
-			this.selectList = [];
-		},
+		// bankNameChange() {
+		// 	this.selectList = [];
+		// },
 	},
 };
 </script>
@@ -593,7 +593,7 @@ export default {
 	text-align: center;
 	width: 362px;
 	border: 1px solid #ccc;
-	margin: 10px 0 0 100px;
+	margin: -22px 0 42px 100px;
 }
 ::v-deep .el-card__header {
 	border: 0;
