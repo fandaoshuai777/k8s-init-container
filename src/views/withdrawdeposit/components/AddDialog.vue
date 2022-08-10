@@ -226,8 +226,11 @@ export default {
 					};
 					this.formList.bankInfos = res.data.bankInfos;
 					this.formList.bankInfos.forEach((n) => {
+						console.log(n.cardType);
 						if (n.cardType === 6) {
 							this.prohibited = false;
+						} else {
+							this.prohibited = true;
 						}
 					});
 					this.id = res.data.id;
