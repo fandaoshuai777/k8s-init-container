@@ -12,6 +12,7 @@
 					<el-col>
 						<el-form-item label="账户名" prop="supplierName">
 							<el-input v-model="formInfo.supplierName" clearable maxlength="50" style="width: 217px" />
+							<div class="username" style="color: red; font-size: 12px">最多添加3个对公、5个对私账户名（添加成功后，暂不支持修改与删除，请谨慎操作！）</div>
 						</el-form-item>
 					</el-col>
 					<el-col>
@@ -80,11 +81,7 @@
 							</el-form-item>
 						</el-col>
 						<el-col>
-							<el-form-item
-								label="开户行"
-								:prop="'bankInfos.' + index + '.bankName'"
-								:rules="[{ required: true, message: '开户行不能为空' }]"
-							>
+							<el-form-item label="开户行" :prop="'bankInfos.' + index + '.bankName'" :rules="[{ required: true, message: '开户行不能为空' }]">
 								<el-select :disabled="forbidden" v-model="item.bankName" placeholder="请选择开户行" value-key="id" filterable>
 									<el-option v-for="item in selectList" :key="item.value" :label="item.bankName" :value="item"> </el-option>
 								</el-select>
@@ -219,6 +216,11 @@ export default {
 						license: res.data.supplierLicenceNo, // 营业执照
 					};
 					this.formList.bankInfos = res.data.bankInfos;
+					this.formList.bankInfos.forEach((n) => {
+						if (n.cardType === 6) {
+							this.prohibited = false;
+						}
+					});
 					this.id = res.data.id;
 				}
 			});
@@ -333,7 +335,7 @@ export default {
 			const { supplierName } = this.formInfo;
 
 			let arr = this.formList.bankInfos.map((n, index) => {
-				console.log(n)
+				console.log(n);
 				return {
 					accountNumber: n.accountNumber,
 					cardType: n.cardType,
@@ -362,7 +364,14 @@ export default {
 		},
 		resetForm() {
 			this.$refs['formInfo'].resetFields();
-
+			this.formInfo = {
+				supplierName: '', // 账户名
+				supplierType: 'PERSON', // 账户类型 PERSON：个人, BUSINESS:企业
+				supplierLicenceNo: '', // 身份证号
+				supplierLicenceUrl: '', // 身份证图片地址
+				// type: [],
+				license: '',
+			}
 			this.$emit('update:show', false);
 			this.formList = {
 				bankInfos: [],
@@ -494,5 +503,8 @@ export default {
 }
 .el-form--inline .el-form-item {
 	display: block;
+}
+.username{
+	width: 260px;
 }
 </style>
