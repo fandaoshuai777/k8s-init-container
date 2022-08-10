@@ -52,77 +52,86 @@
 					</el-col>
 				</el-row>
 			</el-form>
-			<el-form ref="listCard" :model="formList" label-width="90px" size="small" :inline="true" class="border" :rules="rulesCard">
-				<el-card class="box-card" v-for="(item, index) in formList.bankInfos" :key="index" style="margin-top: 5px">
+			<div style="border-top: 0.5px solid"></div>
+			<el-form ref="listCard" :model="formList" label-width="100px" size="small" :inline="true" :rules="rulesCard">
+				<el-row>
+					<el-col>
+						<el-form-item label="添加提现卡">
+							<div style="color: red; width: 195px; font-size: 12px">每个账户名最多可添加10张提现卡。</div>
+						</el-form-item>
+					</el-col>
+				</el-row>
+				<el-card class="card" style="margin-top:10px" v-for="(item, index) in formList.bankInfos" :key="index">
 					<div slot="header" class="clearfix">
-						<span>提现卡</span>
-						<el-button
-							style="float: right; padding: 3px 0"
-							type="text"
-							icon="el-icon-close"
-							circle
-							:disabled="type == 'compile' ? false : disabled"
-							@click="delDept(index)"
+						<el-button style="float: right; padding: 3px 0" type="text" :disabled="type == 'compile' ? false : disabled" @click="delDept(index)"
+							><i class="el-icon-close"></i
 						></el-button>
 					</div>
-					<el-row class="row">
-						<el-col>
-							<el-form-item label="银行账号" :prop="'bankInfos.' + index + '.accountNumber'" :rules="rulesCard.accountNumber">
-								<el-input
-									:disabled="forbidden"
-									v-model="item.accountNumber"
-									clearable
-									maxlength="50"
-									style="width: 217px"
-									placeholder="请输入银行账号"
-								/>
-							</el-form-item>
-						</el-col>
-						<el-col>
-							<el-form-item label="开户行" :prop="'bankInfos.' + index + '.bankName'" :rules="[{ required: true, message: '开户行不能为空' }]">
-								<el-select
-									:disabled="forbidden"
-									v-model="item.bankName"
-									placeholder="请选择开户行"
-									value-key="id"
-									:remote-method="remoteMethod"
-									filterable
-									remote
-									reserve-keyword
-									clearable
-									:loading="loadings"
-									@change="bankNameChange"
-								>
-									<el-option v-for="item in selectList" :key="item.value" :label="item.bankName" :value="item" style="width: 200px"> </el-option>
-								</el-select>
-							</el-form-item>
-						</el-col>
-						<el-col>
-							<el-form-item label="卡类型" :prop="'bankInfos.' + index + '.cardType'" :rules="[{ required: true, message: '卡类型不能为空' }]">
-								<el-select
-									v-if="prohibited === true"
-									:disabled="type === 'particulars' ? (forbidden = true) : (forbidden = false)"
-									v-model="item.cardType"
-									placeholder="请选择卡类型"
-								>
-									<el-option label="借记卡" :value="1"></el-option>
-									<el-option label="贷记卡" :value="2"></el-option>
-									<el-option label="存折" :value="4"></el-option>
-								</el-select>
-								<el-select v-else v-model="item.cardType" placeholder="请选择卡类型">
-									<el-option label="对公卡" :value="6"></el-option>
-								</el-select>
-							</el-form-item>
-						</el-col>
-					</el-row>
-				</el-card>
-				<el-form-item style="margin-top: 20px; text-align: right">
-					<div style="display: flex">
-						<div style="color: red; width: 217px; font-size: 12px">每个账户名最多可添加10张提现卡。</div>
-
-						<el-button type="success" icon="el-icon-plus" circle @click="increase" :disabled="type == 'compile' ? false : disabled"></el-button>
+					<div  style="margin-top: 5px">
+						<div class="cardWarp">
+							<div>
+								<el-form-item label="银行账号" :prop="'bankInfos.' + index + '.accountNumber'" :rules="rulesCard.accountNumber">
+									<el-input
+										:disabled="forbidden"
+										v-model="item.accountNumber"
+										clearable
+										maxlength="50"
+										style="width: 217px"
+										placeholder="请输入银行账号"
+									/>
+								</el-form-item>
+								<el-form-item label="开户行" :prop="'bankInfos.' + index + '.bankName'" :rules="[{ required: true, message: '开户行不能为空' }]">
+									<el-select
+										:disabled="forbidden"
+										v-model="item.bankName"
+										placeholder="请选择开户行"
+										value-key="id"
+										:remote-method="remoteMethod"
+										filterable
+										remote
+										reserve-keyword
+										clearable
+										:loading="loadings"
+										@change="bankNameChange"
+									>
+										<el-option v-for="item in selectList" :key="item.value" :label="item.bankName" :value="item" style="width: 200px"> </el-option>
+									</el-select>
+								</el-form-item>
+								<el-form-item label="卡类型" :prop="'bankInfos.' + index + '.cardType'" :rules="[{ required: true, message: '卡类型不能为空' }]">
+									<el-select
+										v-if="prohibited === true"
+										:disabled="type === 'particulars' ? (forbidden = true) : (forbidden = false)"
+										v-model="item.cardType"
+										placeholder="请选择卡类型"
+									>
+										<el-option label="借记卡" :value="1"></el-option>
+										<el-option label="贷记卡" :value="2"></el-option>
+										<el-option label="存折" :value="4"></el-option>
+									</el-select>
+									<el-select v-else v-model="item.cardType" placeholder="请选择卡类型">
+										<el-option label="对公卡" :value="6"></el-option>
+									</el-select>
+								</el-form-item>
+							</div>
+						</div>
 					</div>
-				</el-form-item>
+				</el-card>
+				<div style="width: 420px; height: 40px; margin: 10px auto">
+					<el-button
+						type="primary"
+						style="width: 100%; height: 40px"
+						icon="el-icon-plus"
+						@click="increase"
+						:disabled="type == 'compile' ? false : disabled"
+					></el-button>
+				</div>
+
+				<!-- <el-form-item style="margin-top: 20px; text-align: right">
+					<div style="display: flex">
+
+						<el-button type="primary" icon="el-icon-plus" @click="increase" :disabled="type == 'compile' ? false : disabled"></el-button>
+					</div>
+				</el-form-item> -->
 			</el-form>
 			<span slot="footer" class="dialog-footer">
 				<el-button v-if="type == 'compile' ? true : !disabled" type="primary" :loading="loading" @click="submitForm('formInfo')">确定</el-button>
@@ -172,7 +181,7 @@ export default {
 				license: '',
 			},
 			formList: {
-				bankInfos: [],
+				bankInfos: [{ accountNumber: '', accountHolderName: '', cardType: '', bankName: '', bankCode: '' }],
 			},
 			loading: false,
 			loadings: false,
@@ -542,15 +551,24 @@ export default {
 	height: 178px;
 	display: block;
 }
-.row {
-	margin: 0 auto;
-	width: 500px;
-	padding-top: 10px;
-}
+
 .el-form--inline .el-form-item {
 	display: block;
 }
 .username {
 	width: 241px;
+}
+.cardWarp {
+	width: 100%;
+}
+.card {
+	padding-top: 10px;
+	text-align: center;
+	width: 420px;
+	border: 1px solid #ccc;
+	margin: 0 auto;
+}
+::v-deep .el-card__header {
+	border: 0;
 }
 </style>

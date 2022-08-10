@@ -33,7 +33,7 @@
 					<span style="color: red" v-if="JSON.stringify(options) === '[]'">尚未添加提现卡,请添加提现卡后再申请 !</span>
 					<el-radio-group v-model="formInfo.merchantBankInfoId" v-else>
 						<el-radio border v-for="item in options" :key="item.id" :label="item.id">
-							<div>开户行：{{ item.accountHolderName }}</div>
+							<div>开户行：{{ item.bankName }}</div>
 							<div style="margin-top: 12px">银行账号:{{ item.accountNumber }}</div>
 							<span class="position">
 								<span>
