@@ -13,7 +13,7 @@ function baseURLEnv() {
         return 'https://internal.dev.op-api-gateway.wonder-link.net'
     } else if (window.location.hostname.indexOf('fat-1') !== -1) {
         console.log('fat-1')
-        return 'http://internal.fat-1.merchant-server.wonderlink.cc'
+        return 'https://internal.fat-1.op-api-gateway.wonderlink.cc'
     } else {
         console.log('线上')
         return 'https://op-api-gateway.wonder-link.net'
