@@ -32,25 +32,27 @@
 				<el-form-item label="选择提现卡:" prop="merchantBankInfoId">
 					<span style="color: red" v-if="JSON.stringify(options) === '[]'">尚未添加提现卡,请添加提现卡后再申请 !</span>
 					<el-radio-group v-model="formInfo.merchantBankInfoId" v-else>
-						<el-radio border v-for="item in options" :key="item.id" :label="item.id" >
+						<el-radio border v-for="item in options" :key="item.id" :label="item.id">
 							<div>开户行：{{ item.accountHolderName }}</div>
 							<div style="margin-top: 12px">银行账号:{{ item.accountNumber }}</div>
 							<span class="position">
-								{{
-									item.cardType === 1
-										? '借记卡'
-										: item.cardType === 2
-										? '贷记卡'
-										: item.cardType === 3
-										? '准贷卡'
-										: item.cardType === 4
-										? '存折'
-										: item.cardType === 5
-										? '单位结算卡'
-										: item.cardType === 6
-										? '对公卡'
-										: item.cardType
-								}}
+								<span>
+									{{
+										item.cardType === 1
+											? '借记卡'
+											: item.cardType === 2
+											? '贷记卡'
+											: item.cardType === 3
+											? '准贷卡'
+											: item.cardType === 4
+											? '存折'
+											: item.cardType === 5
+											? '单位结算卡'
+											: item.cardType === 6
+											? '对公卡'
+											: item.cardType
+									}}
+								</span>
 							</span>
 						</el-radio>
 					</el-radio-group>
@@ -103,7 +105,7 @@ export default {
 				cardType: 1,
 				merchantBankInfoId: '',
 			},
-			radio:'',
+			radio: '',
 			loading: false,
 			rules: {
 				payee: [{ required: true, message: '请输入提现账户', trigger: 'blur' }],
@@ -114,9 +116,7 @@ export default {
 			},
 			selectList: [],
 			payeeList: [],
-			options: [
-		
-			],
+			options: [],
 		};
 	},
 	created() {
@@ -134,14 +134,14 @@ export default {
 			}
 		},
 		async handleClick() {
-			this.options=[]
+			this.options = [];
 			const res = await select_by_merchant_id({ merchantId: sessionStorage.getItem('merchantId') });
 			if (res.code == 0 && res.data.length != 0) {
-			this.dialogFormVisible = true;
-			this.payeeList = res.data;
-			query_bank_info().then((res) => {
-				this.selectList = res.data.list;
-			});
+				this.dialogFormVisible = true;
+				this.payeeList = res.data;
+				query_bank_info().then((res) => {
+					this.selectList = res.data.list;
+				});
 			} else {
 				this.$confirm('尊敬的客户，您尚未添加提现账户，请添加后再试', '提示', {
 					confirmButtonText: '添加提现账户',
@@ -153,7 +153,7 @@ export default {
 			}
 		},
 		accountName(val) {
-			console.log(val.bankInfos)
+			console.log(val.bankInfos);
 			this.options = val.bankInfos;
 		},
 		onClose() {
@@ -172,7 +172,7 @@ export default {
 			this.$refs[formName].validate((valid) => {
 				if (valid) {
 					this.loading = true;
-					const { payee, payeeAccount, bankName, amount, cardType,merchantBankInfoId } = this.formInfo;
+					const { payee, payeeAccount, bankName, amount, cardType, merchantBankInfoId } = this.formInfo;
 					let data = {
 						merchantId: sessionStorage.getItem('merchantId'), // 商户ID
 						payee: payee.supplierName,
@@ -185,7 +185,7 @@ export default {
 						cardType,
 						merchantBankInfoId,
 					};
-					console.log(data)
+					console.log(data);
 					withdrawl(data).then((res) => {
 						console.log(res, 'resresres');
 						if (res.code == 0) {
