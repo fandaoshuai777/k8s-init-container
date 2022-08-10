@@ -333,11 +333,12 @@ export default {
 			const { supplierName } = this.formInfo;
 
 			let arr = this.formList.bankInfos.map((n, index) => {
+				console.log(n)
 				return {
 					accountNumber: n.accountNumber,
 					cardType: n.cardType,
-					bankName: n.accountHolderName.bankName,
-					bankCode: n.accountHolderName.bankCode,
+					bankName: n.bankName.bankName,
+					bankCode: n.bankName.bankCode,
 					accountHolderName: supplierName,
 					id: n.id ? n.id : '',
 				};
