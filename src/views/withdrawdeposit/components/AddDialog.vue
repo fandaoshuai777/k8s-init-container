@@ -7,69 +7,56 @@
 			:close-on-click-modal="false"
 			width="25%"
 		>
-			<el-form ref="formInfo" :rules="rules" :model="formInfo" label-width="100px" size="small" :disabled="disabled" :inline="true">
-				<el-row>
-					<el-col>
-						<el-form-item label="账户名" prop="supplierName">
-							<el-input v-model="formInfo.supplierName" clearable maxlength="50" style="width: 217px" />
-							<!-- <div class="username" style="color: red; font-size: 12px">最多添加3个对公、5个对私账户名(添加成功后，暂不支持修改与删除，请谨慎操作!)</div> -->
+			<el-form ref="formInfo" :rules="rules" :model="formInfo" label-width="100px" size="small" :disabled="disabled">
+				<div style="margin-left: 120px">
+					<el-form-item label="账户名" prop="supplierName">
+						<el-input v-model="formInfo.supplierName" clearable maxlength="50" style="width: 360px" />
+					</el-form-item>
+					<el-form-item label="账户类型" prop="supplierType">
+						<el-select v-model="formInfo.supplierType" placeholder="请选择账户类型" @change="selectChange" style="width: 360px">
+							<el-option label="个人" value="PERSON"></el-option>
+							<el-option label="企业" value="BUSINESS"></el-option>
+						</el-select>
+					</el-form-item>
+					<div>
+						<el-form-item v-if="formInfo.supplierType == 'PERSON'" label="身份证号" prop="supplierLicenceNo">
+							<el-input v-model="formInfo.supplierLicenceNo" clearable maxlength="18" style="width: 360px" />
 						</el-form-item>
-					</el-col>
-
-					<el-col>
-						<el-form-item label="账户类型" prop="supplierType">
-							<el-select v-model="formInfo.supplierType" placeholder="请选择账户类型" @change="selectChange">
-								<el-option label="个人" value="PERSON"></el-option>
-								<el-option label="企业" value="BUSINESS"></el-option>
-							</el-select>
+						<el-form-item v-if="formInfo.supplierType == 'BUSINESS'" label="营业执照号" prop="license">
+							<el-input v-model="formInfo.license" clearable maxlength="15" style="width: 360px" />
 						</el-form-item>
-					</el-col>
-					<el-col>
-						<div>
-							<el-form-item v-if="formInfo.supplierType == 'PERSON'" label="身份证号" prop="supplierLicenceNo">
-								<el-input v-model="formInfo.supplierLicenceNo" clearable maxlength="18" style="width: 217px" />
-							</el-form-item>
-							<el-form-item v-if="formInfo.supplierType == 'BUSINESS'" label="营业执照号" prop="license">
-								<el-input v-model="formInfo.license" clearable maxlength="15" style="width: 217px" />
-							</el-form-item>
-						</div>
-					</el-col>
-					<el-col>
-						<el-form-item :label="formInfo.supplierType == 'PERSON' ? '身份证正面' : '营业执照'" prop="supplierLicenceUrl">
-							<el-upload
-								class="el-uploads"
-								:show-file-list="false"
-								action="#"
-								:http-request="uploadAvatar"
-								:headers="{ token: token }"
-								:before-upload="beforeAvatarUpload"
-							>
-								<img v-if="formInfo.supplierLicenceUrl" :src="formInfo.supplierLicenceUrl" class="avatar" />
-								<i v-else class="el-icon-plus avatar-uploader-icon"></i>
-							</el-upload>
-							<div style="color: red; font-size: 12px">请上传JPG、PNG格式文件不超过2M</div>
-						</el-form-item>
-					</el-col>
-				</el-row>
+					</div>
+					<el-form-item :label="formInfo.supplierType == 'PERSON' ? '身份证正面' : '营业执照'" prop="supplierLicenceUrl">
+						<el-upload
+							class="el-uploads"
+							:show-file-list="false"
+							action="#"
+							:http-request="uploadAvatar"
+							:headers="{ token: token }"
+							:before-upload="beforeAvatarUpload"
+							style="width: 200px"
+						>
+							<img v-if="formInfo.supplierLicenceUrl" :src="formInfo.supplierLicenceUrl" class="avatar" />
+							<i v-else class="el-icon-plus avatar-uploader-icon"></i>
+						</el-upload>
+						<div style="color: red; font-size: 12px">请上传JPG、PNG格式文件不超过2M</div>
+					</el-form-item>
+				</div>
 			</el-form>
 			<div style="border-top: 0.5px solid"></div>
 			<el-form ref="listCard" :model="formList" label-width="100px" size="small" :inline="true" :rules="rulesCard">
-				<el-row>
-					<el-col>
-						<el-form-item label="添加提现卡">
-							<div style="color: red; width: 195px; font-size: 12px">每个账户名最多可添加10张提现卡。</div>
-						</el-form-item>
-					</el-col>
-				</el-row>
-				<el-card class="card" style="margin-top:10px" v-for="(item, index) in formList.bankInfos" :key="index">
-					<div slot="header" class="clearfix">
-						<el-button style="float: right; padding: 3px 0" type="text" :disabled="type == 'compile' ? false : disabled" @click="delDept(index)"
-							><i class="el-icon-close"></i
-						></el-button>
-					</div>
-					<div  style="margin-top: 5px">
-						<div class="cardWarp">
-							<div>
+				<div style="margin-left: 120px">
+					<el-form-item label="添加提现卡">
+						<div style="color: red; width: 195px; font-size: 12px">每个账户名最多可添加10张提现卡。</div>
+					</el-form-item>
+					<el-card class="card" style="margin-top: 10px auto auto 20px" v-for="(item, index) in formList.bankInfos" :key="index">
+						<div slot="header" class="clearfix">
+							<el-button style="float: right; padding: 3px 0" type="text" :disabled="type == 'compile' ? false : disabled" @click="delDept(index)"
+								><i class="el-icon-close"></i
+							></el-button>
+						</div>
+						<div style="margin-top: 5px">
+							<div class="cardWarp">
 								<el-form-item label="银行账号" :prop="'bankInfos.' + index + '.accountNumber'" :rules="rulesCard.accountNumber">
 									<el-input
 										:disabled="forbidden"
@@ -114,24 +101,17 @@
 								</el-form-item>
 							</div>
 						</div>
+					</el-card>
+					<div style="width: 362px; height: 40px; margin: 10px 0 0 100px">
+						<el-button
+							type="primary"
+							style="width: 100%; height: 40px"
+							icon="el-icon-plus"
+							@click="increase"
+							:disabled="type == 'compile' ? false : disabled"
+						></el-button>
 					</div>
-				</el-card>
-				<div style="width: 420px; height: 40px; margin: 10px auto">
-					<el-button
-						type="primary"
-						style="width: 100%; height: 40px"
-						icon="el-icon-plus"
-						@click="increase"
-						:disabled="type == 'compile' ? false : disabled"
-					></el-button>
 				</div>
-
-				<!-- <el-form-item style="margin-top: 20px; text-align: right">
-					<div style="display: flex">
-
-						<el-button type="primary" icon="el-icon-plus" @click="increase" :disabled="type == 'compile' ? false : disabled"></el-button>
-					</div>
-				</el-form-item> -->
 			</el-form>
 			<span slot="footer" class="dialog-footer">
 				<el-button v-if="type == 'compile' ? true : !disabled" type="primary" :loading="loading" @click="submitForm('formInfo')">确定</el-button>
@@ -255,7 +235,57 @@ export default {
 		},
 		submitForm(formName) {
 			if (this.type === 'compile') {
-				this.edit();
+				this.$refs[formName].validate((valid) => {
+					if (valid) {
+						this.$refs['listCard'].validate((valid) => {
+							if (valid) {
+								const h = this.$createElement;
+								let text = '';
+								console.log(this.formList.bankInfos.length);
+								if (this.formList.bankInfos.length <= 0) {
+									text = h('p', null, [
+										h('span', { style: 'font-size: 18px' }, '您尚未添加提现卡，确定保存吗? '),
+										h('p', { style: 'color: red' }, '最多添加3个对公、5个对私账户名'),
+										h('p', { style: 'color: red' }, '(添加成功后，暂不支持修改与删除，请谨慎操作!)'),
+									]);
+								} else {
+									text = h('p', null, [
+										h('span', { style: 'font-size: 18px' }, '确定保存吗? '),
+										h('p', { style: 'color: red' }, '最多添加3个对公、5个对私账户名'),
+										h('p', { style: 'color: red' }, '(添加成功后，暂不支持修改与删除，请谨慎操作!)'),
+									]);
+								}
+								this.$msgbox({
+									title: '系统提示',
+									message: text,
+									showCancelButton: true,
+									confirmButtonText: '确定',
+									cancelButtonText: '取消',
+									beforeClose: (action, instance, done) => {
+										if (action === 'confirm') {
+											instance.confirmButtonLoading = true;
+											instance.confirmButtonText = '执行中...';
+											setTimeout(() => {
+												done();
+												setTimeout(() => {
+													instance.confirmButtonLoading = false;
+												}, 300);
+											}, 2000);
+										} else {
+											done();
+											this.$message('取消操作');
+										}
+									},
+								})
+									.then(async (action) => {
+										console.log(action);
+										await this.edit();
+									})
+									.catch(() => {});
+							}
+						});
+					}
+				});
 			} else {
 				this.$refs[formName].validate((valid) => {
 					if (valid) {
@@ -552,23 +582,23 @@ export default {
 	display: block;
 }
 
-.el-form--inline .el-form-item {
-	display: block;
-}
 .username {
 	width: 241px;
 }
 .cardWarp {
-	width: 100%;
+	width: 327px;
 }
 .card {
 	padding-top: 10px;
 	text-align: center;
-	width: 420px;
+	width: 362px;
 	border: 1px solid #ccc;
-	margin: 0 auto;
+	margin: 10px 0 0 100px;
 }
 ::v-deep .el-card__header {
 	border: 0;
+}
+::v-deep .card .el-card__body {
+	padding: 5px;
 }
 </style>
