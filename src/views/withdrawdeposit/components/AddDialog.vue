@@ -195,11 +195,7 @@ export default {
 			default: false,
 		},
 	},
-	created() {
-		// query_bank_info().then((res) => {
-		// 	this.selectList = res.data.list;
-		// });
-	},
+	created() {},
 	mounted() {},
 	methods: {
 		getDetail(id) {
@@ -224,6 +220,12 @@ export default {
 					});
 					this.id = res.data.id;
 				}
+			});
+			this.select()
+		},
+		select() {
+			query_bank_info().then((res) => {
+				this.selectList = res.data.list;
 			});
 		},
 		onClose() {

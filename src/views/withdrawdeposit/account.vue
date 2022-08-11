@@ -29,11 +29,11 @@
 				</el-table-column>
 			</el-table>
 		</el-card>
-		<add-dialog class="dialog" :show.sync="show" @change="change" :type='type' ref="child" :disabled="disabled"></add-dialog>
+		<add-dialog class="dialog" :show.sync="show" @change="change" :type="type" ref="child" :disabled="disabled"></add-dialog>
 	</div>
 </template>
 <script>
-import { allow_or_not, getmerList, deleteUser, submit_again} from '@/api/withdrawdeposit';
+import { allow_or_not, getmerList, deleteUser, submit_again } from '@/api/withdrawdeposit';
 import AddDialog from './components/AddDialog';
 
 export default {
@@ -46,7 +46,7 @@ export default {
 			tableData: [],
 			disabled: false,
 			loading: false,
-			type:'add'
+			type: 'add',
 		};
 	},
 	created() {
@@ -55,71 +55,74 @@ export default {
 	methods: {
 		async init() {
 			this.loading = true;
-			const res = await getmerList({merchantId: sessionStorage.getItem("merchantId")});
+			const res = await getmerList({ merchantId: sessionStorage.getItem('merchantId') });
 			this.loading = false;
 			if (res.code == 0) {
-				this.tableData = res.data.sort( (a, b) => {return b.stats - a.stats });
+				this.tableData = res.data.sort((a, b) => {
+					return b.stats - a.stats;
+				});
 			}
 		},
 		handleAdd() {
-			allow_or_not({merchantId: sessionStorage.getItem("merchantId")}).then( res => {
+			allow_or_not({ merchantId: sessionStorage.getItem('merchantId') }).then((res) => {
 				if (res.code == 0) {
 					if (res.data) {
 						this.show = true;
 						this.disabled = false;
+						this.$refs.child.select();
 					}
-					this.type = 'add'
+					this.type = 'add';
 				} else {
 					this.$message({
 						type: 'error',
-						message: '最多添加3个对公、5个对私账户!'
+						message: '最多添加3个对公、5个对私账户!',
 					});
 				}
-			})
+			});
 		},
 		handleClick(row) {
-			submit_again({id: row.id}).then( res => {
+			submit_again({ id: row.id }).then((res) => {
 				if (res.code == 0) {
 					this.$message({
 						type: 'success',
-						message: '提交成功!'
+						message: '提交成功!',
 					});
 					this.init();
 				}
-			})
+			});
 		},
 		handleDelete(row) {
 			this.$confirm('确定删除吗?', '提示', {
 				confirmButtonText: '确定',
 				cancelButtonText: '取消',
-				type: 'warning'
+				type: 'warning',
 			}).then(() => {
-				deleteUser({id: row.id}).then( res => {
+				deleteUser({ id: row.id }).then((res) => {
 					if (res.code == 0) {
 						this.$message({
 							type: 'success',
-							message: '删除成功!'
+							message: '删除成功!',
 						});
 						this.init();
 					}
-				})
-			})
+				});
+			});
 		},
 		handleDetail(row) {
-			this.type = 'particulars'
+			this.type = 'particulars';
 			this.show = true;
 			this.disabled = true;
 			this.$refs.child.getDetail(row.id);
 		},
 		compile(row) {
-			this.type = 'compile'
+			this.type = 'compile';
 			this.show = true;
 			this.disabled = true;
 			this.$refs.child.getDetail(row.id);
 		},
 		change() {
 			this.init();
-		}
+		},
 	},
 };
 </script>
@@ -130,10 +133,8 @@ export default {
 	align-items: center;
 	flex-direction: column;
 	text-align: center;
-
 }
-::v-deep .el-dialog{
+::v-deep .el-dialog {
 	width: 700px !important;
 }
-
 </style>
