@@ -15,7 +15,7 @@ function baseURLEnv() {
 	} else if (window.location.hostname.indexOf('fat-1') !== -1) {
 		return ' http://internal.fat-1.merchant-server.wonderlink.cc'
 	} else {
-		return 'https://merchant-server.cngotone.com'
+		return 'http://merchant-server.cngotone.com'
 	}
 }
 // 创建 axios 实例
