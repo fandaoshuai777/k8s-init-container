@@ -196,7 +196,9 @@ export default {
 		},
 	},
 	created() {},
-	mounted() {},
+	mounted() {
+		this.selectList = JSON.parse(sessionStorage.getItem('selectList'))
+	},
 	methods: {
 		getDetail(id) {
 			detailUser({ id: id }).then((res) => {
@@ -221,19 +223,21 @@ export default {
 					this.id = res.data.id;
 				}
 			});
-			this.select()
-		},
-		select() {
-			query_bank_info().then((res) => {
-				this.selectList = res.data.list;
-			});
 		},
 		onClose() {
 			this.$emit('update:show', false);
 			this.$refs['formInfo'].resetFields();
-			this.formList = {
-				bankInfos: [],
-			};
+			(this.formInfo = {
+				supplierName: '', // 账户名
+				supplierType: 'PERSON', // 账户类型 PERSON：个人, BUSINESS:企业
+				supplierLicenceNo: '', // 身份证号
+				supplierLicenceUrl: '', // 身份证图片地址
+				// type: [],
+				license: '',
+			}),
+				(this.formList = {
+					bankInfos: [{ accountNumber: '', accountHolderName: '', cardType: '', bankName: '', bankCode: '' }],
+				});
 		},
 		submitForm(formName) {
 			if (this.type === 'compile') {
@@ -434,19 +438,19 @@ export default {
 			}, 4000);
 		},
 		resetForm() {
+			this.$emit('update:show', false);
 			this.$refs['formInfo'].resetFields();
-			this.formInfo = {
+			(this.formInfo = {
 				supplierName: '', // 账户名
 				supplierType: 'PERSON', // 账户类型 PERSON：个人, BUSINESS:企业
 				supplierLicenceNo: '', // 身份证号
 				supplierLicenceUrl: '', // 身份证图片地址
 				// type: [],
 				license: '',
-			};
-			this.$emit('update:show', false);
-			this.formList = {
-				bankInfos: [],
-			};
+			}),
+				(this.formList = {
+					bankInfos: [{ accountNumber: '', accountHolderName: '', cardType: '', bankName: '', bankCode: '' }],
+				});
 		},
 		uploadAvatar(item) {
 			const formData = new FormData();

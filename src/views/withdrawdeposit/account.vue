@@ -33,7 +33,7 @@
 	</div>
 </template>
 <script>
-import { allow_or_not, getmerList, deleteUser, submit_again } from '@/api/withdrawdeposit';
+import { allow_or_not, getmerList, deleteUser, submit_again, query_bank_info } from '@/api/withdrawdeposit';
 import AddDialog from './components/AddDialog';
 
 export default {
@@ -47,10 +47,16 @@ export default {
 			disabled: false,
 			loading: false,
 			type: 'add',
+			selectList: [],
 		};
 	},
 	created() {
 		this.init();
+	},
+	mounted() {
+		query_bank_info().then((res) => {
+			sessionStorage.setItem('selectList', JSON.stringify(res.data.list));
+		});
 	},
 	methods: {
 		async init() {
@@ -69,7 +75,6 @@ export default {
 					if (res.data) {
 						this.show = true;
 						this.disabled = false;
-						this.$refs.child.select();
 					}
 					this.type = 'add';
 				} else {
