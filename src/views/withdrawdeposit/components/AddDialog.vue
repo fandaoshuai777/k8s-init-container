@@ -77,6 +77,7 @@
 										reserve-keyword
 										clearable
 										:loading="loadings"
+										@change="bankNameChange"
 									>
 										<el-option v-for="item in selectList" :key="item.value" :label="item.bankName" :value="item" style="width: 200px"> </el-option>
 									</el-select>
@@ -522,7 +523,7 @@ export default {
 		},
 		delDept(index) {
 			if (this.formList.bankInfos[index].id) {
-				 delete_by_merchant_id(this.formList.bankInfos[index].id).then((res) => {
+				delete_by_merchant_id(this.formList.bankInfos[index].id).then((res) => {
 					if (res.code === '0') {
 						this.formList.bankInfos.splice(index, 1);
 						this.$message.success('删除成功');
@@ -530,7 +531,7 @@ export default {
 				});
 			} else {
 				this.formList.bankInfos.splice(index, 1);
-					this.$message.success('删除成功');
+				this.$message.success('删除成功');
 			}
 		},
 		remoteMethod(query) {
@@ -543,12 +544,12 @@ export default {
 					});
 				}, 200);
 			} else {
-				this.selectList = [];
+				this.selectList = JSON.parse(sessionStorage.getItem('selectList'));
 			}
 		},
-		// bankNameChange() {
-		// 	this.selectList = [];
-		// },
+		bankNameChange() {
+			this.selectList = JSON.parse(sessionStorage.getItem('selectList'));
+		},
 	},
 };
 </script>
