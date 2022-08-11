@@ -89,7 +89,6 @@
 									>
 										<el-option label="借记卡" :value="1"></el-option>
 										<el-option label="贷记卡" :value="2"></el-option>
-										<el-option label="存折" :value="4"></el-option>
 									</el-select>
 									<el-select v-else v-model="item.cardType" placeholder="请选择卡类型">
 										<el-option label="对公卡" :value="6"></el-option>
@@ -197,14 +196,14 @@ export default {
 	},
 	created() {},
 	mounted() {
-		this.selectList = JSON.parse(sessionStorage.getItem('selectList'))
+		this.selectList = JSON.parse(sessionStorage.getItem('selectList'));
 	},
 	methods: {
 		getDetail(id) {
 			detailUser({ id: id }).then((res) => {
 				if (res.code == 0) {
 					this.formInfo = {
-						supplierName: res.data.supplierName, // 账户名
+						supplierName: res.data.supplierName, // 账户名s
 						supplierType: res.data.supplierType, // 账户类型 PERSON：个人, BUSINESS:企业
 						supplierLicenceNo: res.data.supplierLicenceNo, // 身份证号
 						supplierLicenceUrl: res.data.supplierLicenceUrl, // 身份证图片地址
@@ -213,7 +212,6 @@ export default {
 					};
 					this.formList.bankInfos = res.data.bankInfos;
 					this.formList.bankInfos.forEach((n) => {
-						console.log(n.cardType);
 						if (n.cardType === 6) {
 							this.prohibited = false;
 						} else {
@@ -238,6 +236,8 @@ export default {
 				(this.formList = {
 					bankInfos: [{ accountNumber: '', accountHolderName: '', cardType: '', bankName: '', bankCode: '' }],
 				});
+			this.prohibited = true;
+			
 		},
 		submitForm(formName) {
 			if (this.type === 'compile') {
@@ -451,6 +451,8 @@ export default {
 				(this.formList = {
 					bankInfos: [{ accountNumber: '', accountHolderName: '', cardType: '', bankName: '', bankCode: '' }],
 				});
+			this.prohibited = true;
+			
 		},
 		uploadAvatar(item) {
 			const formData = new FormData();
