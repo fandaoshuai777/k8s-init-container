@@ -60,7 +60,7 @@
 										v-model="item.accountNumber"
 										clearable
 										maxlength="50"
-										style="width: 217px"
+										style="width: 200px"
 										placeholder="请输入银行账号"
 									/>
 								</el-form-item>
@@ -71,6 +71,7 @@
 										placeholder="请选择开户行"
 										value-key="id"
 										:remote-method="remoteMethod"
+										style="width: 200px"
 										filterable
 										remote
 										reserve-keyword
@@ -82,13 +83,14 @@
 								</el-form-item>
 								<el-form-item label="卡类型" :prop="'bankInfos.' + index + '.cardType'" :rules="[{ required: true, message: '卡类型不能为空' }]">
 									<el-select
+										style="width: 200px"
 										v-if="prohibited === true"
 										:disabled="type === 'particulars' ? (forbidden = true) : (forbidden = false)"
 										v-model="item.cardType"
 										placeholder="请选择卡类型"
 									>
-										<el-option label="借记卡" :value="1"></el-option>
-										<el-option label="贷记卡" :value="2"></el-option>
+										<el-option label="借记卡" :value="1" style="width: 200px"></el-option>
+										<el-option label="贷记卡" :value="2" style="width: 200px"></el-option>
 									</el-select>
 									<el-select v-else v-model="item.cardType" placeholder="请选择卡类型">
 										<el-option label="对公卡" :value="6"></el-option>
@@ -237,7 +239,6 @@ export default {
 					bankInfos: [{ accountNumber: '', accountHolderName: '', cardType: '', bankName: '', bankCode: '' }],
 				});
 			this.prohibited = true;
-			
 		},
 		submitForm(formName) {
 			if (this.type === 'compile') {
@@ -452,7 +453,6 @@ export default {
 					bankInfos: [{ accountNumber: '', accountHolderName: '', cardType: '', bankName: '', bankCode: '' }],
 				});
 			this.prohibited = true;
-			
 		},
 		uploadAvatar(item) {
 			const formData = new FormData();
@@ -522,27 +522,15 @@ export default {
 		},
 		delDept(index) {
 			if (this.formList.bankInfos[index].id) {
-				this.$confirm('此操作将永久删除结算卡, 是否继续?', '提示', {
-					confirmButtonText: '确定',
-					cancelButtonText: '取消',
-					type: 'warning',
-				})
-					.then(async () => {
-						await delete_by_merchant_id(this.formList.bankInfos[index].id).then((res) => {
-							if (res.code === '0') {
-								this.formList.bankInfos.splice(index, 1);
-								this.$message.success('删除成功');
-							}
-						});
-					})
-					.catch(() => {
-						this.$message({
-							type: 'info',
-							message: '已取消删除',
-						});
-					});
+				 delete_by_merchant_id(this.formList.bankInfos[index].id).then((res) => {
+					if (res.code === '0') {
+						this.formList.bankInfos.splice(index, 1);
+						this.$message.success('删除成功');
+					}
+				});
 			} else {
 				this.formList.bankInfos.splice(index, 1);
+					this.$message.success('删除成功');
 			}
 		},
 		remoteMethod(query) {
