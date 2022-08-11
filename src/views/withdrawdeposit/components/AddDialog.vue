@@ -195,12 +195,12 @@ export default {
 			default: false,
 		},
 	},
-	created() {},
-	mounted() {
-		query_bank_info().then((res) => {
-			this.selectList = res.data.list;
-		});
+	created() {
+		// query_bank_info().then((res) => {
+		// 	this.selectList = res.data.list;
+		// });
 	},
+	mounted() {},
 	methods: {
 		getDetail(id) {
 			detailUser({ id: id }).then((res) => {
