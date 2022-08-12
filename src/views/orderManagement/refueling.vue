@@ -15,7 +15,7 @@
 						></el-input>
 					</el-form-item>
 					<el-form-item label="渠道订单号" prop="thirdOrderId">
-						<el-input  v-model="formInline.thirdOrderId" placeholder="请输入渠道订单号" clearable></el-input>
+						<el-input v-model="formInline.thirdOrderId" placeholder="请输入渠道订单号" clearable></el-input>
 					</el-form-item>
 					<el-form-item label="油品型号" prop="oilType">
 						<el-select v-model="formInline.oilType" placeholder="请选择">
@@ -86,7 +86,6 @@
 						>
 						</el-date-picker>
 					</el-form-item>
-
 					<el-form-item>
 						<el-button @click="reset">重置</el-button>
 						<el-button type="primary" @click="inquire">查询</el-button>
@@ -123,6 +122,9 @@
 						<div>加油量（升）</div>
 					</el-card>
 				</el-col>
+				<el-col >
+					<ReportBtn ref="reportbtn" @Report="report" />
+				</el-col>
 			</el-row>
 			<Table
 				:loading="loading"
@@ -133,6 +135,7 @@
 				@sizeChange="pageSizeChange"
 			>
 				<template v-slot:done="{ row }">
+					<el-button type="text" @click="applicationDrawback(row)">申请退款</el-button>
 					<el-button type="text" @click="particulars(row)">订单详情</el-button>
 					<el-button type="text" v-if="row.orderStatus === '支付成功' && row.channelId != '喂车车'" @click="reprint(row)">补打小票</el-button>
 				</template>
@@ -297,11 +300,13 @@
 <script>
 import Table from '@/components/table/index_detail';
 import Dialog from '@/components/system/SysDialog';
+import ReportBtn from '@/components/reportBtn';
 import { oneClickOrderList, oneClickOrderDetails, oneClickOrderCount, printReceipt } from '@/api/oil/refueling';
 export default {
 	components: {
 		Table,
 		Dialog,
+		ReportBtn,
 	},
 	data() {
 		return {
@@ -388,7 +393,7 @@ export default {
 				{
 					label: '操作',
 					prop: 'done',
-					width: 200,
+					width: 260,
 					fixed: 'right',
 				},
 			],
@@ -423,7 +428,6 @@ export default {
 			},
 			time: [],
 			// dialog
-			// 设置弹窗组件所需数据
 			assignDialog: {
 				title: '订单详情',
 				width: 900,
@@ -431,7 +435,6 @@ export default {
 				visible: false,
 				display: false,
 			},
-
 			payData: [],
 			statistics: [],
 			maxDate: null,
@@ -476,7 +479,7 @@ export default {
 		this.orderStatistics();
 	},
 	methods: {
-		changeNum() {
+		changeNum() { 
 			if (this.formInline.id.length > 19) {
 				this.formInline.id = this.formInline.id.slice(0, 19);
 			}
@@ -497,8 +500,7 @@ export default {
 				pageSize: this.pagination.pageSize,
 			};
 			oneClickOrderList(data).then((res) => {
-			this.loading = false;
-
+				this.loading = false;
 				this.total = Number(res.data.total);
 				this.tableData = res.data.list.map((n) => {
 					return {
@@ -662,9 +664,7 @@ export default {
 			this.orderList();
 			this.orderStatistics();
 		},
-		/**
-		 * 格式化时间
-		 */
+        //格式化时间
 		formatDate(date) {
 			var myyear = date.getFullYear();
 			var mymonth = date.getMonth() + 1;
@@ -677,6 +677,18 @@ export default {
 				myweekday = '0' + myweekday;
 			}
 			return myyear + '-' + mymonth + '-' + myweekday;
+		},
+		// 导出
+		report() {
+			const obj = {
+				...this.formInline,
+			};
+			const params = this.objectToQuery(obj);
+			console.log(params);
+			this.$refs.reportbtn.fileName = '一键加油订单列表';
+			this.$refs.reportbtn.url = 'v1/station/pageListExcel';
+			this.$refs.reportbtn.info = params;
+			this.$refs.reportbtn.Reports();
 		},
 	},
 };

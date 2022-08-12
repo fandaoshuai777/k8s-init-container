@@ -171,7 +171,7 @@
 							"admin",
 							"common"
 						],
-						"icon": "el-icon-thumb"
+						"icon": "el-icon-document"
 					}
 				},
 				{
@@ -188,7 +188,7 @@
 							"admin",
 							"common"
 						],
-						"icon": "el-icon-edit"
+						"icon": "el-icon-document"
 					}
 				},
 				{
@@ -205,15 +205,16 @@
 							"admin",
 							"common"
 						],
-						"icon": "el-icon-s-tools"
+						"icon": "el-icon-document"
 					}
 				},
+
 				{
-					"path": "/orderManagement/downloadCenter",
-					"name": "downloadCenter",
-					"component": "orderManagement/downloadCenter",
+					"path": "/orderManagement/reimburse",
+					"name": "reimburse",
+					"component": "orderManagement/reimburse",
 					"meta": {
-						"title": "下载中心",
+						"title": "退款审核",
 						"isLink": "",
 						"isHide": false,
 						"isKeepAlive": true,
@@ -223,7 +224,7 @@
 							"admin",
 							"common"
 						],
-						"icon": "iconfont icon-gongju"
+						"icon": "el-icon-monitor"
 					}
 				}
 			]
@@ -262,6 +263,5 @@
 
 			]
 		}
-
 	]
 }
