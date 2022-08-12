@@ -8,9 +8,10 @@
 			"meta": {
 				"title": "订单管理",
 				"isLink": "",
-				"isHide": false,
+				"isHide": true,
 				"isKeepAlive": true,
 				"isAffix": false,
+				
 				"isIframe": false,
 				"roles": [
 					"admin",
@@ -206,6 +207,24 @@
 						],
 						"icon": "el-icon-s-tools"
 					}
+				},
+				{
+					"path": "/orderManagement/downloadCenter",
+					"name": "downloadCenter",
+					"component": "orderManagement/downloadCenter",
+					"meta": {
+						"title": "下载中心",
+						"isLink": "",
+						"isHide": false,
+						"isKeepAlive": true,
+						"isAffix": false,
+						"isIframe": false,
+						"roles": [
+							"admin",
+							"common"
+						],
+						"icon": "iconfont icon-gongju"
+					}
 				}
 			]
 		},
@@ -220,8 +239,6 @@
 				"isKeepAlive": true,
 				"isAffix": false,
 				"isIframe": false,
-				"isHide": true,
-				"hidden": true,
 				"icon": "iconfont icon-crew_feature"
 			},
 			"children": [
@@ -245,5 +262,6 @@
 
 			]
 		}
+
 	]
 }
