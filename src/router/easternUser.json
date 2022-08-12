@@ -2,6 +2,91 @@
 	"code": 0,
 	"data": [
 		{
+			"path": "/orderManagement",
+			"name": "OrderManagement",
+			"component": "layout/routerView/parent",
+			"redirect": "orderManagement",
+			"meta": {
+				"title": "订单管理",
+				"isLink": "",
+				"isKeepAlive": true,
+				"isAffix": false,
+				"isIframe": false,
+				"icon": "el-icon-document"
+			},
+			"children": [
+				{
+					"path": "/orderManagement/refueling",
+					"name": "refueling",
+					"component": "orderManagement/refueling",
+					"meta": {
+						"title": "一键加油订单",
+						"isLink": "",
+						"isKeepAlive": true,
+						"isAffix": false,
+						"isIframe": false,
+						"roles": [
+							"admin",
+							"common"
+						],
+						"icon": "el-icon-document"
+					}
+				},
+				{
+					"path": "/orderManagement/quickPass",
+					"name": "quickPass",
+					"component": "orderManagement/quickPass",
+					"meta": {
+						"title": "闪付订单",
+						"isLink": "",
+						"isKeepAlive": true,
+						"isAffix": false,
+						"isIframe": false,
+						"roles": [
+							"admin",
+							"common"
+						],
+						"icon": "el-icon-document"
+					}
+				},
+				{
+					"path": "/orderManagement/stored",
+					"name": "stored",
+					"component": "orderManagement/stored",
+					"meta": {
+						"title": "储值订单",
+						"isLink": "",
+						"isKeepAlive": true,
+						"isAffix": false,
+						"isIframe": false,
+						"roles": [
+							"admin",
+							"common"
+						],
+						"icon": "el-icon-document"
+					}
+				},
+				{
+					"path": "/orderManagement/reimburse",
+					"name": "reimburse",
+					"component": "orderManagement/reimburse",
+					"meta": {
+						"title": "退款审核",
+						"isLink": "",
+						"isHide": false,
+						"isKeepAlive": true,
+						"isAffix": false,
+						"isIframe": false,
+						"roles": [
+							"admin",
+							"common"
+						],
+						"icon": "el-icon-monitor"
+					}
+				}
+			]
+		},
+		{
 			"path": "/indentmanagement/index.vue",
 			"name": "indentmanagement",
 			"component": "indentmanagement",
@@ -11,7 +96,6 @@
 				"isHide": true,
 				"isKeepAlive": true,
 				"isAffix": false,
-				
 				"isIframe": false,
 				"roles": [
 					"admin",
@@ -144,92 +228,6 @@
 			]
 		},
 		{
-			"path": "/orderManagement",
-			"name": "OrderManagement",
-			"component": "layout/routerView/parent",
-			"redirect": "orderManagement",
-			"meta": {
-				"title": "订单管理",
-				"isLink": "",
-				"isKeepAlive": true,
-				"isAffix": false,
-				"isIframe": false,
-				"icon": "el-icon-document"
-			},
-			"children": [
-				{
-					"path": "/orderManagement/refueling",
-					"name": "refueling",
-					"component": "orderManagement/refueling",
-					"meta": {
-						"title": "一键加油订单",
-						"isLink": "",
-						"isKeepAlive": true,
-						"isAffix": false,
-						"isIframe": false,
-						"roles": [
-							"admin",
-							"common"
-						],
-						"icon": "el-icon-document"
-					}
-				},
-				{
-					"path": "/orderManagement/quickPass",
-					"name": "quickPass",
-					"component": "orderManagement/quickPass",
-					"meta": {
-						"title": "闪付订单",
-						"isLink": "",
-						"isKeepAlive": true,
-						"isAffix": false,
-						"isIframe": false,
-						"roles": [
-							"admin",
-							"common"
-						],
-						"icon": "el-icon-document"
-					}
-				},
-				{
-					"path": "/orderManagement/stored",
-					"name": "stored",
-					"component": "orderManagement/stored",
-					"meta": {
-						"title": "储值订单",
-						"isLink": "",
-						"isKeepAlive": true,
-						"isAffix": false,
-						"isIframe": false,
-						"roles": [
-							"admin",
-							"common"
-						],
-						"icon": "el-icon-document"
-					}
-				},
-
-				{
-					"path": "/orderManagement/reimburse",
-					"name": "reimburse",
-					"component": "orderManagement/reimburse",
-					"meta": {
-						"title": "退款审核",
-						"isLink": "",
-						"isHide": false,
-						"isKeepAlive": true,
-						"isAffix": false,
-						"isIframe": false,
-						"roles": [
-							"admin",
-							"common"
-						],
-						"icon": "el-icon-monitor"
-					}
-				}
-			]
-		},
-		{
 			"path": "/settlementManagement",
 			"name": "SettlementManagement",
 			"component": "layout/routerView/parent",
@@ -260,7 +258,6 @@
 						"icon": "el-icon-thumb"
 					}
 				}
-
 			]
 		}
 	]
