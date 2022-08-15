@@ -2,7 +2,7 @@
 	<div class="system-role-container">
 		<el-card shadow="hover">
 			<div>
-				<el-form :model="formInline" label-width="95px" :inline="true" label-position="right">
+				<el-form :model="formInline" label-width="95px" :inline="true" label-position="right" size="small">
 					<el-form-item label="订单号" prop="id">
 						<el-input
 							v-model="formInline.id"
@@ -87,15 +87,15 @@
 						</el-date-picker>
 					</el-form-item>
 					<el-form-item>
-						<el-button @click="reset">重置</el-button>
-						<el-button type="primary" @click="inquire">查询</el-button>
+						<el-button @click="reset" size="small">重置</el-button>
+						<el-button type="primary" @click="inquire" size="small">查询</el-button>
 					</el-form-item>
 				</el-form>
 			</div>
 			<div style="margin-left: 15px">
-				<el-button type="primary" @click="today(1)">今日</el-button>
-				<el-button type="primary" @click="today(2)">昨日</el-button>
-				<el-button type="primary" @click="today(7)">近7日</el-button>
+				<el-button type="primary" @click="today(1)" size="small">今日</el-button>
+				<el-button type="primary" @click="today(2)" size="small">昨日</el-button>
+				<el-button type="primary" @click="today(7)" size="small">近7日</el-button>
 			</div>
 			<el-row class="card" :gutter="12" style="margin: 20px 0">
 				<el-col :span="4" style="width: 180px">
@@ -122,9 +122,9 @@
 						<div>加油量（升）</div>
 					</el-card>
 				</el-col>
-				<el-col >
+				<!-- <el-col >
 					<ReportBtn ref="reportbtn" @Report="report" />
-				</el-col>
+				</el-col> -->
 			</el-row>
 			<Table
 				:loading="loading"
@@ -135,9 +135,19 @@
 				@sizeChange="pageSizeChange"
 			>
 				<template v-slot:done="{ row }">
-					<el-button type="text" @click="applicationDrawback(row)">申请退款</el-button>
+					<el-button
+						type="text"
+						v-if="(row.channelId === '小鹰加油' && row.orderStatus === '支付成功' && row.isInvoiced === 0) || row.refundStatus === '退款失败'"
+						@click="applicationDrawback(row)"
+						>申请退款</el-button
+					>
 					<el-button type="text" @click="particulars(row)">订单详情</el-button>
-					<el-button type="text" v-if="row.orderStatus === '支付成功' && row.channelId != '喂车车'" @click="reprint(row)">补打小票</el-button>
+					<el-button
+						type="text"
+						v-if="(row.orderStatus === '支付成功' && row.channelId != '喂车车') || row.refundStatus === '退款中'"
+						@click="reprint(row)"
+						>补打小票</el-button
+					>
 				</template>
 			</Table>
 		</el-card>
@@ -301,7 +311,7 @@
 import Table from '@/components/table/index_detail';
 import Dialog from '@/components/system/SysDialog';
 import ReportBtn from '@/components/reportBtn';
-import { oneClickOrderList, oneClickOrderDetails, oneClickOrderCount, printReceipt } from '@/api/oil/refueling';
+import { oneClickOrderList, oneClickOrderDetails, oneClickOrderCount, printReceipt, refundReview } from '@/api/oil/refueling';
 export default {
 	components: {
 		Table,
@@ -479,7 +489,7 @@ export default {
 		this.orderStatistics();
 	},
 	methods: {
-		changeNum() { 
+		changeNum() {
 			if (this.formInline.id.length > 19) {
 				this.formInline.id = this.formInline.id.slice(0, 19);
 			}
@@ -664,7 +674,7 @@ export default {
 			this.orderList();
 			this.orderStatistics();
 		},
-        //格式化时间
+		//格式化时间
 		formatDate(date) {
 			var myyear = date.getFullYear();
 			var mymonth = date.getMonth() + 1;
@@ -689,6 +699,36 @@ export default {
 			this.$refs.reportbtn.url = 'v1/station/pageListExcel';
 			this.$refs.reportbtn.info = params;
 			this.$refs.reportbtn.Reports();
+		},
+		// 申请退款
+		applicationDrawback(row) {
+			this.$confirm('确定要申请退款吗?', '提示', {
+				confirmButtonText: '确定',
+				cancelButtonText: '取消',
+				type: 'warning',
+			})
+				.then(async () => {
+					await this.Review(row.thirdOrderId);
+				})
+				.catch(() => {
+					this.$message({
+						type: 'info',
+						message: '已取消操作',
+					});
+				});
+		},
+		Review(data) {
+		console.log(data)
+			refundReview({orderNo:data,rfndReason:''}).then((res) => {
+				if(res.code === '0'){
+					this.$message.success('操作成功')
+				}else{
+					this.$message.error(res.message)
+				}
+				console.log(res);
+			}).finally(()=>{
+				this.orderList()
+			})
 		},
 	},
 };

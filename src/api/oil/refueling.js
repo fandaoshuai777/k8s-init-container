@@ -1,5 +1,5 @@
 import request from '@/utils/orderRequest';
-
+const url = 'http://192.168.3.87:8888'
 //订单列表
 export function oneClickOrderList(data) {
   return request({
@@ -29,5 +29,13 @@ export function printReceipt(thirdOrderId) {
   return request({
     url: `/gotone-merchant-api/order/printReceipt/${thirdOrderId}`,
     method: 'GET',
+  })
+}
+//申请退款
+export function refundReview(params) {
+  return request({
+    url: `${url}/order/orderInfo/refundReview`,
+    method: 'post',
+    data: params,
   })
 }

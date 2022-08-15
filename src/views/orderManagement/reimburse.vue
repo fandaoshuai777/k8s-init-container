@@ -1,32 +1,37 @@
 <template>
 	<div>
 		<el-card shadow="hover">
-			<el-form :model="formInline" label-width="95px" :inline="true" label-position="right" ref="reset">
+			<el-form :model="formInline" label-width="95px" :inline="true" label-position="right" ref="reset" size="small">
 				<el-form-item label="手机号:">
-					<el-input v-model="formInline.id" placeholder="请输入报表名称" clearable> </el-input>
+					<el-input v-model="formInline.driverTel" placeholder="请输入手机号" clearable> </el-input>
 				</el-form-item>
 				<el-form-item label="油品型号:">
-					<el-select v-model="formInline.refundStatus" placeholder="请选择">
+					<el-select v-model="formInline.oilType" placeholder="请选择" clearable>
 						<el-option label="全部" value />
-						<el-option label="退款中" :value="2" />
-						<el-option label="退款成功" :value="5" />
-						<el-option label="退款失败" :value="6" />
+						<el-option label="0#" value="0#" />
+						<el-option label="-10#" value="-10#" />
+						<el-option label="92#" value="92#" />
+						<el-option label="95#" value="95#" />
+						<el-option label="98#" value="98#" />
+						<el-option label="101#" value="101#" />
+						<el-option label="CNG" value="CNG" />
+						<el-option label="LNG" value="LNG" />
 					</el-select>
 				</el-form-item>
 				<el-form-item label="订单号:">
-					<el-input v-model="formInline.id" placeholder="请输入报表名称" clearable> </el-input>
+					<el-input v-model="formInline.orderNo" placeholder="请输入订单号" clearable> </el-input>
 				</el-form-item>
 				<el-form-item label="退款状态:">
-					<el-select v-model="formInline.refundStatus" placeholder="请选择">
+					<el-select v-model="formInline.paymentStatus" placeholder="请选择" clearable>
 						<el-option label="全部" value />
-						<el-option label="退款中" :value="2" />
-						<el-option label="退款成功" :value="5" />
-						<el-option label="退款失败" :value="6" />
+						<el-option label="退款成功" :value="2" />
+						<el-option label="退款中" :value="4" />
+						<el-option label="退款失败" :value="5" />
 					</el-select>
 				</el-form-item>
 				<el-form-item label="创建时间">
 					<el-date-picker
-						v-model="times"
+						v-model="establishTime"
 						type="datetimerange"
 						start-placeholder="开始日期"
 						end-placeholder="结束日期"
@@ -37,7 +42,7 @@
 				</el-form-item>
 				<el-form-item label="支付时间">
 					<el-date-picker
-						v-model="time"
+						v-model="payTime"
 						type="datetimerange"
 						start-placeholder="开始日期"
 						end-placeholder="结束日期"
@@ -68,6 +73,7 @@
 </template>
 <script>
 import Table from '@/components/table/index_detail';
+import { list, refundOrder, rejectedRefundOrder } from '@/api/oil/refund';
 export default {
 	components: {
 		Table,
@@ -75,78 +81,76 @@ export default {
 	data() {
 		return {
 			formInline: {
-				id: '',
+				driverTel: '',
+				oilType: '',
+				orderNo: '',
+				paymentStatus: '',
+				endPayTime: '',
+				startPayTime: '',
+				startOrderTime: '',
+				endOrderTime: '',
 			},
 			loading: false,
-			tableData: [
-				{
-					a: 243456,
-					b: '134***1234',
-					c: 1,
-					d: '92#',
-					e: 5,
-					f: '109.01',
-					g: 98,
-					l: 1.23,
-					m: '微信支付',
-					n: '退款中',
-					o: '2022-08-09 10:38:51',
-					p: '2022-08-09 10:38:51',
-				},
-			],
+			tableData: [],
 			colums: [
 				{
 					label: '订单编号',
-					prop: 'a',
+					prop: 'orderNo',
 				},
 				{
 					label: '司机手机号',
-					prop: 'b',
+					prop: 'driverTel',
 				},
 				{
 					label: '枪号',
-					prop: 'c',
+					prop: 'oilGunNo',
 				},
 				{
 					label: '油品类型',
-					prop: 'd',
+					prop: 'oilType',
 				},
 				{
 					label: '订单金额',
-					prop: 'e',
+					prop: 'totlePrice',
 				},
 				{
 					label: '实付金额',
-					prop: 'f',
+					prop: 'driverTotal',
 				},
 				{
 					label: '加油量',
-					prop: 'g',
+					prop: 'fuelVolume',
 				},
 				{
 					label: '支付方式',
-					prop: 'm',
+					prop: 'paymentMode',
 				},
 				{
 					label: '退款状态',
-					prop: 'n',
+					prop: 'paymentStatus',
 				},
 				{
 					label: '创建时间',
-					prop: 'o',
+					prop: 'orderTime',
 				},
 				{
 					label: '支付时间',
-					prop: 'p',
+					prop: 'paymentTime',
 				},
 				{
 					label: '操作',
 					prop: 'done',
 					fixed: 'right',
+					width: 150,
 				},
 			],
-			times: [],
-			time: [],
+			establishTime: [],
+			payTime: [],
+			pagination: {
+				pageSize: 10,
+				currPage: 1,
+			},
+			total: 0,
 		};
 	},
 	computed: {
@@ -154,17 +158,26 @@ export default {
 			return { ...this.pagination, total: this.total };
 		},
 	},
+	mounted() {
+		this.inquire();
+	},
 	methods: {
 		// 查询
-		inquire() {},
+		inquire() {
+			this.pagination.currPage = 1;
+			this.loading = true;
+			this.downloadList();
+		},
 		// 拒绝
-		refuse() {
+		refuse(row) {
 			this.$confirm('确认审核拒绝', '提示', {
 				confirmButtonText: '确定',
 				cancelButtonText: '取消',
 				type: 'warning',
 			})
-				.then(() => {})
+				.then(() => {
+					this.reject(row.orderNo);
+				})
 				.catch(() => {
 					this.$message({
 						type: 'info',
@@ -172,14 +185,30 @@ export default {
 					});
 				});
 		},
+		reject(orderNo) {
+			rejectedRefundOrder({orderNo:orderNo})
+				.then((res) => {
+					if (res.code === '0') {
+						this.$message.success(res.result);
+						this.downloadList();
+
+					} else {
+						this.$message.error(res.msg);
+						this.downloadList();
+					}
+				})
+			
+		},
 		// 通过
-		pass() {
+		pass(row) {
 			this.$confirm('确认审核通过?', '提示', {
 				confirmButtonText: '确定',
 				cancelButtonText: '取消',
 				type: 'warning',
 			})
-				.then(() => {})
+				.then(() => {
+					this.transit(row.orderNo);
+				})
 				.catch(() => {
 					this.$message({
 						type: 'info',
@@ -187,8 +216,57 @@ export default {
 					});
 				});
 		},
+		transit(orderNo) {
+			refundOrder({orderNo:orderNo})
+				.then((res) => {
+					if (res.code === '0') {
+						this.$message.success(res.result);
+						this.downloadList();
+
+					} else {
+						this.$message.error(res.msg);
+						this.downloadList();
+
+					}
+				})
+				.finally(() => {
+					this.downloadList();
+				});
+		},
 		// 列表
-		downloadList() {},
+		downloadList() {
+			this.loading = true
+			if (this.establishTime) {
+				this.formInline.startOrderTime = this.establishTime[0];
+				this.formInline.endOrderTime = this.establishTime[1];
+			} else {
+				this.formInline.startOrderTime = '';
+				this.formInline.endOrderTime = '';
+			}
+			if (this.payTime) {
+				this.formInline.startPayTime = this.payTime[0];
+				this.formInline.endPayTime = this.payTime[1];
+			} else {
+				this.formInline.startPayTime = '';
+				this.formInline.endPayTime = '';
+			}
+			const data = { ...this.formInline, pageNum: this.pagination.currPage, pageSize: this.pagination.pageSize };
+
+			list(data).then((res) => {
+				if (res.code === '0') {
+					this.tableData = res.result.oilOrderPage.map((n) => {
+						return {
+							...n,
+							paymentMode: n.paymentMode == 1 ? '主动支付' : n.paymentMode == 2 ? '二维码支付' : n.paymentMode,
+							paymentStatus:
+								n.paymentStatus == 2 ? '退款成功' : n.paymentStatus == 4 ? '退款中' : n.paymentStatus == 5 ? '退款失败' : n.paymentStatus,
+						};
+					});
+					this.total = res.result.totalNum;
+					this.loading = false;
+				}
+			});
+		},
 		// 页码变化
 		paginationChange(value) {
 			this.pagination.currPage = value.current;

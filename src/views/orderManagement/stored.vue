@@ -2,7 +2,7 @@
 	<div class="system-role-container">
 		<el-card shadow="hover">
 			<div>
-				<el-form :model="formInline" label-width="95px" :inline="true" label-position="right" ref="reset">
+				<el-form :model="formInline" label-width="95px" :inline="true" label-position="right" ref="reset" size="small">
 					<el-form-item label="订单号">
 						<el-input
 							type="number"
@@ -82,9 +82,9 @@
 				</el-form>
 			</div>
 			<div style="margin-left: 15px">
-				<el-button type="primary" @click="today(1)">今日</el-button>
-				<el-button type="primary" @click="today(2)">昨日</el-button>
-				<el-button type="primary" @click="today(7)">近7日</el-button>
+				<el-button type="primary" @click="today(1)" size="small">今日</el-button>
+				<el-button type="primary" @click="today(2)" size="small">昨日</el-button>
+				<el-button type="primary" @click="today(7)" size="small">近7日</el-button>
 			</div>
 			<el-row class="card" :gutter="12" style="margin: 20px 0">
 				<el-col :span="4" style="width: 200px">
