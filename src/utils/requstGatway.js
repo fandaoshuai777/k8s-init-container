@@ -6,8 +6,7 @@ import { Local, Session } from '@/utils/storage';
 
 function baseURLEnv() {
     if (process.env.NODE_ENV === 'development') {
-        console.log('development')
-        return 'https://internal.dev.op-api-gateway.wonder-link.net'
+        return 'https://internal.fat.op-api-gateway.wonder-link.net/'
     } else if (window.location.hostname.indexOf('ciecdev') !== -1) {
         console.log('ciecdev')
         return 'https://internal.dev.op-api-gateway.wonder-link.net'

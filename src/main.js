@@ -15,7 +15,8 @@ Vue.use(Element, { i18n: (key, value) => i18n.t(key, value), size: globalCompone
 Vue.mixin(mixins)
 Vue.config.productionTip = false;
 Vue.prototype.bus = new Vue();
-
+import VueMergeableTable from 'vue-mergeable-table'
+Vue.use(VueMergeableTable)
 new Vue({
 	router,
 	store,

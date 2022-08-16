@@ -1,10 +1,10 @@
-import request from '@/utils/request'
+import request from '@/utils/requstGatway'
 
-//结算日账单
-export function billList(params) {
+//账单
+export function get_settle(params) {
   return request({
-    url: '/stationSettle/stationDailyBillList',
+    url: '/gotone-settlement-api/mp/merchant/bill/get_settle_by_station_id_and_date',
     method: 'GET',
-    data: params,
+    params,
   })
 }
