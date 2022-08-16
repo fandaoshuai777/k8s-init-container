@@ -1,5 +1,5 @@
-import request from '@/utils/orderRequest';
-const url = 'http://192.168.3.87:8888'
+import request from '@/utils/requstGatway';
+const url = 'http://internal.fat-1.merchant-server.wonderlink.cc'
 //订单列表
 export function oneClickOrderList(data) {
   return request({

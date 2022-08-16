@@ -1,4 +1,4 @@
-import request from '@/utils/orderRequest';
+import request from '@/utils/requstGatway';
 
 //闪付订单列表
 export function quickPassOrderList(data) {

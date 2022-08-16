@@ -1,4 +1,4 @@
-import request from '@/utils/orderRequest';
+import request from '@/utils/requstGatway';
 
 //储值订单列表
 export function storedOrderList(data) {
