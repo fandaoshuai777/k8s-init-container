@@ -81,7 +81,7 @@ export default {
 			this.$refs.Userform.validate((valid) => {
 				if (valid) {
 					account(this.form).then((res) => {
-						if (res.code == 200) {
+						if (res.code == 200 || res.code == '0') {
 							this.submit.loading = true;
 							let userName = 'admin';
 							setTimeout(() => {
