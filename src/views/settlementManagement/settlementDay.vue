@@ -79,7 +79,8 @@ export default {
 				startDate: this.time[0] + ' 00:00:00',
 				endDate: this.time[1] + ' 23:59:59',
 				// stationId: Session.get('enterpriseId'),
-				stationId: 179640,
+				stationId: Session.get('enterpriseId'),
+				merchantId: Session.get('merchantId'),
 			};
 
 			get_settle(data).then((res) => {
@@ -558,10 +559,10 @@ export default {
 							class: 'time',
 							merge: { row: index, col: 10, rowspan: 1, colspan: 1 },
 						});
+						console.log(info.settlementStatus);
 						//结算状态
 						this.renderOptions.data.push({
-							content: info.settlementStatus === 1 ? '已结算' : '未结算',
-
+							content: info.settlementStatus === 1 ? '已结算' : info.settlementStatus === 0 ? '未结算' : info.settlementStatus,
 							class: 'time',
 							merge: { row: index, col: 11, rowspan: 1, colspan: 1 },
 						});
@@ -570,6 +571,8 @@ export default {
 				if (this.WCC === undefined) {
 				} else {
 					this.WCC.forEach((info, index) => {
+						console.log(info.settlementStatus);
+
 						//订单金额
 						this.renderOptions.data.push({
 							content: info.orderAmount?.toString(),
@@ -614,10 +617,9 @@ export default {
 						});
 						//结算状态
 						this.renderOptions.data.push({
-							content: info.settlementStatus === 1 ? '已结算' : '未结算',
-
+							content: info.settlementStatus === 1 ? '已结算' : info.settlementStatus === 0 ? '未结算' : info.settlementStatus,
 							class: 'time',
-							merge: { row: index, col: 11, rowspan: 1, colspan: 1 },
+							merge: { row: index + 3, col: 11, rowspan: 1, colspan: 1 },
 						});
 					});
 				}
@@ -668,10 +670,10 @@ export default {
 						});
 						//结算状态
 						this.renderOptions.data.push({
-							content: info.settlementStatus === 1 ? '已结算' : '未结算',
+							content: info.settlementStatus === 1 ? '已结算' : info.settlementStatus === 0 ? '未结算' : info.settlementStatus,
 
 							class: 'time',
-							merge: { row: index, col: 11, rowspan: 1, colspan: 1 },
+							merge: { row: index + 12, col: 11, rowspan: 1, colspan: 1 },
 						});
 					});
 				}
@@ -722,9 +724,10 @@ export default {
 						});
 						//结算状态
 						this.renderOptions.data.push({
-							content: info.settlementStatus === 1 ? '已结算' : '未结算',
+							content: info.settlementStatus === 1 ? '已结算' : info.settlementStatus === 0 ? '未结算' : info.settlementStatus,
+
 							class: 'time',
-							merge: { row: index, col: 11, rowspan: 1, colspan: 1 },
+							merge: { row: index + 13, col: 11, rowspan: 1, colspan: 1 },
 						});
 					});
 				}
