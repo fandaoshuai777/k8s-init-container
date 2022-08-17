@@ -6,15 +6,12 @@ import { Local, Session } from '@/utils/storage';
 
 function baseURLEnv() {
     if (process.env.NODE_ENV === 'development') {
-        return 'https://internal.fat.op-api-gateway.wonder-link.net'
+        return 'https://internal.fat-1.op-api-gateway.wonderlink.cc'
     } else if (window.location.hostname.indexOf('test') !== -1) {
-        return 'https://internal.fat.op-api-gateway.wonder-link.net'
-    } else if (window.location.hostname.indexOf('fat') !== -1) {
-        return 'https://internal.fat.op-api-gateway.wonder-link.net'
+        return 'https://internal.fat-1.op-api-gateway.wonderlink.cc'
     } else if (window.location.hostname.indexOf('fat-1') !== -1) {
         return 'https://internal.fat-1.op-api-gateway.wonderlink.cc'
     } else {
-        console.log('线上')
         return 'https://op-api-gateway.wonder-link.net'
     }
 }
