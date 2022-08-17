@@ -24,11 +24,11 @@ function baseURLEnv() {
 		return 'https://internal.dev.op-api-gateway.wonder-link.net'
 	} else if (window.location.hostname.indexOf('test') !== -1) {
 		return 'https://internal.fat.op-api-gateway.wonder-link.net'
-	} else if (window.location.hostname.indexOf('fat') !== -1) {
-		return 'https://internal.fat.op-api-gateway.wonder-link.net'
 	} else if (window.location.hostname.indexOf('fat-1') !== -1) {
 		return 'http://internal.fat-1.merchant-server.wonderlink.cc'
-	}else {
+	} else if (window.location.hostname.indexOf('fat') !== -1) {
+		return 'https://internal.fat.op-api-gateway.wonder-link.net'
+	} else {
 		return 'https://op-api-gateway.wonder-link.net'
 	}
 }
