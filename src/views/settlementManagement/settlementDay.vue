@@ -52,7 +52,7 @@ export default {
 			time: [],
 			StartDatetions: {
 				disabledDate: (time) => {
-					return time.getTime()+86400000 > new Date();
+					return time.getTime() + 86400000 > new Date();
 				},
 			},
 		};
@@ -109,20 +109,26 @@ export default {
 					rows: 15,
 					data: [],
 				};
+				//表头
+				this.renderOptions.data.push({
+					content: `${this.time[0]} - ${this.time[1]}`,
+					class: 'time',
+					merge: { row: 0, col: 0, rowspan: 14, colspan: 1 },
+				});
 			} else {
 				this.renderOptions = {
 					cols: 12,
 					rows: 15,
 					data: [],
 				};
+				//表头
+				this.renderOptions.data.push({
+					content: `${this.time[0]}`,
+					class: 'time',
+					merge: { row: 0, col: 0, rowspan: 14, colspan: 1 },
+				});
 			}
 
-			//表头
-			this.renderOptions.data.push({
-				content: `${this.time[0]} - ${this.time[1]}`,
-				class: 'time',
-				merge: { row: 0, col: 0, rowspan: 14, colspan: 1 },
-			});
 			this.renderOptions.data.push({
 				content: '小鹰加油',
 				class: 'time',
@@ -508,7 +514,6 @@ export default {
 				}
 			} else {
 				if (this.XYJY === undefined) {
-					return false;
 				} else {
 					this.XYJY.forEach((info, index) => {
 						//订单金额
@@ -563,7 +568,6 @@ export default {
 					});
 				}
 				if (this.WCC === undefined) {
-					return false;
 				} else {
 					this.WCC.forEach((info, index) => {
 						//订单金额
@@ -618,7 +622,6 @@ export default {
 					});
 				}
 				if (this.DD === undefined) {
-					return false;
 				} else {
 					this.DD.forEach((info, index) => {
 						//订单金额
@@ -673,7 +676,6 @@ export default {
 					});
 				}
 				if (this.TY === undefined) {
-					return false;
 				} else {
 					this.TY.forEach((info, index) => {
 						//订单金额
@@ -727,7 +729,6 @@ export default {
 					});
 				}
 				if (this.SUM === undefined) {
-					return false;
 				} else {
 					this.SUM.forEach((info, index) => {
 						//订单金额
