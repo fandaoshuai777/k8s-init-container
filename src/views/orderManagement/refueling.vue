@@ -137,7 +137,7 @@
 				<template v-slot:done="{ row }">
 					<el-button
 						type="text"
-						v-if="(row.channelId === '小鹰加油' && row.orderStatus === '支付成功' && row.isInvoiced === 0) || row.refundStatus === '退款失败'"
+						v-if="(row.channelId === '小鹰加油' && row.orderStatus === '支付成功' && row.isInvoiced === 0 && row.refundStatus != '退款中') || row.refundStatus === '退款失败'"
 						@click="applicationDrawback(row)"
 						>申请退款</el-button
 					>
@@ -549,11 +549,13 @@ export default {
 								: n.payType === 7
 								? '其他支付'
 								: n.payType,
-						refundStatus:
+							refundStatus:
 							n.refundStatus === -1
 								? ''
 								: n.refundStatus === 0
-								? '--'
+								? '未退款'
+								: n.refundStatus === 1
+								? '退款中'
 								: n.refundStatus === 2
 								? '退款中'
 								: // : n.refundStatus === 3
