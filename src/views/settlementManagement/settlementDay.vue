@@ -145,7 +145,7 @@
 									<el-table-column align="center" :width="With" prop="settlementAccountType"> </el-table-column>
 									<el-table-column align="center" :width="With" prop="orderAmount">
 										<template slot-scope="scope">
-											{{ (scope.row.orderAmount = ' ') }}
+											{{ scope.row.orderAmount === 0 ? '--' : scope.row.orderAmount }}
 										</template>
 									</el-table-column>
 									<el-table-column align="center" :width="With" prop="channelPoundage">
