@@ -19,9 +19,10 @@
 					</el-form-item>
 				</el-form>
 			</div>
-			<div class="warp">
-				<el-table class="table" border :class="[flag ? 'activeCls' : 'errorCls']"  x>
-					<el-table-column prop="date" label="账单日期" align="center" :width="warpWith"> </el-table-column>
+			<div class="warp" ref="table_inner">
+				<el-table class="table" border :style="flag ? 'width:' + errorWidth + 'px' : 'width:' + tableWidth + 'px'">
+					<!-- <el-table class="table" border> -->
+					<el-table-column prop="date" label="账单日期" align="center" :width="With"> </el-table-column>
 					<el-table-column :width="With" label="渠道" align="center"> </el-table-column>
 					<el-table-column :width="With" label="	订单类型" align="center"> </el-table-column>
 					<el-table-column :width="With" label="	结算账户" align="center"> </el-table-column>
@@ -34,9 +35,9 @@
 					<el-table-column :width="With" label="	实结金额" align="center"> </el-table-column>
 					<el-table-column :width="With" label="	账单状态" align="center" v-if="flag === 0"> </el-table-column>
 				</el-table>
-				<el-table :class="[flag ? 'activeCls' : 'errorCls']" :data="dataList" :show-header="false" border class="warptable"  >
+				<el-table :style="flag ? 'width:' + errorWidth + 'px' : 'width:' + tableWidth + 'px'" :data="dataList" :show-header="false" border class="warptable">
 					<el-table-column prop="riqi" align="center">
-						<el-table-column align="center" prop="riqi" :width="warpWith"></el-table-column>
+						<el-table-column align="center" prop="riqi" :width="With"></el-table-column>
 						<el-table-column align="center" prop="lists">
 							<template slot-scope="scopeDate">
 								<el-table :show-header="false" :data="scopeDate.row.lists" class="warptable_inner">
@@ -84,9 +85,9 @@
 						</el-table-column>
 					</el-table-column>
 				</el-table>
-				<el-table border :show-header="false" :data="sum" :class="[flag ? 'activeCls' : 'errorCls']" >
+				<el-table border :show-header="false" :data="sum" :style="flag ? 'width:' + errorWidth + 'px' : 'width:' + tableWidth + 'px'">
 					<el-table-column align="center" prop="settlementAccountType">
-						<el-table-column align="center" prop="orderType" :width="warpWith">
+						<el-table-column align="center" prop="orderType" :width="With">
 							<template slot-scope="scope">
 								{{ scope.row.orderType | filter }}
 							</template>
@@ -142,6 +143,8 @@ export default {
 			flag: 0,
 			warpWith: 155,
 			With: 133,
+			errorWidth: 0,
+			tableWidth: 0,
 			screenWidth: 0,
 		};
 	},
@@ -199,14 +202,18 @@ export default {
 	mounted() {},
 	watch: {
 		screenWidth: function (n, o) {
-	
-				if (n <= 1280) {
-					this.warpWith = 96;
-					this.With = 80;
-				} else {
-					this.warpWith = 167;
-					this.With = 131;
-				}
+			this.tableWidth = this.$refs.table_inner.clientWidth;
+			this.With = Math.ceil(this.tableWidth / 12);
+			this.errorWidth = this.tableWidth - this.With;
+
+			// this.warpWith = ;
+			// if (n <= 1280) {
+			// 	this.warpWith = 96;
+			// 	this.With = 80;
+			// } else {
+			// 	this.warpWith = 167;
+			// 	this.With = 131;
+			// }
 		},
 	},
 	mounted() {
@@ -303,14 +310,16 @@ export default {
 ::v-deep .warptable .el-table .el-table__cell {
 	padding: 0;
 }
-.activeCls {
-	width: 910px;
-}
-.errorCls {
-	width: 1612px;
-}
+// .activeCls {
+// 	width: 1482px;
+// }
+// .errorCls {
+// 	width: 1612px;
+// }
 .system-role-container ::v-deep .el-table .el-table__cell {
 	padding: 0 !important;
 }
-
+::v-deep .el-table--scrollable-x .el-table__body-wrapper {
+	overflow: hidden;
+}
 </style>
