@@ -48,11 +48,7 @@
 					class="warptable"
 				>
 					<el-table-column prop="riqi" align="center">
-						<el-table-column align="center" prop="riqi" :width="With">
-							<template slot-scope="scope">
-								{{ scope.row.riqi }}
-							</template>
-						</el-table-column>
+						<el-table-column align="center" prop="riqi" :width="With"> </el-table-column>
 						<el-table-column align="center" prop="lists">
 							<template slot-scope="scopeDate">
 								<el-table :show-header="false" :data="scopeDate.row.lists" class="warptable_inner">
@@ -308,8 +304,8 @@ export default {
 							}
 						}
 					});
-					this.lists = list
-					console.log(list)
+					this.lists = list;
+					console.log(list);
 					// this.lists = res.data.filter((n, index) => {
 					// 	delete res.data[res.data.length - 1];
 					// 	if (n.channelName === 'XYJY') {
@@ -329,7 +325,8 @@ export default {
 					// 	}
 					// });
 					this.dataList = [];
-					if (new Date(this.time[1]).getTime() - new Date(this.time[0]).getTime() > 86400000) {
+
+					if (new Date(this.time[1]).getTime() - new Date(this.time[0]).getTime() > 0) {
 						this.flag = 1;
 						this.dataList.push({
 							riqi: `${this.time[0]}  -  ${this.time[1]}`,
