@@ -3,6 +3,9 @@ let url = ' http://internal.fat-1.merchant-server.wonderlink.cc'
 if (process.env.NODE_ENV === 'development') {
   url = 'http://internal.fat-1.merchant-server.wonderlink.cc'
 
+} else if (window.location.hostname.indexOf('fat-1') !== -1) {
+  url = 'http://internal.fat-1.merchant-server.wonderlink.cc'
+
 } else {
   url = 'http://merchant-server.cngotone.com'
 
