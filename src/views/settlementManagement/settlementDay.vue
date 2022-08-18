@@ -21,26 +21,26 @@
 			</div>
 
 			<el-table class="table" border>
-				<el-table-column prop="date" label="账单日期" align="center" width="155"> </el-table-column>
-				<el-table-column label="渠道" width="132" align="center"> </el-table-column>
-				<el-table-column label="	订单类型" width="132" align="center"> </el-table-column>
-				<el-table-column label="	结算账户" width="132" align="center"> </el-table-column>
-				<el-table-column label="	订单金额" width="132" align="center"> </el-table-column>
-				<el-table-column label="	支付通道手续费" width="132" align="center"> </el-table-column>
-				<el-table-column label="	平台服务费" width="132" align="center"> </el-table-column>
-				<el-table-column label="	应结金额" width="132" align="center"> </el-table-column>
-				<el-table-column label="	结算服务费" width="132" align="center"> </el-table-column>
-				<el-table-column label="	采购折扣金额" width="132" align="center"> </el-table-column>
-				<el-table-column label="	实结金额" width="132" align="center"> </el-table-column>
-				<el-table-column label="	账单状态" width="132" align="center" v-if="flag === 0"> </el-table-column>
+				<el-table-column prop="date" label="账单日期" align="center" :width="warpWith"> </el-table-column>
+				<el-table-column :width="With" label="渠道" align="center"> </el-table-column>
+				<el-table-column :width="With" label="	订单类型" align="center"> </el-table-column>
+				<el-table-column :width="With" label="	结算账户" align="center"> </el-table-column>
+				<el-table-column :width="With" label="	订单金额" align="center"> </el-table-column>
+				<el-table-column :width="With" label="	支付通道手续费" align="center"> </el-table-column>
+				<el-table-column :width="With" label="	平台服务费" align="center"> </el-table-column>
+				<el-table-column :width="With" label="	应结金额" align="center"> </el-table-column>
+				<el-table-column :width="With" label="	结算服务费" align="center"> </el-table-column>
+				<el-table-column :width="With" label="	采购折扣金额" align="center"> </el-table-column>
+				<el-table-column :width="With" label="	实结金额" align="center"> </el-table-column>
+				<el-table-column :width="With" label="	账单状态" align="center" v-if="flag === 0"> </el-table-column>
 			</el-table>
 			<el-table style="width: 100%" :data="dataList" :show-header="false" border class="warptable">
-				<el-table-column prop="riqi" width="155" align="center">
-					<el-table-column align="center" prop="riqi" width="155"></el-table-column>
+				<el-table-column prop="riqi"  align="center">
+					<el-table-column align="center" prop="riqi" :width="warpWith"></el-table-column>
 					<el-table-column align="center" prop="lists">
 						<template slot-scope="scopeDate">
 							<el-table :show-header="false" :data="scopeDate.row.lists" class="warptable_inner">
-								<el-table-column prop="channelName" width="132" align="center">
+								<el-table-column prop="channelName" :width="With" align="center">
 									<template slot-scope="scope">
 										{{ scope.row.channelName | filter }}
 									</template>
@@ -48,27 +48,27 @@
 								<el-table-column prop="orderType" align="center">
 									<template slot-scope="channelData">
 										<el-table :show-header="false" :data="channelData.row.channelDate" class="tableNexine">
-											<el-table-column align="center" prop="orderType" width="132">
+											<el-table-column align="center" prop="orderType" :width="With">
 												<template slot-scope="scope">
 													{{ scope.row.orderType | filter }}
 												</template>
 											</el-table-column>
 											<el-table-column align="center" prop="orderType">
 												<template slot-scope="orderData">
-													<el-table :show-header="false" :data="orderData.row.detailsList">
-														<el-table-column align="center" prop="settlementAccountType" width="132">
+													<el-table :show-header="false" :data="orderData.row.detailsList" border>
+														<el-table-column align="center" prop="settlementAccountType">
 															<template slot-scope="scope">
 																{{ scope.row.settlementAccountType | filter }}
 															</template>
 														</el-table-column>
-														<el-table-column align="center" width="132" prop="orderAmount"></el-table-column>
-														<el-table-column align="center" width="132" prop="channelPoundage"></el-table-column>
-														<el-table-column align="center" width="132" prop="platformServiceFee"></el-table-column>
-														<el-table-column align="center" width="132" prop="settlementAmount"></el-table-column>
-														<el-table-column width="132" align="center" prop="settlementServiceFee"></el-table-column>
-														<el-table-column align="center" width="132" prop="purchaseDiscountAmount"></el-table-column>
-														<el-table-column width="132" align="center" prop="solidKnotAmount"></el-table-column>
-														<el-table-column align="center" prop="settlementStatus" width="132" v-if="flag === 0">
+														<el-table-column align="center" :width="With" prop="orderAmount"></el-table-column>
+														<el-table-column align="center" :width="With" prop="channelPoundage"></el-table-column>
+														<el-table-column align="center" :width="With" prop="platformServiceFee"></el-table-column>
+														<el-table-column align="center" :width="With" prop="settlementAmount"></el-table-column>
+														<el-table-column align="center" :width="With" prop="settlementServiceFee"></el-table-column>
+														<el-table-column align="center" :width="With" prop="purchaseDiscountAmount"></el-table-column>
+														<el-table-column align="center" :width="With" prop="solidKnotAmount"></el-table-column>
+														<el-table-column align="center" :width="With" prop="settlementStatus" v-if="flag === 0">
 															<template slot-scope="scope">
 																{{ scope.row | filterStatus }}
 															</template>
@@ -84,19 +84,39 @@
 					</el-table-column>
 				</el-table-column>
 			</el-table>
-			<el-table style="width: 100%" class="table" border :show-header="false" :data="sum" :span-method="arraySpanMethod">
-				<el-table-column align="center" prop="settlementAccountType"> </el-table-column>
-				<el-table-column align="center" prop="settlementAccountType"> </el-table-column>
-				<el-table-column align="center" prop="settlementAccountType"> </el-table-column>
-				<el-table-column align="center" prop="settlementAccountType"> </el-table-column>
-				<el-table-column align="center" prop="orderAmount"></el-table-column>
-				<el-table-column align="center" prop="channelPoundage"></el-table-column>
-				<el-table-column align="center" prop="platformServiceFee"></el-table-column>
-				<el-table-column align="center" prop="settlementAmount"></el-table-column>
-				<el-table-column align="center" prop="settlementServiceFee"></el-table-column>
-				<el-table-column align="center" prop="purchaseDiscountAmount"></el-table-column>
-				<el-table-column align="center" prop="solidKnotAmount"></el-table-column>
-				<el-table-column align="center" prop="settlementStatus" v-if="flag === 0"></el-table-column>
+			<el-table style="width: 100%" border :show-header="false" :data="sum">
+				<el-table-column align="center" prop="settlementAccountType">
+					<el-table-column align="center" prop="orderType" :width="warpWith">
+						<template slot-scope="scope">
+							{{ scope.row.orderType | filter }}
+						</template>
+					</el-table-column>
+					<el-table-column align="center" prop="orderType">
+						<template slot-scope="data">
+							<el-table :show-header="false" :data="data.row.detailsList" border>
+								<el-table-column align="center" :width="With" prop="settlementAccountType"> </el-table-column>
+								<el-table-column align="center" :width="With" prop="settlementAccountType"> </el-table-column>
+								<el-table-column align="center" :width="With" prop="settlementAccountType"> </el-table-column>
+								<el-table-column align="center" :width="With" prop="orderAmount">
+									<template slot-scope="scope">
+										{{ (scope.row.orderAmount = ' ') }}
+									</template>
+								</el-table-column>
+								<el-table-column align="center" :width="With" prop="channelPoundage"> </el-table-column>
+								<el-table-column align="center" :width="With" prop="platformServiceFee"></el-table-column>
+								<el-table-column align="center" :width="With" prop="settlementAmount"></el-table-column>
+								<el-table-column align="center" :width="With" prop="settlementServiceFee"></el-table-column>
+								<el-table-column align="center" :width="With" prop="purchaseDiscountAmount"></el-table-column>
+								<el-table-column align="center" :width="With" prop="solidKnotAmount"></el-table-column>
+								<el-table-column align="center" :width="With" prop="settlementStatus" v-if="flag === 0">
+									<template slot-scope="scope">
+										{{ (scope.row.settlementStatus = ' ') }}
+									</template>
+								</el-table-column>
+							</el-table>
+						</template>
+					</el-table-column>
+				</el-table-column>
 			</el-table>
 		</el-card>
 	</div>
@@ -118,6 +138,9 @@ export default {
 				},
 			},
 			sum: [],
+			flag: '',
+			warpWith: 155,
+			With: 133,
 		};
 	},
 	computed: {},
@@ -171,6 +194,15 @@ export default {
 		this.time = [t.toISOString().split('T')[0], t.toISOString().split('T')[0]];
 		this.list();
 	},
+	mounted() {
+		if (document.body.clientWidth <= 1280) {
+			this.warpWith = 110;
+			this.With = 90;
+		} else {
+			this.warpWith = 155;
+			this.With = 133;
+		}
+	},
 	methods: {
 		// 查询
 		inquire() {
@@ -184,14 +216,12 @@ export default {
 				// endDate: '2022-08-16 23:59:59',
 				stationId: Session.get('enterpriseId'),
 				merchantId: Session.get('merchantId'),
-				stationId: 1111130249,
-				merchantId: 13529,
 			};
 
 			get_settle(data).then((res) => {
 				if (res.code === '0') {
-					this.sum = res.data[res.data.length - 1].channelDate[0].detailsList;
-
+					this.sum = [res.data[res.data.length - 1].channelDate[0]];
+					console.log(this.sum);
 					this.lists = res.data.map((n) => {
 						delete res.data[res.data.length - 1];
 						return {
@@ -255,5 +285,7 @@ export default {
 }
 ::v-deep .warptable .el-table .el-table__cell {
 	padding: 0;
+}
+::v-deep .el-table--medium .el-table__cell {
 }
 </style>
