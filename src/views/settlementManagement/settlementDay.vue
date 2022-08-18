@@ -103,7 +103,11 @@
 																	{{ scope.row.purchaseDiscountAmount === 0 ? '--' : scope.row.purchaseDiscountAmount }}
 																</template>
 															</el-table-column>
-															<el-table-column align="center" :width="With" prop="solidKnotAmount"></el-table-column>
+															<el-table-column align="center" :width="With" prop="solidKnotAmount">
+																<template slot-scope="scope">
+																	{{ scope.row.solidKnotAmount === 0 ? '--' : scope.row.solidKnotAmount }}
+																</template>
+															</el-table-column>
 															<el-table-column align="center" :width="With" prop="settlementStatus" v-if="flag === 0">
 																<template slot-scope="scope">
 																	{{ scope.row | filterStatus }}
@@ -144,12 +148,36 @@
 											{{ (scope.row.orderAmount = ' ') }}
 										</template>
 									</el-table-column>
-									<el-table-column align="center" :width="With" prop="channelPoundage"> </el-table-column>
-									<el-table-column align="center" :width="With" prop="platformServiceFee"></el-table-column>
-									<el-table-column align="center" :width="With" prop="settlementAmount"></el-table-column>
-									<el-table-column align="center" :width="With" prop="settlementServiceFee"></el-table-column>
-									<el-table-column align="center" :width="With" prop="purchaseDiscountAmount"></el-table-column>
-									<el-table-column align="center" :width="With" prop="solidKnotAmount"></el-table-column>
+									<el-table-column align="center" :width="With" prop="channelPoundage">
+										<template slot-scope="scope">
+											{{ scope.row.channelPoundage === 0 ? '--' : scope.row.channelPoundage }}
+										</template>
+									</el-table-column>
+									<el-table-column align="center" :width="With" prop="platformServiceFee">
+										<template slot-scope="scope">
+											{{ scope.row.platformServiceFee === 0 ? '--' : scope.row.platformServiceFee }}
+										</template>
+									</el-table-column>
+									<el-table-column align="center" :width="With" prop="settlementAmount">
+										<template slot-scope="scope">
+											{{ scope.row.settlementAmount === 0 ? '--' : scope.row.settlementAmount }}
+										</template>
+									</el-table-column>
+									<el-table-column align="center" :width="With" prop="settlementServiceFee">
+										<template slot-scope="scope">
+											{{ scope.row.settlementServiceFee === 0 ? '--' : scope.row.settlementServiceFee }}
+										</template>
+									</el-table-column>
+									<el-table-column align="center" :width="With" prop="purchaseDiscountAmount">
+										<template slot-scope="scope">
+											{{ scope.row.purchaseDiscountAmount === 0 ? '--' : scope.row.purchaseDiscountAmount }}
+										</template>
+									</el-table-column>
+									<el-table-column align="center" :width="With" prop="solidKnotAmount">
+										<template slot-scope="scope">
+											{{ scope.row.solidKnotAmount === 0 ? '--' : scope.row.solidKnotAmount }}
+										</template>
+									</el-table-column>
 									<el-table-column align="center" :width="With" prop="settlementStatus" v-if="flag === 0">
 										<template slot-scope="scope">
 											{{ (scope.row.settlementStatus = ' ') }}
