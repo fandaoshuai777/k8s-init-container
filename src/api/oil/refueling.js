@@ -1,5 +1,12 @@
 import request from '@/utils/requstGatway';
-const url = 'http://internal.fat-1.merchant-server.wonderlink.cc'
+let url = ' http://internal.fat-1.merchant-server.wonderlink.cc'
+if (process.env.NODE_ENV === 'development') {
+  url = 'http://internal.fat-1.merchant-server.wonderlink.cc'
+
+} else {
+  url = 'http://merchant-server.cngotone.com'
+
+}
 //订单列表
 export function oneClickOrderList(data) {
   return request({

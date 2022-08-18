@@ -29,7 +29,7 @@ function baseURLEnv() {
 	} else if (window.location.hostname.indexOf('fat') !== -1) {
 		return 'https://internal.fat.op-api-gateway.wonder-link.net'
 	} else {
-		return 'https://op-api-gateway.wonder-link.net'
+		return 'http://merchant-server.cngotone.com'
 	}
 }
 // 创建 axios 实例
