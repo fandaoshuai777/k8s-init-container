@@ -20,7 +20,12 @@
 				</el-form>
 			</div>
 			<div class="warp" ref="table_inner">
-				<el-table class="table" border :style="flag ? 'width:' + errorWidth + 'px' : 'width:' + tableWidth + 'px'">
+				<el-table
+					class="table"
+					border
+					:style="flag ? 'width:' + errorWidth + 'px' : 'width:' + tableWidth + 'px'"
+					:header-cell-style="{ background: '#e9f6ff' }"
+				>
 					<!-- <el-table class="table" border> -->
 					<el-table-column prop="date" label="账单日期" align="center" :width="With"> </el-table-column>
 					<el-table-column :width="With" label="渠道" align="center"> </el-table-column>
@@ -35,9 +40,19 @@
 					<el-table-column :width="With" label="	实结金额" align="center"> </el-table-column>
 					<el-table-column :width="With" label="	账单状态" align="center" v-if="flag === 0"> </el-table-column>
 				</el-table>
-				<el-table :style="flag ? 'width:' + errorWidth + 'px' : 'width:' + tableWidth + 'px'" :data="dataList" :show-header="false" border class="warptable">
+				<el-table
+					:style="flag ? 'width:' + errorWidth + 'px' : 'width:' + tableWidth + 'px'"
+					:data="dataList"
+					:show-header="false"
+					border
+					class="warptable"
+				>
 					<el-table-column prop="riqi" align="center">
-						<el-table-column align="center" prop="riqi" :width="With"></el-table-column>
+						<el-table-column align="center" prop="riqi" :width="With">
+							<template slot-scope="scope">
+								{{ scope.row.riqi }}
+							</template>
+						</el-table-column>
 						<el-table-column align="center" prop="lists">
 							<template slot-scope="scopeDate">
 								<el-table :show-header="false" :data="scopeDate.row.lists" class="warptable_inner">
@@ -56,18 +71,42 @@
 												</el-table-column>
 												<el-table-column align="center" prop="orderType">
 													<template slot-scope="orderData">
-														<el-table :show-header="false" :data="orderData.row.detailsList">
+														<el-table :show-header="false" :data="orderData.row.detailsList" :row-class-name="tableRowClassName">
 															<el-table-column align="center" prop="settlementAccountType" :width="With">
 																<template slot-scope="scope">
 																	{{ scope.row.settlementAccountType | filter }}
 																</template>
 															</el-table-column>
-															<el-table-column align="center" :width="With" prop="orderAmount"></el-table-column>
-															<el-table-column align="center" :width="With" prop="channelPoundage"></el-table-column>
-															<el-table-column align="center" :width="With" prop="platformServiceFee"></el-table-column>
-															<el-table-column align="center" :width="With" prop="settlementAmount"></el-table-column>
-															<el-table-column align="center" :width="With" prop="settlementServiceFee"></el-table-column>
-															<el-table-column align="center" :width="With" prop="purchaseDiscountAmount"></el-table-column>
+															<el-table-column align="center" :width="With" prop="orderAmount">
+																<template slot-scope="scope">
+																	{{ scope.row.orderAmount === 0 ? '--' : scope.row.orderAmount }}
+																</template>
+															</el-table-column>
+															<el-table-column align="center" :width="With" prop="channelPoundage">
+																<template slot-scope="scope">
+																	{{ scope.row.channelPoundage === 0 ? '--' : scope.row.channelPoundage }}
+																</template>
+															</el-table-column>
+															<el-table-column align="center" :width="With" prop="platformServiceFee">
+																<template slot-scope="scope">
+																	{{ scope.row.platformServiceFee === 0 ? '--' : scope.row.platformServiceFee }}
+																</template>
+															</el-table-column>
+															<el-table-column align="center" :width="With" prop="settlementAmount">
+																<template slot-scope="scope">
+																	{{ scope.row.settlementAmount === 0 ? '--' : scope.row.settlementAmount }}
+																</template>
+															</el-table-column>
+															<el-table-column align="center" :width="With" prop="settlementServiceFee">
+																<template slot-scope="scope">
+																	{{ scope.row.settlementServiceFee === 0 ? '--' : scope.row.settlementServiceFee }}
+																</template>
+															</el-table-column>
+															<el-table-column align="center" :width="With" prop="purchaseDiscountAmount">
+																<template slot-scope="scope">
+																	{{ scope.row.purchaseDiscountAmount === 0 ? '--' : scope.row.purchaseDiscountAmount }}
+																</template>
+															</el-table-column>
 															<el-table-column align="center" :width="With" prop="solidKnotAmount"></el-table-column>
 															<el-table-column align="center" :width="With" prop="settlementStatus" v-if="flag === 0">
 																<template slot-scope="scope">
@@ -85,11 +124,17 @@
 						</el-table-column>
 					</el-table-column>
 				</el-table>
-				<el-table border :show-header="false" :data="sum" :style="flag ? 'width:' + errorWidth + 'px' : 'width:' + tableWidth + 'px'">
+				<el-table
+					border
+					:show-header="false"
+					:data="sum"
+					:style="flag ? 'width:' + errorWidth + 'px' : 'width:' + tableWidth + 'px'"
+					class="colorBack"
+				>
 					<el-table-column align="center" prop="settlementAccountType">
 						<el-table-column align="center" prop="orderType" :width="With">
 							<template slot-scope="scope">
-								{{ scope.row.orderType | filter }}
+								{{ (scope.row = '总计') }}
 							</template>
 						</el-table-column>
 						<el-table-column align="center" prop="orderType">
@@ -181,6 +226,9 @@ export default {
 					return '银行卡';
 				case 'PRI':
 					return '虚拟账户';
+				case 'ZJC':
+					return '资金池';
+
 				case 'SUM':
 					return '合计';
 				case 1:
@@ -205,15 +253,6 @@ export default {
 			this.tableWidth = this.$refs.table_inner.clientWidth;
 			this.With = Math.ceil(this.tableWidth / 12);
 			this.errorWidth = this.tableWidth - this.With;
-
-			// this.warpWith = ;
-			// if (n <= 1280) {
-			// 	this.warpWith = 96;
-			// 	this.With = 80;
-			// } else {
-			// 	this.warpWith = 167;
-			// 	this.With = 131;
-			// }
 		},
 	},
 	mounted() {
@@ -228,6 +267,12 @@ export default {
 	},
 
 	methods: {
+		tableRowClassName({ row, rowIndex }) {
+			if (row.settlementAccountType === 'SUM') {
+				return 'warning-row';
+			}
+		},
+
 		// 查询
 		inquire() {
 			this.list();
@@ -245,19 +290,49 @@ export default {
 			get_settle(data).then((res) => {
 				if (res.code === '0') {
 					this.sum = [res.data[res.data.length - 1].channelDate[0]];
-					console.log(this.sum);
-					this.lists = res.data.map((n) => {
-						delete res.data[res.data.length - 1];
-						return {
-							...n,
-						};
+					let list = [];
+					res.data.map((n) => {
+						if (n.channelName === 'XYJY') {
+							list.unshift(n);
+						} else if (n.channelName === 'WCC') {
+							list.unshift(n);
+						} else if (n.channelName === 'DD') {
+							if (n.channelDate[0].detailsList[0].solidKnotAmount === 0) {
+							} else {
+								list.push(n);
+							}
+						} else if (n.channelName === 'TY') {
+							if (n.channelDate[0].detailsList[0].solidKnotAmount === 0) {
+							} else {
+								list.push(n);
+							}
+						}
 					});
+					this.lists = list
+					console.log(list)
+					// this.lists = res.data.filter((n, index) => {
+					// 	delete res.data[res.data.length - 1];
+					// 	if (n.channelName === 'XYJY') {
+					// 		return n;
+					// 	} else if (n.channelName === 'WCC') {
+					// 		return n;
+					// 	} else if (n.channelName === 'DD') {
+					// 		if (n.channelDate[0].detailsList[0].solidKnotAmount === 0) {
+					// 		} else {
+					// 			return n;
+					// 		}
+					// 	} else if (n.channelName === 'TY') {
+					// 		if (n.channelDate[0].detailsList[0].solidKnotAmount === 0) {
+					// 		} else {
+					// 			return n;
+					// 		}
+					// 	}
+					// });
 					this.dataList = [];
-
 					if (new Date(this.time[1]).getTime() - new Date(this.time[0]).getTime() > 86400000) {
 						this.flag = 1;
 						this.dataList.push({
-							riqi: `${this.time[0]}- ${this.time[1]}`,
+							riqi: `${this.time[0]}  -  ${this.time[1]}`,
 							lists: this.lists,
 						});
 					} else {
@@ -267,8 +342,6 @@ export default {
 							lists: this.lists,
 						});
 					}
-
-					console.log(this.dataList);
 				} else {
 					this.$message.error(res.message);
 				}
@@ -321,5 +394,24 @@ export default {
 }
 ::v-deep .el-table--scrollable-x .el-table__body-wrapper {
 	overflow: hidden;
+}
+.el-table .warning-row {
+	background: oldlace;
+}
+
+.el-table .success-row {
+	background: #f0f9eb;
+}
+::v-deep .warning-row {
+	background-color: #e4e4e4;
+}
+::v-deep .warning {
+	background-color: red;
+}
+.colorBack ::v-deep .el-table tr {
+	background: #e9f6ff;
+}
+.colorBack ::v-deep .el-table__cell {
+	background: #e9f6ff;
 }
 </style>
