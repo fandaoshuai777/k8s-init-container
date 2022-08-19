@@ -4,7 +4,7 @@ function baseURLEnv() {
   if (process.env.NODE_ENV === 'development') {
     return 'https://internal.dev.op-api-gateway.wonder-link.net'
   } else if (window.location.hostname.indexOf('fat-1') !== -1) {
-    return ' http://internal.fat-1.merchant-server.wonderlink.cc'
+    return ' https://internal.fat-1.op-api-gateway.wonderlink.cc'
   } else {
     // return 'http://merchant-server.cngotone.com'
   }
