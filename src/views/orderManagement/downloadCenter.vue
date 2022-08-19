@@ -3,7 +3,7 @@
 		<el-card shadow="hover">
 			<el-form :model="formInline" label-width="95px" :inline="true" label-position="right" ref="reset" size="small">
 				<el-form-item label="报表名称">
-					<el-input v-model="formInline.fileName" placeholder="请输入报表名称" clearable> </el-input>
+					<el-input v-model="formInline.fileName" placeholder="请输入报表名称" clearable @keyup.enter.native="inquire()"> </el-input>
 				</el-form-item>
 				<el-form-item>
 					<el-button type="primary" @click="inquire" size="small">查询</el-button>
@@ -18,7 +18,7 @@
 				@sizeChange="pageSizeChange"
 			>
 				<template v-slot:done="{ row }">
-					<el-button type="text" @click="download(row)">下载</el-button>
+					<el-button type="text" v-if="row.stats === '导出成功'" @click="download(row)">下载</el-button>
 					<el-button style="color: red" type="text" @click="remove(row)">删除</el-button>
 				</template>
 			</Table>
@@ -28,7 +28,8 @@
 <script>
 import Table from '@/components/table/index_detail';
 import { Session } from '@/utils/storage';
-import { selectPage, deleteById } from '@/api/oil/download';
+import { selectPage, deleteById, download } from '@/api/oil/download';
+import { downloadBlob } from '@/utils/downLoad.js';
 export default {
 	components: {
 		Table,
@@ -97,8 +98,8 @@ export default {
 				cancelButtonText: '取消',
 				type: 'warning',
 			})
-				.then( () => {
-					 this.deleteList(data);
+				.then(() => {
+					this.deleteList(data);
 				})
 				.catch(() => {
 					this.$message({
@@ -120,12 +121,7 @@ export default {
 		},
 		// 下载
 		download(row) {
-			let link = document.createElement('a');
-			link.style.display = 'none';
-			link.href = row.fileUrl;
-			// link.setAttribute('download');
-			document.body.appendChild(link);
-			link.click();
+			downloadBlob(row.fileName, `/gotone-cms-api/mp/async/export/download?id=${row.id}`, '');
 		},
 		// 列表
 		downloadList() {
