@@ -83,6 +83,24 @@
 						],
 						"icon": "el-icon-monitor"
 					}
+				},
+				{
+					"path": "/orderManagement/downloadCenter",
+					"name": "downloadCenter",
+					"component": "orderManagement/downloadCenter",
+					"meta": {
+						"title": "下载中心",
+						"isLink": "",
+						"isHide": false,
+						"isKeepAlive": true,
+						"isAffix": false,
+						"isIframe": false,
+						"roles": [
+							"admin",
+							"common"
+						],
+						"icon": "iconfont icon-gongju"
+					}
 				}
 			]
 		},
