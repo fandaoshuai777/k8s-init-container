@@ -212,14 +212,14 @@ export default {
 	methods: {
 		// 查询
 		inquire() {
-			if (this.establishTime == null && this.payTime == null) {
-				this.$message.error('时间不能为空,范围62天');
-				return false;
-			} else {
+			// if ((this.establishTime == null || this.establishTime.length === 0) && (this.payTime == null || this.payTime.length === 0)   ) {
+			// 	this.$message.error('时间不能为空,范围62天');
+			// 	return false;
+			// } else {
 				this.pagination.currPage = 1;
 				this.loading = true;
 				this.downloadList();
-			}
+			// }
 		},
 		// 拒绝
 		refuse(row) {

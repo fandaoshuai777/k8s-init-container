@@ -123,8 +123,8 @@
 					</el-card>
 				</el-col>
 				<el-col>
-					<el-button @click="report" :disabled="displayed"
-					 type="primary" size="small"	><span>{{ displayed ? num + 's' : '导出' }}</span></el-button
+					<el-button @click="report" :disabled="displayed" type="primary" size="small"
+						><span>{{ displayed ? num + 's' : '导出' }}</span></el-button
 					>
 				</el-col>
 			</el-row>
@@ -602,7 +602,7 @@ export default {
 		},
 		// 查询
 		inquire() {
-			if (this.time == null) {
+			if (this.time == null || this.time.length === 0) {
 				this.$message.error('时间不能为空,范围62天');
 				return false;
 			} else {
@@ -650,7 +650,7 @@ export default {
 				refundStatus: '',
 				rmbPayactualAmount: '',
 				rmbTotalAmount: '',
-				startTime: '',
+				startTime: null,
 				thirdOrderId: '',
 				timeStatus: 1,
 				userPhone: '',
@@ -701,36 +701,41 @@ export default {
 		},
 		// 导出
 		report() {
-			var vm = this;
-			vm.displayed = true;
-			// 控制倒计时及按钮是否可以点击
-			const TIME_COUNT = 60;
-			vm.num = TIME_COUNT;
-			const obj = {
-				...this.formInline,
-				stationId: sessionStorage.getItem('enterpriseId'),
-				userName: JSON.parse(sessionStorage.getItem('loginUser')).userName,
-				userId: JSON.parse(sessionStorage.getItem('loginUser')).userId,
-			};
-			exportOrder(obj).then((res) => {
-				if (res.code === '0') {
-					this.$message.success('导出成功,请到下载中心 下载');
-				} else {
-					this.$message.error('导出失败');
-				}
-			});
-			clearInterval(vm.timer);
-			vm.timer = window.setInterval(() => {
-				if (vm.num > 0 && vm.num <= TIME_COUNT) {
-					// 倒计时时不可点击
-					vm.displayed = true;
-					// 计时秒数
-					vm.num--;
-					// 更新按钮的文字内容
-				} else {
-					vm.displayed = false;
-				}
-			}, 1000);
+			if (this.time == null || this.time.length === 0) {
+				this.$message.error('时间不能为空,范围62天');
+				return false;
+			} else {
+				var vm = this;
+				vm.displayed = true;
+				// 控制倒计时及按钮是否可以点击
+				const TIME_COUNT = 60;
+				vm.num = TIME_COUNT;
+				const obj = {
+					...this.formInline,
+					stationId: sessionStorage.getItem('enterpriseId'),
+					userName: JSON.parse(sessionStorage.getItem('loginUser')).userName,
+					userId: JSON.parse(sessionStorage.getItem('loginUser')).userId,
+				};
+				exportOrder(obj).then((res) => {
+					if (res.code === '0') {
+						this.$message.success('导出成功,请到下载中心 下载');
+					} else {
+						this.$message.error('导出失败');
+					}
+				});
+				clearInterval(vm.timer);
+				vm.timer = window.setInterval(() => {
+					if (vm.num > 0 && vm.num <= TIME_COUNT) {
+						// 倒计时时不可点击
+						vm.displayed = true;
+						// 计时秒数
+						vm.num--;
+						// 更新按钮的文字内容
+					} else {
+						vm.displayed = false;
+					}
+				}, 1000);
+			}
 		},
 		// 申请退款
 		applicationDrawback(row) {

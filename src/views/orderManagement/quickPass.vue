@@ -517,7 +517,7 @@ export default {
 		},
 		// 查询
 		inquire() {
-			if (this.time == null) {
+			if (this.time == null||this.time.length === 0) {
 				this.$message.error('时间不能为空,范围62天');
 				return false;
 			} else {
