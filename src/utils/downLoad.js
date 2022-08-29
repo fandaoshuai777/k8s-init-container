@@ -11,18 +11,22 @@ function baseURLEnv() {
     return 'http://merchant-server.cngotone.com'
   }
 }
-export const downloadBlob = (fileName, url, info) => {
-  const apiUrl = baseURLEnv() + url + info
+export const downloadBlob = (fileName, url) => {
+  const apiUrl = baseURLEnv() + url 
+  console.log(apiUrl)
 
-  axios.get(apiUrl, { responseType: 'blob', headers: { 'merchant-server-token': Local.get('token')} }).then((res) => {
-    console.log(res)
-    const link = document.createElement('a')
-    const blob = new Blob([res.data])
-    link.style.display = 'none'
-    link.href = URL.createObjectURL(blob)
-    link.setAttribute('download', fileName + '.csv')
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
-  })
+  axios.get(apiUrl, { responseType: 'blob', headers: { 'merchant-server-token': Local.get('token'),'content-type': 'application/vnd.ms-excel', } }).then(
+    function (response) {
+      const link = document.createElement('a')
+      const blob = new Blob([response.data])
+      link.style.display = 'none'
+      link.href = URL.createObjectURL(blob)
+      link.setAttribute('download', fileName + '.csv')
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+    }
+
+   
+  )
 }
