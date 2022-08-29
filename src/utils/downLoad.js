@@ -13,15 +13,15 @@ function baseURLEnv() {
 }
 export const downloadBlob = (fileName, url) => {
   const apiUrl = baseURLEnv() + url 
-  console.log(apiUrl)
-
-  axios.get(apiUrl, { responseType: 'blob', headers: { 'merchant-server-token': Local.get('token'),'content-type': 'application/vnd.ms-excel', } }).then(
+  axios.get(apiUrl, { responseType: 'blob', headers: { 'merchant-server-token': Local.get('token') } }).then(
     function (response) {
+console.log(response.headers['content-disposition'].split('.')[1])
+console.log(fileName)
       const link = document.createElement('a')
       const blob = new Blob([response.data])
       link.style.display = 'none'
       link.href = URL.createObjectURL(blob)
-      link.setAttribute('download', fileName + '.csv')
+      link.setAttribute('download', fileName +'.'+ response.headers['content-disposition'].split('.')[1])
       document.body.appendChild(link)
       link.click()
       document.body.removeChild(link)
