@@ -395,7 +395,7 @@ export default {
 						let days = maxDate.getTime() - minDate.getTime(); //计算完之后必须清除，否则选择器一直处于禁止选择的状态
 						this.maxDate = null;
 						this.minDate = null;
-						return parseInt(days / (1000 * 60 * 60 * 24)) > 62;
+						return parseInt(days / (1000 * 60 * 60 * 24)) > 64;
 					} else {
 						//设置当前时间后的时间不可选
 						return time.getTime() > Date.now();
@@ -526,11 +526,15 @@ export default {
 		},
 		// 查询
 		inquire() {
-			this.loading = true;
-
-			this.pagination.currPage = 1;
-			this.orderList();
-			this.orderStatistics();
+			if (this.time == null) {
+				this.$message.error('时间不能为空,范围62天');
+				return false;
+			} else {
+				this.loading = true;
+				this.pagination.currPage = 1;
+				this.orderList();
+				this.orderStatistics();
+			}
 		},
 		// 详情
 		particulars(row) {

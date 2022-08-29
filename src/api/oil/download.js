@@ -16,3 +16,11 @@ export function deleteById(data) {
         data
     })
 }
+//下载
+export function download(id) {
+    return request({
+        url: `/gotone-cms-api/mp/async/export/download?id=${id}`,
+        method: 'GET',
+        responseType:'blob'
+    })
+}

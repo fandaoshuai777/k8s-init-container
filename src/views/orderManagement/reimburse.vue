@@ -37,6 +37,7 @@
 						end-placeholder="结束日期"
 						:default-time="['00:00:00', '23:59:59']"
 						value-format="yyyy-MM-dd HH:mm:ss"
+						:picker-options="pickerOption"
 					>
 					</el-date-picker>
 				</el-form-item>
@@ -48,6 +49,7 @@
 						end-placeholder="结束日期"
 						:default-time="['00:00:00', '23:59:59']"
 						value-format="yyyy-MM-dd HH:mm:ss"
+						:picker-options="pickerOptions"
 					>
 					</el-date-picker>
 				</el-form-item>
@@ -151,6 +153,52 @@ export default {
 				currPage: 1,
 			},
 			total: 0,
+			pickerOptions: {
+				// 当我们选择日期时的回调方法。返回两个日期的最大值和最小值，第一次返回一个值，第二次返回两个值
+				onPick: ({ maxDate, minDate }) => {
+					//当我们选择两个值的时候，就认为用户已经选择完毕
+					if (maxDate != null && minDate != null) {
+						this.maxDate = maxDate;
+						this.minDate = minDate;
+					}
+				},
+				disabledDate: (time) => {
+					let maxDate = this.maxDate;
+					let minDate = this.minDate;
+					if (maxDate != null && minDate != null) {
+						let days = maxDate.getTime() - minDate.getTime(); //计算完之后必须清除，否则选择器一直处于禁止选择的状态
+						this.maxDate = null;
+						this.minDate = null;
+						return parseInt(days / (1000 * 60 * 60 * 24)) > 64;
+					} else {
+						//设置当前时间后的时间不可选
+						return time.getTime() > Date.now();
+					}
+				},
+			},
+			pickerOption: {
+				// 当我们选择日期时的回调方法。返回两个日期的最大值和最小值，第一次返回一个值，第二次返回两个值
+				onPick: ({ maxDate, minDate }) => {
+					//当我们选择两个值的时候，就认为用户已经选择完毕
+					if (maxDate != null && minDate != null) {
+						this.maxDate = maxDate;
+						this.minDate = minDate;
+					}
+				},
+				disabledDate: (time) => {
+					let maxDate = this.maxDate;
+					let minDate = this.minDate;
+					if (maxDate != null && minDate != null) {
+						let days = maxDate.getTime() - minDate.getTime(); //计算完之后必须清除，否则选择器一直处于禁止选择的状态
+						this.maxDate = null;
+						this.minDate = null;
+						return parseInt(days / (1000 * 60 * 60 * 24)) > 64;
+					} else {
+						//设置当前时间后的时间不可选
+						return time.getTime() > Date.now();
+					}
+				},
+			},
 		};
 	},
 	computed: {
@@ -164,9 +212,14 @@ export default {
 	methods: {
 		// 查询
 		inquire() {
-			this.pagination.currPage = 1;
-			this.loading = true;
-			this.downloadList();
+			if (this.establishTime == null && this.payTime == null) {
+				this.$message.error('时间不能为空,范围62天');
+				return false;
+			} else {
+				this.pagination.currPage = 1;
+				this.loading = true;
+				this.downloadList();
+			}
 		},
 		// 拒绝
 		refuse(row) {
@@ -186,18 +239,15 @@ export default {
 				});
 		},
 		reject(orderNo) {
-			rejectedRefundOrder({orderNo:orderNo})
-				.then((res) => {
-					if (res.code === '0') {
-						this.$message.success(res.result);
-						this.downloadList();
-
-					} else {
-						this.$message.error(res.msg);
-						this.downloadList();
-					}
-				})
-			
+			rejectedRefundOrder({ orderNo: orderNo }).then((res) => {
+				if (res.code === '0') {
+					this.$message.success(res.result);
+					this.downloadList();
+				} else {
+					this.$message.error(res.msg);
+					this.downloadList();
+				}
+			});
 		},
 		// 通过
 		pass(row) {
@@ -217,16 +267,14 @@ export default {
 				});
 		},
 		transit(orderNo) {
-			refundOrder({orderNo:orderNo})
+			refundOrder({ orderNo: orderNo })
 				.then((res) => {
 					if (res.code === '0') {
 						this.$message.success(res.result);
 						this.downloadList();
-
 					} else {
 						this.$message.error(res.msg);
 						this.downloadList();
-
 					}
 				})
 				.finally(() => {
@@ -235,7 +283,7 @@ export default {
 		},
 		// 列表
 		downloadList() {
-			this.loading = true
+			this.loading = true;
 			if (this.establishTime) {
 				this.formInline.startOrderTime = this.establishTime[0];
 				this.formInline.endOrderTime = this.establishTime[1];

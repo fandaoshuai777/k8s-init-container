@@ -122,9 +122,11 @@
 						<div>加油量（升）</div>
 					</el-card>
 				</el-col>
-				<!-- <el-col >
-					<ReportBtn ref="reportbtn" @Report="report" />
-				</el-col> -->
+				<el-col>
+					<el-button @click="report" :disabled="displayed"
+					 type="primary" size="small"	><span>{{ displayed ? num + 's' : '导出' }}</span></el-button
+					>
+				</el-col>
 			</el-row>
 			<Table
 				:loading="loading"
@@ -137,7 +139,10 @@
 				<template v-slot:done="{ row }">
 					<el-button
 						type="text"
-						v-if="(row.channelId === '小鹰加油' && row.orderStatus === '支付成功' && row.isInvoiced === 0 && row.refundStatus != '退款中') || row.refundStatus === '退款失败'"
+						v-if="
+							(row.channelId === '小鹰加油' && row.orderStatus === '支付成功' && row.isInvoiced === 0 && row.refundStatus != '退款中') ||
+							row.refundStatus === '退款失败'
+						"
 						@click="applicationDrawback(row)"
 						>申请退款</el-button
 					>
@@ -311,7 +316,7 @@
 import Table from '@/components/table/index_detail';
 import Dialog from '@/components/system/SysDialog';
 import ReportBtn from '@/components/reportBtn';
-import { oneClickOrderList, oneClickOrderDetails, oneClickOrderCount, printReceipt, refundReview } from '@/api/oil/refueling';
+import { oneClickOrderList, oneClickOrderDetails, oneClickOrderCount, printReceipt, refundReview, exportOrder } from '@/api/oil/refueling';
 export default {
 	components: {
 		Table,
@@ -320,6 +325,7 @@ export default {
 	},
 	data() {
 		return {
+			displayed: false,
 			// table
 			loading: false,
 			tableData: [],
@@ -465,7 +471,7 @@ export default {
 						let days = maxDate.getTime() - minDate.getTime(); //计算完之后必须清除，否则选择器一直处于禁止选择的状态
 						this.maxDate = null;
 						this.minDate = null;
-						return parseInt(days / (1000 * 60 * 60 * 24)) > 62;
+						return parseInt(days / (1000 * 60 * 60 * 24)) > 64;
 					} else {
 						//设置当前时间后的时间不可选
 						return time.getTime() > Date.now();
@@ -549,7 +555,7 @@ export default {
 								: n.payType === 7
 								? '其他支付'
 								: n.payType,
-							refundStatus:
+						refundStatus:
 							n.refundStatus === -1
 								? ''
 								: n.refundStatus === 0
@@ -570,7 +576,6 @@ export default {
 						channelId: n.channelId === 1 ? '小鹰加油' : n.channelId === 2 ? '喂车车' : n.channelId,
 					};
 				});
-				console.log(res);
 			});
 		},
 		// 统计
@@ -597,11 +602,15 @@ export default {
 		},
 		// 查询
 		inquire() {
-			this.loading = true;
-
-			this.pagination.currPage = 1;
-			this.orderList();
-			this.orderStatistics();
+			if (this.time == null) {
+				this.$message.error('时间不能为空,范围62天');
+				return false;
+			} else {
+				this.loading = true;
+				this.pagination.currPage = 1;
+				this.orderList();
+				this.orderStatistics();
+			}
 		},
 		// 详情
 		particulars(row) {
@@ -692,15 +701,36 @@ export default {
 		},
 		// 导出
 		report() {
+			var vm = this;
+			vm.displayed = true;
+			// 控制倒计时及按钮是否可以点击
+			const TIME_COUNT = 60;
+			vm.num = TIME_COUNT;
 			const obj = {
 				...this.formInline,
+				stationId: sessionStorage.getItem('enterpriseId'),
+				userName: JSON.parse(sessionStorage.getItem('loginUser')).userName,
+				userId: JSON.parse(sessionStorage.getItem('loginUser')).userId,
 			};
-			const params = this.objectToQuery(obj);
-			console.log(params);
-			this.$refs.reportbtn.fileName = '一键加油订单列表';
-			this.$refs.reportbtn.url = 'v1/station/pageListExcel';
-			this.$refs.reportbtn.info = params;
-			this.$refs.reportbtn.Reports();
+			exportOrder(obj).then((res) => {
+				if (res.code === '0') {
+					this.$message.success('导出成功,请到下载中心 下载');
+				} else {
+					this.$message.error('导出失败');
+				}
+			});
+			clearInterval(vm.timer);
+			vm.timer = window.setInterval(() => {
+				if (vm.num > 0 && vm.num <= TIME_COUNT) {
+					// 倒计时时不可点击
+					vm.displayed = true;
+					// 计时秒数
+					vm.num--;
+					// 更新按钮的文字内容
+				} else {
+					vm.displayed = false;
+				}
+			}, 1000);
 		},
 		// 申请退款
 		applicationDrawback(row) {
@@ -720,17 +750,19 @@ export default {
 				});
 		},
 		Review(data) {
-		console.log(data)
-			refundReview({orderNo:data,rfndReason:''}).then((res) => {
-				if(res.code === '0'){
-					this.$message.success('操作成功')
-				}else{
-					this.$message.error(res.message)
-				}
-				console.log(res);
-			}).finally(()=>{
-				this.orderList()
-			})
+			console.log(data);
+			refundReview({ orderNo: data, rfndReason: '' })
+				.then((res) => {
+					if (res.code === '0') {
+						this.$message.success('操作成功');
+					} else {
+						this.$message.error(res.message);
+					}
+					console.log(res);
+				})
+				.finally(() => {
+					this.orderList();
+				});
 		},
 	},
 };

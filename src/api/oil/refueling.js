@@ -49,3 +49,11 @@ export function refundReview(params) {
     data: params,
   })
 }
+//导出
+export function exportOrder(params) {
+  return request({
+    url: `/gotone-order-api/export/exportOrder`,
+    method: 'post',
+    data:params
+  })
+}
