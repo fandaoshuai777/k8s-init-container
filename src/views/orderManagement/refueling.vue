@@ -471,7 +471,7 @@ export default {
 						let days = maxDate.getTime() - minDate.getTime(); //计算完之后必须清除，否则选择器一直处于禁止选择的状态
 						this.maxDate = null;
 						this.minDate = null;
-						return parseInt(days / (1000 * 60 * 60 * 24)) > 64;
+						return parseInt(days / (1000 * 60 * 60 * 24)) > 61;
 					} else {
 						//设置当前时间后的时间不可选
 						return time.getTime() > Date.now();
