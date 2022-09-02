@@ -26,7 +26,7 @@ export function quickPassOrderCount(data) {
 }
 
 //导出
-export function exportOrder(params) {
+export function exportPassOrder(params) {
   return request({
     url: `/gotone-order-api/export/exportPassOrder`,
     method: 'post',
