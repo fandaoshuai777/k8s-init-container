@@ -24,3 +24,11 @@ export function storedOrderCount(data) {
     data
   })
 }
+//导出
+export function exportStoredOrder(params) {
+  return request({
+    url: `/gotone-order-api/export/exportStoredOrder`,
+    method: 'post',
+    data:params
+  })
+}

@@ -83,6 +83,9 @@
 				<el-button type="primary" @click="today(1)" size="small">今日</el-button>
 				<el-button type="primary" @click="today(2)" size="small">昨日</el-button>
 				<el-button type="primary" @click="today(7)" size="small">近7日</el-button>
+					<el-button @click="report" :disabled="displayed"  size="small"
+						><span>{{ displayed ? num + 's' : '导出' }}</span></el-button
+					>
 			</div>
 			<el-row class="card" :gutter="12" style="margin: 20px 0">
 				<el-col :span="4" style="width: 180px">
@@ -260,7 +263,7 @@
 <script>
 import Table from '@/components/table/index_detail';
 import Dialog from '@/components/system/SysDialog';
-import { quickPassOrderList, quickPassOrderCount, oneClickOrderDetails } from '@/api/oil/quickPass';
+import { quickPassOrderList, quickPassOrderCount, oneClickOrderDetails ,exportPassOrder} from '@/api/oil/quickPass';
 export default {
 	components: {
 		Table,
@@ -268,6 +271,8 @@ export default {
 	},
 	data() {
 		return {
+			displayed: false,
+
 			// table
 			loading: false,
 			tableData: [],
@@ -530,6 +535,43 @@ export default {
 				this.pagination.currPage = 1;
 				this.orderList();
 				this.orderStatistics();
+			}
+		},
+				// 导出
+		report() {
+			if (this.time == null || this.time.length === 0) {
+				this.$message.error('时间不能为空,范围62天');
+				return false;
+			} else {
+				var vm = this;
+				vm.displayed = true;
+				// 控制倒计时及按钮是否可以点击
+				const TIME_COUNT = 60;
+				vm.num = TIME_COUNT;
+				const obj = {
+					...this.formInline,
+					userName: JSON.parse(sessionStorage.getItem('loginUser')).userName,
+					userId: JSON.parse(sessionStorage.getItem('loginUser')).userId,
+				};
+				exportPassOrder(obj).then((res) => {
+					if (res.code === '0') {
+						this.$message.success('导出成功,请到下载中心 下载');
+					} else {
+						this.$message.error('导出失败');
+					}
+				});
+				clearInterval(vm.timer);
+				vm.timer = window.setInterval(() => {
+					if (vm.num > 0 && vm.num <= TIME_COUNT) {
+						// 倒计时时不可点击
+						vm.displayed = true;
+						// 计时秒数
+						vm.num--;
+						// 更新按钮的文字内容
+					} else {
+						vm.displayed = false;
+					}
+				}, 1000);
 			}
 		},
 		// 详情

@@ -96,6 +96,9 @@
 				<el-button type="primary" @click="today(1)" size="small">今日</el-button>
 				<el-button type="primary" @click="today(2)" size="small">昨日</el-button>
 				<el-button type="primary" @click="today(7)" size="small">近7日</el-button>
+					<el-button @click="report" :disabled="displayed"  size="small"
+						><span>{{ displayed ? num + 's' : '导出' }}</span></el-button
+					>
 			</div>
 			<el-row class="card" :gutter="12" style="margin: 20px 0">
 				<el-col :span="4" style="width: 180px">
@@ -121,11 +124,6 @@
 						<div>{{ statistics.fuel }}</div>
 						<div>加油量（升）</div>
 					</el-card>
-				</el-col>
-				<el-col>
-					<el-button @click="report" :disabled="displayed" type="primary" size="small"
-						><span>{{ displayed ? num + 's' : '导出' }}</span></el-button
-					>
 				</el-col>
 			</el-row>
 			<Table
