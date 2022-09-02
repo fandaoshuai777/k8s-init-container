@@ -19,7 +19,7 @@
 					</el-form-item>
 				</el-form>
 			</div>
-			<div class="warp" ref="table_inner">
+			<div v-loading="loading" class="warp" ref="table_inner">
 				<el-table
 					class="table"
 					border
@@ -27,7 +27,7 @@
 					:header-cell-style="{ background: '#e9f6ff' }"
 				>
 					<!-- <el-table class="table" border> -->
-					<el-table-column prop="date" label="账单日期" align="center" :width="With"> </el-table-column>
+					<el-table-column prop="date" label="账单日期" align="center" :width="timeWidth"> </el-table-column>
 					<el-table-column :width="With" label="渠道" align="center"> </el-table-column>
 					<el-table-column :width="With" label="	订单类型" align="center"> </el-table-column>
 					<el-table-column :width="With" label="	结算账户" align="center"> </el-table-column>
@@ -48,7 +48,7 @@
 					class="warptable"
 				>
 					<el-table-column prop="riqi" align="center">
-						<el-table-column align="center" prop="riqi" :width="With"> </el-table-column>
+						<el-table-column align="center" prop="riqi" :width="timeWidth"> </el-table-column>
 						<el-table-column align="center" prop="lists">
 							<template slot-scope="scopeDate">
 								<el-table :show-header="false" :data="scopeDate.row.lists" class="warptable_inner">
@@ -132,7 +132,7 @@
 					class="colorBack"
 				>
 					<el-table-column align="center" prop="settlementAccountType">
-						<el-table-column align="center" prop="orderType" :width="With">
+						<el-table-column align="center" prop="orderType" :width="timeWidth">
 							<template slot-scope="scope">
 								{{ (scope.row = '总计') }}
 							</template>
@@ -199,7 +199,7 @@ import { Session } from '@/utils/storage';
 export default {
 	data() {
 		return {
-			loading: false,
+			loading: true,
 			lists: [],
 			dataList: [],
 			time: [],
@@ -215,6 +215,7 @@ export default {
 			errorWidth: 0,
 			tableWidth: 0,
 			screenWidth: 0,
+            timeWidth: 0
 		};
 	},
 	computed: {},
@@ -271,12 +272,13 @@ export default {
 		this.time = [t.toISOString().split('T')[0], t.toISOString().split('T')[0]];
 		this.list();
 	},
-	mounted() {},
 	watch: {
 		screenWidth: function (n, o) {
 			this.tableWidth = this.$refs.table_inner.clientWidth;
-			this.With = Math.ceil(this.tableWidth / 12);
-			this.errorWidth = this.tableWidth - this.With;
+            const width = Math.ceil((this.tableWidth / 12)) ;
+			this.With = width - 5
+            this.timeWidth = width + 50
+			this.errorWidth = this.tableWidth - width;
 		},
 	},
 	mounted() {
@@ -299,6 +301,7 @@ export default {
 
 		// 查询
 		inquire() {
+            this.loading = true
 			this.list();
 		},
 		list() {
@@ -333,7 +336,6 @@ export default {
 						}
 					});
 					this.lists = list;
-					console.log(list);
 					// this.lists = res.data.filter((n, index) => {
 					// 	delete res.data[res.data.length - 1];
 					// 	if (n.channelName === 'XYJY') {
@@ -367,8 +369,10 @@ export default {
 							lists: this.lists,
 						});
 					}
+                    this.loading = false
 				} else {
 					this.$message.error(res.message);
+                    this.loading = false
 				}
 			});
 		},
@@ -383,7 +387,11 @@ export default {
 		border-color: #e2e5ec;
 	}
 }
-
+::v-deep .el-table__body {
+    width: 100%;
+    // 使表格兼容safari，不错位
+    table-layout: fixed !important;
+}
 ::v-deep {
 	.vue-mergeable-table td {
 		text-align: center !important;
