@@ -66,12 +66,11 @@
 					<el-form-item label="退款状态">
 						<el-select v-model="formInline.refundStatus" placeholder="请选择">
 							<el-option label="全部" value />
-							<!-- <el-option label="未退款" :value="0" /> -->
-							<el-option label="退款中" :value="2" />
-							<!-- <el-option label="退款审核成功" :value="3" />
-							<el-option label="退款审核失败" :value="4" /> -->
-							<el-option label="退款成功" :value="5" />
-							<el-option label="退款失败" :value="6" />
+							<el-option label="退款中" :value="10" />
+							<el-option label="退款成功" :value="2" />
+							<el-option label="退款失败" :value="11" />
+							<el-option label="退款审核中" :value="4" />
+							<el-option label="退款审核失败" :value="5" />
 						</el-select>
 					</el-form-item>
 					<el-form-item label="创建时间">
