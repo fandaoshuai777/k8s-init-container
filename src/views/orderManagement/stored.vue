@@ -534,7 +534,7 @@ export default {
 					userName: JSON.parse(sessionStorage.getItem('loginUser')).userName,
 					userId: JSON.parse(sessionStorage.getItem('loginUser')).userId,
 				};
-				exportPassOrder(obj).then((res) => {
+				exportStoredOrder(obj).then((res) => {
 					if (res.code === '0') {
 						this.$message.success('导出成功,请到下载中心 下载');
 					} else {
