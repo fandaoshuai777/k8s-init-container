@@ -1,4 +1,12 @@
 import request from '@/utils/orderRequest';
+let url = ' http://internal.fat-1.merchant-server.wonderlink.cc'
+if (process.env.NODE_ENV === 'development') {
+  url = 'https://internal.fat-1.op-api-gateway.wonderlink.cc'
+} else if (window.location.hostname.indexOf('fat-1') !== -1) {
+  url = 'https://internal.fat-1.op-api-gateway.wonderlink.cc'
+} else {
+  url = 'https://op-api-gateway.wonder-link.net'
+}
 //退款list
 export function list(data) {
   return request({
@@ -26,9 +34,8 @@ export function rejectedRefundOrder(data) {
 } 
 //导出
 export function exportRefundOrder(data) {
-  console.log(process.env.VUE_APP_BASE_API)
   return request({
-    url: `http://192.168.3.99:80/gotone-order-api/export/exportRefundOrder`,
+    url: `${url}/gotone-order-api/export/exportRefundOrder`,
     method: 'post',
     data
   })

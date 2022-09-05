@@ -188,10 +188,12 @@ export default {
 			},
 		};
 	},
-		created() {
+	created() {
 		const t = new Date();
 		t.setDate(t.getDate() - 0);
 		this.establishTime = [t.toISOString().split('T')[0] + ' 00:00:00', t.toISOString().split('T')[0] + ' 23:59:59'];
+		this.formInline.startOrderTime = this.establishTime[0];
+		this.formInline.endOrderTime = this.establishTime[1];
 	},
 	computed: {
 		paginationOption: function () {
