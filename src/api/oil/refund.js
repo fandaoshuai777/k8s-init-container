@@ -24,3 +24,12 @@ export function rejectedRefundOrder(data) {
     data
   })
 } 
+//导出
+export function exportRefundOrder(data) {
+  console.log(process.env.VUE_APP_BASE_API)
+  return request({
+    url: `http://192.168.3.99:80/gotone-order-api/export/exportRefundOrder`,
+    method: 'post',
+    data
+  })
+} 

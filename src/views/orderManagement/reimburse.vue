@@ -49,7 +49,6 @@
 						end-placeholder="结束日期"
 						:default-time="['00:00:00', '23:59:59']"
 						value-format="yyyy-MM-dd HH:mm:ss"
-						:picker-options="pickerOptions"
 					>
 					</el-date-picker>
 				</el-form-item>
@@ -57,6 +56,11 @@
 					<el-button type="primary" @click="inquire">查询</el-button>
 				</el-form-item>
 			</el-form>
+			<div style="margin-left: 15px; margin-bottom: 10px">
+				<el-button @click="report" :disabled="displayed" size="small"
+					><span>{{ displayed ? num + 's' : '导出' }}</span></el-button
+				>
+			</div>
 			<Table
 				:loading="loading"
 				:colums="colums"
@@ -75,13 +79,15 @@
 </template>
 <script>
 import Table from '@/components/table/index_detail';
-import { list, refundOrder, rejectedRefundOrder } from '@/api/oil/refund';
+import { list, refundOrder, rejectedRefundOrder, exportRefundOrder } from '@/api/oil/refund';
 export default {
 	components: {
 		Table,
 	},
 	data() {
 		return {
+			displayed: false,
+
 			formInline: {
 				driverTel: '',
 				oilType: '',
@@ -153,29 +159,6 @@ export default {
 				currPage: 1,
 			},
 			total: 0,
-			pickerOptions: {
-				// 当我们选择日期时的回调方法。返回两个日期的最大值和最小值，第一次返回一个值，第二次返回两个值
-				onPick: ({ maxDate, minDate }) => {
-					//当我们选择两个值的时候，就认为用户已经选择完毕
-					if (maxDate != null && minDate != null) {
-						this.maxDate = maxDate;
-						this.minDate = minDate;
-					}
-				},
-				disabledDate: (time) => {
-					let maxDate = this.maxDate;
-					let minDate = this.minDate;
-					if (maxDate != null && minDate != null) {
-						let days = maxDate.getTime() - minDate.getTime(); //计算完之后必须清除，否则选择器一直处于禁止选择的状态
-						this.maxDate = null;
-						this.minDate = null;
-						return parseInt(days / (1000 * 60 * 60 * 24)) > 61;
-					} else {
-						//设置当前时间后的时间不可选
-						return time.getTime() > Date.now();
-					}
-				},
-			},
 			pickerOption: {
 				// 当我们选择日期时的回调方法。返回两个日期的最大值和最小值，第一次返回一个值，第二次返回两个值
 				onPick: ({ maxDate, minDate }) => {
@@ -205,6 +188,11 @@ export default {
 			},
 		};
 	},
+		created() {
+		const t = new Date();
+		t.setDate(t.getDate() - 0);
+		this.establishTime = [t.toISOString().split('T')[0] + ' 00:00:00', t.toISOString().split('T')[0] + ' 23:59:59'];
+	},
 	computed: {
 		paginationOption: function () {
 			return { ...this.pagination, total: this.total };
@@ -216,14 +204,52 @@ export default {
 	methods: {
 		// 查询
 		inquire() {
-			// if ((this.establishTime == null || this.establishTime.length === 0) && (this.payTime == null || this.payTime.length === 0)   ) {
-			// 	this.$message.error('时间不能为空,范围62天');
-			// 	return false;
-			// } else {
+			if (this.establishTime == null || this.establishTime.length === 0) {
+				this.$message.error('时间不能为空,范围62天');
+				return false;
+			} else {
 				this.pagination.currPage = 1;
 				this.loading = true;
 				this.downloadList();
-			// }
+			}
+		},
+		report() {
+			if (this.establishTime == null || this.establishTime.length === 0) {
+				this.$message.error('时间不能为空,范围62天');
+				return false;
+			} else {
+				var vm = this;
+				vm.displayed = true;
+				// 控制倒计时及按钮是否可以点击
+				const TIME_COUNT = 60;
+				vm.num = TIME_COUNT;
+				const obj = {
+					...this.formInline,
+					merchantId: sessionStorage.getItem('merchantId'),
+					stationId: sessionStorage.getItem('enterpriseId'),
+					userName: JSON.parse(sessionStorage.getItem('loginUser')).userName,
+					userId: JSON.parse(sessionStorage.getItem('loginUser')).userId,
+				};
+				exportRefundOrder(obj).then((res) => {
+					if (res.code === '0') {
+						this.$message.success('导出成功,请到下载中心 下载');
+					} else {
+						this.$message.error('导出失败');
+					}
+				});
+				clearInterval(vm.timer);
+				vm.timer = window.setInterval(() => {
+					if (vm.num > 0 && vm.num <= TIME_COUNT) {
+						// 倒计时时不可点击
+						vm.displayed = true;
+						// 计时秒数
+						vm.num--;
+						// 更新按钮的文字内容
+					} else {
+						vm.displayed = false;
+					}
+				}, 1000);
+			}
 		},
 		// 拒绝
 		refuse(row) {
