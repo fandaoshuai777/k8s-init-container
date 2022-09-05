@@ -15,16 +15,14 @@ export const downloadBlob = (fileName, url) => {
   const apiUrl = baseURLEnv() + url 
   axios.get(apiUrl, { responseType: 'blob', headers: { 'merchant-server-token': Local.get('token') } }).then(
     function (response) {
-console.log(response.headers['content-disposition'].split('.')[1])
-console.log(fileName)
-      // const link = document.createElement('a')
-      // const blob = new Blob([response.data])
-      // link.style.display = 'none'
-      // link.href = URL.createObjectURL(blob)
-      // link.setAttribute('download', fileName +'.'+ response.headers['content-disposition'].split('.')[1])
-      // document.body.appendChild(link)
-      // link.click()
-      // document.body.removeChild(link)
+      const link = document.createElement('a')
+      const blob = new Blob([response.data])
+      link.style.display = 'none'
+      link.href = URL.createObjectURL(blob)
+      link.setAttribute('download', fileName +'.'+ response.headers['content-disposition'].split('.')[1])
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
     }
 
    
