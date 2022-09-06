@@ -276,14 +276,14 @@
 						<template slot="label"> 退款状态 </template>
 						{{
 							payData.refundStatus == 2
-								? '退款中'
-								: payData.refundStatus == 3
-								? '退款审核成功'
-								: payData.refundStatus == 4
-								? '退款审核失败'
-								: payData.refundStatus == 5
 								? '退款成功'
-								: payData.refundStatus == 6
+								: payData.refundStatus == 4
+								? '退款审核中'
+								: payData.refundStatus == 5
+								? '退款审核失败'
+								: payData.refundStatus == 10
+								? '退款中'
+								: payData.refundStatus == 11
 								? '退款失败'
 								: payData.refundStatus == -1
 								? ''
@@ -560,18 +560,16 @@ export default {
 							n.refundStatus === -1
 								? ''
 								: n.refundStatus === 0
-								? '--'
-								: n.refundStatus === 1
-								? '退款中'
+								? '未退款'
 								: n.refundStatus === 2
-								? '退款中'
-								: // : n.refundStatus === 3
-								// ? '退款审核成功'
-								// : n.refundStatus === 4
-								// ? '退款审核失败'
-								n.refundStatus === 5
 								? '退款成功'
-								: n.refundStatus === 6
+								: n.refundStatus === 4
+								? '退款审核中'
+								: n.refundStatus === 5
+								? '退款审核失败'
+								: n.refundStatus === 10
+								? '退款中'
+								: n.refundStatus === 11
 								? '退款失败'
 								: n.refundStatus,
 						channelId: n.channelId === 1 ? '小鹰加油' : n.channelId === 2 ? '喂车车' : n.channelId,

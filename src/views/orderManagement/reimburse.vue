@@ -71,6 +71,14 @@
 				@currentChange="paginationChange"
 				@sizeChange="pageSizeChange"
 			>
+				<template v-slot:paymentStatus="{ row }">
+					<span v-if="row.paymentStatus == 2">退款成功</span>
+					<span v-else-if="row.paymentStatus == 10">退款中</span>
+					<span v-else-if="row.paymentStatus == 11">退款失败</span>
+					<span v-else-if="row.paymentStatus == 4">退款审核中</span>
+					<span v-else-if="row.paymentStatus == 5">退款审核失败</span>
+					<span v-else="row.paymentStatus">-</span>
+				</template>
 				<template v-slot:done="{ row }">
 					<el-button type="text" @click="pass(row)">通过</el-button>
 					<el-button style="color: red" type="text" @click="refuse(row)">拒绝</el-button>
@@ -340,8 +348,6 @@ export default {
 						return {
 							...n,
 							paymentMode: n.paymentMode == 1 ? '主动支付' : n.paymentMode == 2 ? '二维码支付' : n.paymentMode,
-							paymentStatus:
-								n.paymentStatus == 2 ? '退款成功' : n.paymentStatus == 4 ? '退款中' : n.paymentStatus == 5 ? '退款失败' : n.paymentStatus,
 						};
 					});
 					this.total = res.result.totalNum;
