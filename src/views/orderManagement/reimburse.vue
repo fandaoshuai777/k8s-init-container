@@ -73,10 +73,10 @@
 			>
 				<template v-slot:paymentStatus="{ row }">
 					<span v-if="row.paymentStatus == 2">退款成功</span>
-					<span v-else-if="row.paymentStatus == 10">退款中</span>
-					<span v-else-if="row.paymentStatus == 11">退款失败</span>
 					<span v-else-if="row.paymentStatus == 4">退款审核中</span>
 					<span v-else-if="row.paymentStatus == 5">退款审核失败</span>
+					<span v-else-if="row.paymentStatus == 10">退款中</span>
+					<span v-else-if="row.paymentStatus == 11">退款失败</span>
 					<span v-else="row.paymentStatus">-</span>
 				</template>
 				<template v-slot:done="{ row }">

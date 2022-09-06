@@ -55,9 +55,9 @@
 						<el-select v-model="formInline.refundStatus" placeholder="请选择">
 							<el-option label="全部" value />
 							<!-- <el-option label="未退款" :value="0" /> -->
-							<el-option label="退款中" :value="2" />
-							<!-- <el-option label="退款审核成功" :value="3" />
-							<el-option label="退款审核失败" :value="4" /> -->
+							<el-option label="退款中" :value="1" />
+							<el-option label="退款审核成功" :value="3" />
+							<el-option label="退款审核失败" :value="4" />
 							<el-option label="退款成功" :value="5" />
 							<el-option label="退款失败" :value="6" />
 						</el-select>
@@ -228,7 +228,7 @@
 					<el-descriptions-item>
 						<template slot="label"> 退款状态 </template>
 						{{
-							payData.refundStatus == 2
+							payData.refundStatus == 1
 								? '退款中'
 								: payData.refundStatus == 3
 								? '退款审核成功'
@@ -475,13 +475,13 @@ export default {
 								? ''
 								: n.refundStatus === 0
 								? '--'
-								: n.refundStatus === 2
+								: n.refundStatus === 1
 								? '退款中'
-								: // : n.refundStatus === 3
-								// ? '退款审核成功'
-								// : n.refundStatus === 4
-								// ? '退款审核失败'
-								n.refundStatus === 5
+								: n.refundStatus === 3
+								? '退款审核成功'
+								: n.refundStatus === 4
+								? '退款审核失败'
+								: n.refundStatus === 5
 								? '退款成功'
 								: n.refundStatus === 6
 								? '退款失败'
