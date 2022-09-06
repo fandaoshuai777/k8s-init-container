@@ -26,7 +26,7 @@ const dynamicRoutes = [
 		path: '/',
 		name: '/',
 		component: 'layout/index',
-		redirect: '/indentmanagement/index.vue',
+		redirect: '/orderManagement/refueling',
 		meta: {
 			isKeepAlive: true,
 		},
