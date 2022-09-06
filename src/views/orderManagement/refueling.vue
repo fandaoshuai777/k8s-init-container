@@ -564,7 +564,7 @@ export default {
 							n.refundStatus === -1
 								? ''
 								: n.refundStatus === 0
-								? '未退款'
+								? '--'
 								: n.refundStatus === 1
 								? '退款中'
 								: n.refundStatus === 2
