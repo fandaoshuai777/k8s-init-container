@@ -215,7 +215,7 @@ export default {
 			errorWidth: 0,
 			tableWidth: 0,
 			screenWidth: 0,
-            timeWidth: 0
+			timeWidth: 0,
 		};
 	},
 	computed: {},
@@ -275,9 +275,9 @@ export default {
 	watch: {
 		screenWidth: function (n, o) {
 			this.tableWidth = this.$refs.table_inner.clientWidth;
-            const width = Math.ceil((this.tableWidth / 12)) ;
-			this.With = width - 5
-            this.timeWidth = width + 50
+			const width = Math.ceil(this.tableWidth / 12);
+			this.With = width - 5;
+			this.timeWidth = width + 50;
 			this.errorWidth = this.tableWidth - width;
 		},
 	},
@@ -301,7 +301,7 @@ export default {
 
 		// 查询
 		inquire() {
-            this.loading = true
+			this.loading = true;
 			this.list();
 		},
 		list() {
@@ -316,63 +316,63 @@ export default {
 
 			get_settle(data).then((res) => {
 				if (res.code === '0') {
-					this.sum = [res.data[res.data.length - 1].channelDate[0]];
 					let list = [];
-					res.data.map((n) => {
-						if (n.channelName === 'XYJY') {
-							list.unshift(n);
-						} else if (n.channelName === 'WCC') {
-							list.unshift(n);
-						} else if (n.channelName === 'DD') {
-							if (n.channelDate[0].detailsList[0].solidKnotAmount === 0) {
-							} else {
-								list.push(n);
-							}
-						} else if (n.channelName === 'TY') {
-							if (n.channelDate[0].detailsList[0].solidKnotAmount === 0) {
-							} else {
-								list.push(n);
-							}
-						}
-					});
-					this.lists = list;
-					// this.lists = res.data.filter((n, index) => {
-					// 	delete res.data[res.data.length - 1];
-					// 	if (n.channelName === 'XYJY') {
-					// 		return n;
-					// 	} else if (n.channelName === 'WCC') {
-					// 		return n;
-					// 	} else if (n.channelName === 'DD') {
-					// 		if (n.channelDate[0].detailsList[0].solidKnotAmount === 0) {
-					// 		} else {
-					// 			return n;
-					// 		}
-					// 	} else if (n.channelName === 'TY') {
-					// 		if (n.channelDate[0].detailsList[0].solidKnotAmount === 0) {
-					// 		} else {
-					// 			return n;
-					// 		}
-					// 	}
-					// });
-					this.dataList = [];
 
-					if (new Date(this.time[1]).getTime() - new Date(this.time[0]).getTime() > 0) {
-						this.flag = 1;
-						this.dataList.push({
-							riqi: `${this.time[0]}  -  ${this.time[1]}`,
-							lists: this.lists,
-						});
+					if (res.data.length === 0) {
+						this.dataList = [];
+						if (new Date(this.time[1]).getTime() - new Date(this.time[0]).getTime() > 0) {
+							this.flag = 1;
+							this.dataList.push({
+								riqi: `${this.time[0]}  -  ${this.time[1]}`,
+							});
+						} else {
+							this.flag = 0;
+							this.dataList.push({
+								riqi: `${this.time[0]}`,
+							});
+						}
+						this.loading = false;
+						return false;
 					} else {
-						this.flag = 0;
-						this.dataList.push({
-							riqi: `${this.time[0]}`,
-							lists: this.lists,
+						this.sum = [res.data[res.data.length - 1].channelDate[0]];
+						res.data.map((n) => {
+							if (n.channelName === 'XYJY') {
+								list.unshift(n);
+							} else if (n.channelName === 'WCC') {
+								list.unshift(n);
+							} else if (n.channelName === 'DD') {
+								if (n.channelDate[0].detailsList[0].solidKnotAmount === 0) {
+								} else {
+									list.push(n);
+								}
+							} else if (n.channelName === 'TY') {
+								if (n.channelDate[0].detailsList[0].solidKnotAmount === 0) {
+								} else {
+									list.push(n);
+								}
+							}
 						});
+						this.lists = list;
+						this.dataList = [];
+
+						if (new Date(this.time[1]).getTime() - new Date(this.time[0]).getTime() > 0) {
+							this.flag = 1;
+							this.dataList.push({
+								riqi: `${this.time[0]}  -  ${this.time[1]}`,
+								lists: this.lists,
+							});
+						} else {
+							this.flag = 0;
+							this.dataList.push({
+								riqi: `${this.time[0]}`,
+								lists: this.lists,
+							});
+						}
+						this.loading = false;
 					}
-                    this.loading = false
 				} else {
 					this.$message.error(res.message);
-                    this.loading = false
+					this.loading = false;
 				}
 			});
 		},
@@ -388,9 +388,9 @@ export default {
 	}
 }
 ::v-deep .el-table__body {
-    width: 100%;
-    // 使表格兼容safari，不错位
-    table-layout: fixed !important;
+	width: 100%;
+	// 使表格兼容safari，不错位
+	table-layout: fixed !important;
 }
 ::v-deep {
 	.vue-mergeable-table td {
