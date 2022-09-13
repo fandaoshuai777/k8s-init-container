@@ -280,7 +280,7 @@
 								: payData.refundStatus == 1
 								? '退款中'
 								: payData.refundStatus == 2
-								? '退款待审核'
+								? '退款审核中'
 								: payData.refundStatus == 3
 								? '退款审核成功'
 								: payData.refundStatus == 4
@@ -568,7 +568,7 @@ export default {
 								: n.refundStatus === 1
 								? '退款中'
 								: n.refundStatus === 2
-								? '退款待审核'
+								? '退款审核中'
 								: n.refundStatus === 3
 								? '退款审核成功'
 								: n.refundStatus === 4
