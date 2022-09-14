@@ -137,8 +137,8 @@
 					<el-button
 						type="text"
 						v-if="
-							(row.channelId === '小鹰加油' && row.orderStatus === '支付成功' && row.isInvoiced === 0 && row.refundStatus != '退款中') ||
-							row.refundStatus === '退款失败' || row.refundStatus != '退款审核中'
+							(row.channelId === '小鹰加油' && row.orderStatus === '支付成功' && row.isInvoiced === 0 && row.refundStatus != '退款中' && row.refundStatus != '退款审核中') ||
+							row.refundStatus === '退款失败'
 						"
 						@click="applicationDrawback(row)"
 						>申请退款</el-button
