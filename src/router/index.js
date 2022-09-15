@@ -189,6 +189,7 @@ export function dynamicRouter(routes) {
 // 文档地址：https://router.vuejs.org/zh/api/#router-addroutes
 export function adminUser(router, to, next) {
 	user().then((res) => {
+        Session.set('merchantId', res.result.merchantId);
 		if (res.result.source !== 8) {
 			resetRouter();
 			// 读取用户信息，获取对应权限进行判断
