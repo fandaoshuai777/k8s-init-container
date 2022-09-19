@@ -252,7 +252,7 @@ export default {
 				case 'PRI':
 					return '虚拟账户';
 				case 'ZJC':
-					return '资金池';
+					return '渠道服务';
 
 				case 'SUM':
 					return '合计';
