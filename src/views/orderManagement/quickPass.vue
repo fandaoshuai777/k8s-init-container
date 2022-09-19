@@ -68,7 +68,6 @@
 							end-placeholder="结束日期"
 							:default-time="['00:00:00', '23:59:59']"
 							value-format="yyyy-MM-dd HH:mm:ss"
-							:picker-options="pickerOptions"
 						>
 						</el-date-picker>
 					</el-form-item>
@@ -377,33 +376,7 @@ export default {
 			statistics: [],
 			maxDate: null,
 			minDate: null,
-			pickerOptions: {
-				// 当我们选择日期时的回调方法。返回两个日期的最大值和最小值，第一次返回一个值，第二次返回两个值
-				onPick: ({ maxDate, minDate }) => {
-					//当我们选择两个值的时候，就认为用户已经选择完毕
-					if (maxDate != null && minDate != null) {
-						this.maxDate = maxDate;
-						this.minDate = minDate;
-					}
-				},
-				disabledDate: (time) => {
-					let maxDate = this.maxDate;
-					let minDate = this.minDate;
-					if (maxDate != null && minDate != null) {
-						let days = maxDate.getTime() - minDate.getTime(); //计算完之后必须清除，否则选择器一直处于禁止选择的状态
-						this.maxDate = null;
-						this.minDate = null;
-						if (parseInt(days / (1000 * 60 * 60 * 24)) > 61) {
-							this.$message.error('时间范围62天,请重新选择');
-							return parseInt(days / (1000 * 60 * 60 * 24)) > 61;
-						} else {
-						}
-					} else {
-						//设置当前时间后的时间不可选
-						return time.getTime() > Date.now();
-					}
-				},
-			},
+		
 		};
 	},
 	computed: {
@@ -528,16 +501,12 @@ export default {
 		},
 		// 查询
 		inquire() {
-			if (this.time == null||this.time.length === 0) {
-				this.$message.error('时间不能为空,范围62天');
-				return false;
-			} else {
+		
 				this.loading = true;
 
 				this.pagination.currPage = 1;
 				this.orderList();
 				this.orderStatistics();
-			}
 		},
 				// 导出
 		report() {
