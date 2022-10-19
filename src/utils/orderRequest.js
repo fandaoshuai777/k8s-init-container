@@ -22,7 +22,7 @@ function baseURLEnv() {
 		return 'http://internal.fat1.merchant-server.wonderlink.cc'
 	} else if (window.location.hostname.indexOf('test') !== -1) {
 		return 'http://merchant-server-test.c29dd69ffd4404f389adfa283b540267b.cn-hangzhou.alicontainer.com/'
-	} else if (window.location.hostname.indexOf('fat-1') !== -1) {
+	} else if (window.location.hostname.indexOf('fat1') !== -1) {
 		return 'http://internal.fat1.merchant-server.wonderlink.cc'
 	} else if (window.location.hostname.indexOf('fat') !== -1) {
 		return 'https://internal.fat.op-api-gateway.wonder-link.net'
