@@ -5,8 +5,8 @@ function baseURLEnv() {
     // return 'https://internal.dev.op-api-gateway.wonder-link.net'
     return 'http://192.168.3.73:80'
 
-  } else if (window.location.hostname.indexOf('fat-1') !== -1) {
-    return ' https://internal.fat-1.op-api-gateway.wonderlink.cc'
+  } else if (window.location.hostname.indexOf('fat1') !== -1) {
+    return ' https://internal.fat1.op-api-gateway.wonderlink.cc'
   } else {
     return 'https://op-api-gateway.wonder-link.net'
   }

@@ -1,9 +1,9 @@
 import request from '@/utils/orderRequest';
 let url = ' http://internal.fat1.merchant-server.wonderlink.cc'
 if (process.env.NODE_ENV === 'development') {
-  url = 'https://internal.fat-1.op-api-gateway.wonderlink.cc'
+  url = 'https://internal.fat1.op-api-gateway.wonderlink.cc'
 } else if (window.location.hostname.indexOf('fat1') !== -1) {
-  url = 'https://internal.fat-1.op-api-gateway.wonderlink.cc'
+  url = 'https://internal.fat1.op-api-gateway.wonderlink.cc'
 } else {
   url = 'https://op-api-gateway.wonder-link.net'
 }
