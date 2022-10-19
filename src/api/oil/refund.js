@@ -1,5 +1,5 @@
 import request from '@/utils/orderRequest';
-let url = ' http://internal.fat-1.merchant-server.wonderlink.cc'
+let url = ' http://internal.fat1.merchant-server.wonderlink.cc'
 if (process.env.NODE_ENV === 'development') {
   url = 'https://internal.fat-1.op-api-gateway.wonderlink.cc'
 } else if (window.location.hostname.indexOf('fat-1') !== -1) {
