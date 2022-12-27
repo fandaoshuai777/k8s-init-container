@@ -8,11 +8,11 @@ function baseURLEnv() {
     if (process.env.NODE_ENV === 'development') {
         return 'https://internal.fat1.op-api-gateway.wonderlink.cc'
     } else if (window.location.hostname.indexOf('test') !== -1) {
-        return 'http://merchant-server-test.c29dd69ffd4404f389adfa283b540267b.cn-hangzhou.alicontainer.com'
+        return 'https://internal.fat.op-api-gateway.wonderlink.cc'
     } else if (window.location.hostname.indexOf('fat1') !== -1) {
         return 'https://internal.fat1.op-api-gateway.wonderlink.cc'
     } else if (window.location.hostname.indexOf('fat') !== -1) {
-        return 'http://merchant-server-test.c29dd69ffd4404f389adfa283b540267b.cn-hangzhou.alicontainer.com/'
+        return 'https://internal.fat.op-api-gateway.wonderlink.cc'
     } else {
         console.log('线上')
         return 'https://op-api-gateway.wonder-link.net'
