@@ -12,7 +12,7 @@ module.exports = {
 		hotOnly: false, // 热更新
 		proxy: {
 			[process.env.VUE_APP_BASE_API]: {
-				target: 'http://internal.fat1.merchant-server.wonderlink.cc',
+				target: 'http://merchant-server-test.c29dd69ffd4404f389adfa283b540267b.cn-hangzhou.alicontainer.com',
 				changeOrigin: true,
 				pathRewrite: {
 					['^' + process.env.VUE_APP_BASE_API]: ''
